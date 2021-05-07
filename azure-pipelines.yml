@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  projectDirectory: 'src/api'
+  projectDirectory: '$(System.DefaultWorkingDirectory)/src/api'
   configuration: 'release'
   pool: Default
 
