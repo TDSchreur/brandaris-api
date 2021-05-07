@@ -50,3 +50,28 @@ stages:
             PathtoPublish: 'deploy'
             ArtifactName: 'arm'
             publishLocation: 'Container'
+
+ - stage: CI - ARM
+   jobs:
+     - job: ARM
+       pool: $(pool)
+       steps:
+                 
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'arm'
+            targetPath: '$(Pipeline.Workspace)'
+            
+        - task: AzureResourceManagerTemplateDeployment@3
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: 'MSDN Premium DutchWorkz(f395fc6c-f196-4abe-a248-e9b7d37c9f66)'
+            subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: 'brandaris-ci'
+            location: 'West Europe'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(Pipeline.Workspace)\azuredeploy.json'
+            csmParametersFile: '$(Pipeline.Workspace)\azuredeploy.parameters.ci.json'
+            deploymentMode: 'Incremental'
