@@ -73,6 +73,6 @@ stages:
             resourceGroupName: 'brandaris-ci'
             location: 'West Europe'
             templateLocation: 'Linked artifact'
-            csmFile: '$(Pipeline.Workspace)\azuredeploy.json'
-            csmParametersFile: '$(Pipeline.Workspace)\azuredeploy.parameters.ci.json'
+            csmFile: 'azuredeploy.json'
+            csmParametersFile: 'azuredeploy.parameters.ci.json'
             deploymentMode: 'Incremental'
