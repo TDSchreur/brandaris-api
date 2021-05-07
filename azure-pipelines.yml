@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  project: 'src/api/api.csproj'
+  project: src/api/api.csproj
   configuration: 'release'
   pool: Default
 
@@ -32,7 +32,7 @@ stages:
             arguments: '--no-restore -c ${configuration}'
 
         - task: DotNetCoreCLI@2
-          displayName: poublish
+          displayName: publish
           inputs:
             command: 'publish'
             projects: ${project}
