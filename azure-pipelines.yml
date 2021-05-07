@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  project: '**/src/api/api.csproj'
+  project: '**/api.csproj'
   configuration: 'release'
   pool: Default
 
