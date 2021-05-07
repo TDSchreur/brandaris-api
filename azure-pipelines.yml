@@ -44,13 +44,6 @@ stages:
             ArtifactName: 'api'
             publishLocation: 'Container'
 
-        - task: PublishBuildArtifacts@1
-          displayName: "publish arm"
-          inputs:
-            PathtoPublish: 'deploy'
-            ArtifactName: 'arm'
-            publishLocation: 'Container'
-
  - stage: CI_ARM
    jobs:
      - job: ARM
