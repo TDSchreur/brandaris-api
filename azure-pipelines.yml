@@ -51,7 +51,7 @@ stages:
             ArtifactName: 'arm'
             publishLocation: 'Container'
 
- - stage: CI - ARM
+ - stage: CI_ARM
    jobs:
      - job: ARM
        pool: $(pool)
@@ -64,6 +64,7 @@ stages:
             targetPath: '$(Pipeline.Workspace)'
             
         - task: AzureResourceManagerTemplateDeployment@3
+          displayName: ARM deployment for CI
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: 'MSDN Premium DutchWorkz(f395fc6c-f196-4abe-a248-e9b7d37c9f66)'
