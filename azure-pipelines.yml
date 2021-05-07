@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  project: './src/api/api.csproj'
+  projectDirectory: 'src/api'
   configuration: 'release'
   pool: Default
 
@@ -22,23 +22,23 @@ stages:
           displayName: restore
           inputs:
             command: 'restore'
-            projects: ${project}
+            workingDirectory: ${projectDirectory}
             feedsToUse: 'select'
 
         - task: DotNetCoreCLI@2
           displayName: build
           inputs:
             command: 'build'
-            projects: ${project}
+            workingDirectory: ${projectDirectory}
             arguments: '--no-restore -c ${configuration}'
 
         - task: DotNetCoreCLI@2
           displayName: poublish
           inputs:
             command: 'publish'
-            projects: ${project}
+            workingDirectory: ${projectDirectory}
             zipAfterPublish: true
-            arguments: '--no-build -c ${configuration}'
+            arguments: '--no-build -c ${configuration} -o $(Build.ArtifactStagingDirectory)'
             
         - task: PublishBuildArtifacts@1
           inputs:
