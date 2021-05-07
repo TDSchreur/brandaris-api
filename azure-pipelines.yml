@@ -11,9 +11,9 @@ variables:
 
 stages:
  - stage: Build
-   pool: $(pool)
    jobs:
      - job: Build       
+       pool: ${pool}
        steps:
         - task: DotNetCoreCLI@2
           displayName: restore
