@@ -4,9 +4,6 @@ trigger:
 pr:
   - master
 
-resources:
-  - repo: self
-
 variables:
   project: '**/api.csproj'
   configuration: 'release'
