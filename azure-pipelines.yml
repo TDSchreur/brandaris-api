@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  project: 'src/api/api.csproj'
+  project: './src/api/api.csproj'
   configuration: 'release'
   pool: Default
 
@@ -36,7 +36,8 @@ stages:
           displayName: poublish
           inputs:
             command: 'publish'
-            publishWebProjects: true
+            projects: ${project}
+            zipAfterPublish: true
             arguments: '--no-build -c ${configuration}'
             
         - task: PublishBuildArtifacts@1
