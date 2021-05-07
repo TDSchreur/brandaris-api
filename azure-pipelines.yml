@@ -8,7 +8,7 @@ resources:
   - repo: self
 
 variables:
-  project: 'src/api/api.crproj'
+  project: 'src/api/api.csproj'
   configuration: 'release'
   pool: Default
 
@@ -19,22 +19,25 @@ stages:
        pool: $(pool)
        steps:
         - task: DotNetCoreCLI@2
+          displayName: restore
           inputs:
             command: 'restore'
             projects: ${project}
             feedsToUse: 'select'
+
         - task: DotNetCoreCLI@2
+          displayName: build
           inputs:
             command: 'build'
             projects: ${project}
             arguments: '--no-restore -c ${configuration}'
 
         - task: DotNetCoreCLI@2
+          displayName: poublish
           inputs:
             command: 'publish'
             publishWebProjects: true
             arguments: '--no-build -c ${configuration}'
-            buildProperties: 
             
         - task: PublishBuildArtifacts@1
           inputs:
