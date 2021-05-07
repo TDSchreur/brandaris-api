@@ -61,7 +61,7 @@ stages:
           inputs:
             buildType: 'current'
             artifactName: 'arm'
-            targetPath: '$(Pipeline.Workspace)'
+            targetPath: '$(System.DefaultWorkingDirectory)\arm'
             
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: ARM deployment for CI
@@ -73,6 +73,6 @@ stages:
             resourceGroupName: 'brandaris-ci'
             location: 'West Europe'
             templateLocation: 'Linked artifact'
-            csmFile: 'azuredeploy.json'
-            csmParametersFile: 'azuredeploy.parameters.ci.json'
+            csmFile: '$(System.DefaultWorkingDirectory)\arm\azuredeploy.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)\arm\azuredeploy.parameters.ci.json'
             deploymentMode: 'Incremental'
