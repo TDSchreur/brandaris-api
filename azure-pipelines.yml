@@ -22,7 +22,7 @@ stages:
           displayName: restore
           inputs:
             command: 'restore'
-            projects: '${project}'
+            projects: '**/*.csproj'
 
         - task: DotNetCoreCLI@2
           displayName: build
