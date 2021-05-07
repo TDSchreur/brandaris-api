@@ -19,7 +19,7 @@ stages:
           displayName: restore
           inputs:
             command: 'restore'
-            projects: '**/*.csproj'
+            projects: $(project)
 
         - task: DotNetCoreCLI@2
           displayName: build
@@ -32,7 +32,7 @@ stages:
           displayName: publish
           inputs:
             command: 'publish'
-            projects: ${project}
+            projects: $(project)
             zipAfterPublish: true
             publishWebProjects: false
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
