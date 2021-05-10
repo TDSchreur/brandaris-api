@@ -8,6 +8,8 @@ variables:
   project: 'src/api/api.csproj'
   configuration: 'release'
   pool: Default
+  subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+  armServiceConnection: 'azure_service_connection'
 
 stages:
  - stage: Build
@@ -44,7 +46,7 @@ stages:
             ArtifactName: 'api'
             publishLocation: 'Container'
 
- - stage: CI_ARM
+ - stage: CI
    jobs:
      - job: ARM
        pool: $(pool)
@@ -53,8 +55,8 @@ stages:
           displayName: ARM deployment for CI
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: 'MSDN Premium DutchWorkz(f395fc6c-f196-4abe-a248-e9b7d37c9f66)'
-            subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+            azureResourceManagerConnection: $(armServiceConnection)
+            subscriptionId: $(subscriptionId)
             action: 'Create Or Update Resource Group'
             resourceGroupName: 'brandaris-ci'
             location: 'West Europe'
@@ -62,3 +64,22 @@ stages:
             csmFile: 'deploy/azuredeploy.json'
             csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
             deploymentMode: 'Incremental'
+            
+     - job: Deploy
+       pool: $(pool)
+       steps:
+
+       - task: DownloadPipelineArtifact@2
+         inputs:
+           buildType: 'current'
+           artifactName: 'api'
+           targetPath: '$(Pipeline.Workspace)'
+
+       - task: AzureRmWebAppDeployment@4
+         inputs:
+           ConnectionType: 'AzureRM'
+           azureSubscription: $(armServiceConnection)
+           appType: 'apiApp'
+           WebAppName: 'brandaris-api'
+           packageForLinux: '$(Pipeline.Workspace)/api.zip'
+           
