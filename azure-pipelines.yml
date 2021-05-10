@@ -43,73 +43,73 @@ stages:
             publishLocation: 'Container'
 
  - stage: CI
+   dependsOn: Build
    jobs:
-     - job: ARM
-       pool: $(pool)
-       steps:            
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: ARM deployment for CI
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: brandaris-ci
-            subscriptionId: $(subscriptionId)
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: 'brandaris-ci'
-            location: 'West Europe'
-            templateLocation: 'Linked artifact'
-            csmFile: 'deploy/azuredeploy.json'
-            csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
-            deploymentMode: 'Incremental'
-            
-     - job: Deploy
-       pool: $(pool)
-       dependsOn: ARM
-       steps:
-       - task: DownloadPipelineArtifact@2
-         inputs:
-           buildType: 'current'
-           artifactName: 'api'
-           targetPath: '$(Pipeline.Workspace)'
-       - task: AzureRmWebAppDeployment@4
-         inputs:
-           ConnectionType: 'AzureRM'
-           azureSubscription: brandaris-ci
-           appType: 'apiApp'
-           WebAppName: 'brandaris-api'
-           packageForLinux: '$(Pipeline.Workspace)/api.zip'
+   - deployment: azure_ci
+     pool: $(pool)
+     environment: ci
+     strategy:
+      runOnce:
+        deploy:
+          steps:            
+           - task: AzureResourceManagerTemplateDeployment@3
+             displayName: ARM deployment for CI
+             inputs:
+               deploymentScope: 'Resource Group'
+               azureResourceManagerConnection: brandaris-ci
+               subscriptionId: $(subscriptionId)
+               action: 'Create Or Update Resource Group'
+               resourceGroupName: 'brandaris-ci'
+               location: 'West Europe'
+               templateLocation: 'Linked artifact'
+               csmFile: 'deploy/azuredeploy.json'
+               csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+               deploymentMode: 'Incremental'
+           - task: DownloadPipelineArtifact@2
+             inputs:
+               buildType: 'current'
+               artifactName: 'api'
+               targetPath: '$(Pipeline.Workspace)'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: brandaris-ci
+               appType: 'apiApp'
+               WebAppName: 'brandaris-api'
+               packageForLinux: '$(Pipeline.Workspace)/api.zip'
 
  - stage: Test
+   dependsOn: CI
    jobs:
-     - job: ARM
-       pool: $(pool)
-       steps:            
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: ARM deployment for Test
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: brandaris-test
-            subscriptionId: $(subscriptionId)
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: 'brandaris-test'
-            location: 'West Europe'
-            templateLocation: 'Linked artifact'
-            csmFile: 'deploy/azuredeploy.json'
-            csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
-            deploymentMode: 'Incremental'
-            
-     - job: Deploy
-       pool: $(pool)
-       dependsOn: ARM
-       steps:
-       - task: DownloadPipelineArtifact@2
-         inputs:
-           buildType: 'current'
-           artifactName: 'api'
-           targetPath: '$(Pipeline.Workspace)'
-       - task: AzureRmWebAppDeployment@4
-         inputs:
-           ConnectionType: 'AzureRM'
-           azureSubscription: 'brandaris-test'           
-           appType: 'apiApp'
-           WebAppName: 'brandaris-api'
-           packageForLinux: '$(Pipeline.Workspace)/api.zip'
+   - deployment: azure_test
+     pool: $(pool)
+     environment: test
+     strategy:
+      runOnce:
+        deploy:
+          steps:            
+           - task: AzureResourceManagerTemplateDeployment@3
+             displayName: ARM deployment for Test
+             inputs:
+               deploymentScope: 'Resource Group'
+               azureResourceManagerConnection: brandaris-test
+               subscriptionId: $(subscriptionId)
+               action: 'Create Or Update Resource Group'
+               resourceGroupName: 'brandaris-test'
+               location: 'West Europe'
+               templateLocation: 'Linked artifact'
+               csmFile: 'deploy/azuredeploy.json'
+               csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+               deploymentMode: 'Incremental'
+           - task: DownloadPipelineArtifact@2
+             inputs:
+               buildType: 'current'
+               artifactName: 'api'
+               targetPath: '$(Pipeline.Workspace)'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: brandaris-test
+               appType: 'apiApp'
+               WebAppName: 'brandaris-api'
+               packageForLinux: '$(Pipeline.Workspace)/api.zip'
