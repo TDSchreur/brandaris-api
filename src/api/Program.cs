@@ -56,7 +56,7 @@ namespace api
                    {
                        builder.ClearProviders();
 
-                       if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
+                       if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
                        {
                            var loggerBuilder = new LoggerConfiguration()
                                               .Enrich.FromLogContext()
@@ -105,6 +105,7 @@ namespace api
                        });
                        builder.UseContentRoot(Directory.GetCurrentDirectory());
                        builder.UseKestrel((context, options) => { options.Configure(context.Configuration.GetSection("Kestrel")); });
+                       builder.UseIIS();
                        builder.UseStartup<Startup>();
                    });
         }
