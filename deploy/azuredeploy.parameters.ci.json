@@ -13,6 +13,9 @@
     },
     "brandaris_api_serviceplan_sku": {
       "value": "B1"
+    },
+    "brandaris_ai_name": {
+      "value": "brandaris-insights"
     }
   }
 }
