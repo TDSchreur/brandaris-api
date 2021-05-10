@@ -9,7 +9,6 @@ variables:
   configuration: 'release'
   pool: Default
   subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
-  armServiceConnection: 'azure_brandaris'
 
 stages:
  - stage: Build
@@ -52,7 +51,7 @@ stages:
           displayName: ARM deployment for CI
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: $(armServiceConnection)
+            azureResourceManagerConnection: brandaris-ci
             subscriptionId: $(subscriptionId)
             action: 'Create Or Update Resource Group'
             resourceGroupName: 'brandaris-ci'
@@ -74,8 +73,7 @@ stages:
        - task: AzureRmWebAppDeployment@4
          inputs:
            ConnectionType: 'AzureRM'
-           azureSubscription: $(armServiceConnection)
-           resourceGroupName: 'brandaris-ci'
+           azureSubscription: brandaris-ci
            appType: 'apiApp'
            WebAppName: 'brandaris-api'
            packageForLinux: '$(Pipeline.Workspace)/api.zip'
@@ -89,7 +87,7 @@ stages:
           displayName: ARM deployment for Test
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: $(armServiceConnection)
+            azureResourceManagerConnection: brandaris-test
             subscriptionId: $(subscriptionId)
             action: 'Create Or Update Resource Group'
             resourceGroupName: 'brandaris-test'
@@ -111,8 +109,7 @@ stages:
        - task: AzureRmWebAppDeployment@4
          inputs:
            ConnectionType: 'AzureRM'
-           azureSubscription: $(armServiceConnection)
-           resourceGroupName: 'brandaris-test'
+           azureSubscription: 'brandaris-test'           
            appType: 'apiApp'
            WebAppName: 'brandaris-api'
            packageForLinux: '$(Pipeline.Workspace)/api.zip'
