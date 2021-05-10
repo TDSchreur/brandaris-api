@@ -5,7 +5,7 @@ pr:
   - master
 
 variables:
-  project: '**/api.csproj'
+  project: 'src/api/api.csproj'
   configuration: 'release'
   pool: Default
 
@@ -38,7 +38,27 @@ stages:
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
             
         - task: PublishBuildArtifacts@1
+          displayName: "publish api"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
+            ArtifactName: 'api'
             publishLocation: 'Container'
+
+ - stage: CI_ARM
+   jobs:
+     - job: ARM
+       pool: $(pool)
+       steps:            
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: ARM deployment for CI
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: 'MSDN Premium DutchWorkz(f395fc6c-f196-4abe-a248-e9b7d37c9f66)'
+            subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: 'brandaris-ci'
+            location: 'West Europe'
+            templateLocation: 'Linked artifact'
+            csmFile: 'deploy/azuredeploy.json'
+            csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+            deploymentMode: 'Incremental'
