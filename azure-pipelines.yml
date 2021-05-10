@@ -75,7 +75,7 @@ stages:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-ci
                appType: 'apiApp'
-               WebAppName: 'brandaris-api'
+               WebAppName: 'brandaris-api-ci'
                packageForLinux: '$(Pipeline.Workspace)/api.zip'
 
  - stage: Test
@@ -111,5 +111,5 @@ stages:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-test
                appType: 'apiApp'
-               WebAppName: 'brandaris-api'
+               WebAppName: 'brandaris-api-test'
                packageForLinux: '$(Pipeline.Workspace)/api.zip'
