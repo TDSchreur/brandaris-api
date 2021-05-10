@@ -150,7 +150,7 @@
                     ],
                     "name": "appsettings",
                     "properties": {
-                        "ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('brandaris_ai_name'))).InstrumentationKey]",
+                        "ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('brandaris_ai_name'))).InstrumentationKey]"
                     }
                 },
                 {
