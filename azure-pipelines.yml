@@ -22,14 +22,12 @@ stages:
           inputs:
             command: 'restore'
             projects: $(project)
-
         - task: DotNetCoreCLI@2
           displayName: build
           inputs:
             command: 'build'
             projects: $(project)
             arguments: '--no-restore -c $(configuration)'
-
         - task: DotNetCoreCLI@2
           displayName: publish
           inputs:
@@ -37,8 +35,7 @@ stages:
             projects: $(project)
             zipAfterPublish: true
             publishWebProjects: false
-            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
-            
+            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'            
         - task: PublishBuildArtifacts@1
           displayName: "publish api"
           inputs:
@@ -67,14 +64,13 @@ stages:
             
      - job: Deploy
        pool: $(pool)
+       dependsOn: ARM
        steps:
-
        - task: DownloadPipelineArtifact@2
          inputs:
            buildType: 'current'
            artifactName: 'api'
            targetPath: '$(Pipeline.Workspace)'
-
        - task: AzureRmWebAppDeployment@4
          inputs:
            ConnectionType: 'AzureRM'
@@ -82,4 +78,3 @@ stages:
            appType: 'apiApp'
            WebAppName: 'brandaris-api'
            packageForLinux: '$(Pipeline.Workspace)/api.zip'
-           
