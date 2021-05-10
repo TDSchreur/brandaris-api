@@ -45,9 +45,9 @@ stages:
  - stage: CI
    dependsOn: Build
    jobs:
-   - deployment: azure_ci
+   - deployment: Deploy
      pool: $(pool)
-     environment: ci
+     environment: brandaris-ci
      strategy:
       runOnce:
         deploy:
@@ -81,9 +81,9 @@ stages:
  - stage: Test
    dependsOn: CI
    jobs:
-   - deployment: azure_test
+   - deployment: Deploy
      pool: $(pool)
-     environment: test
+     environment: brandaris-test
      strategy:
       runOnce:
         deploy:
@@ -99,7 +99,7 @@ stages:
                location: 'West Europe'
                templateLocation: 'Linked artifact'
                csmFile: 'deploy/azuredeploy.json'
-               csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+               csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
                deploymentMode: 'Incremental'
            - task: DownloadPipelineArtifact@2
              inputs:
