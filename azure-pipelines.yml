@@ -66,6 +66,7 @@ stages:
                csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
                deploymentMode: 'Incremental'
            - task: DownloadPipelineArtifact@2
+             displayName: Download artifact
              inputs:
                buildType: 'current'
                artifactName: 'api'
@@ -102,6 +103,7 @@ stages:
                csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
                deploymentMode: 'Incremental'
            - task: DownloadPipelineArtifact@2
+             displayName: Download artifact
              inputs:
                buildType: 'current'
                artifactName: 'api'

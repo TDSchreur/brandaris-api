@@ -1,4 +1,6 @@
 using System;
+using Brandaris.Api.Features;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace api
+namespace Brandaris.Api
 {
     public class Startup
     {
@@ -32,17 +34,19 @@ namespace api
             {
                 endpoints.MapHealthChecks("/health/readiness");
 
-                endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = _ => false });
+                endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions {Predicate = _ => false});
             });
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
+
             app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMediatR(typeof(BaseApiController).Assembly);
+
             services.AddControllers();
 
             services.AddHealthChecks();

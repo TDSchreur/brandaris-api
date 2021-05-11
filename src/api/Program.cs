@@ -8,11 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace api
+namespace Brandaris.Api
 {
     public static class Program
     {
@@ -52,11 +53,11 @@ namespace api
 
                        context.Configuration = builder.Build();
                    })
-                  .ConfigureLogging((context, builder) =>
+                  .ConfigureLogging((_, builder) =>
                    {
                        builder.ClearProviders();
 
-                       if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
+                       if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
                        {
                            var loggerBuilder = new LoggerConfiguration()
                                               .Enrich.FromLogContext()
@@ -73,14 +74,16 @@ namespace api
 
                            builder.AddSerilog(loggerBuilder.CreateLogger());
                        }
-                       else
+
+                       builder.AddApplicationInsights(options =>
                        {
-                           builder.AddApplicationInsights(options =>
-                           {
-                               options.IncludeScopes = true;
-                               options.FlushOnDispose = true;
-                           });
-                       }
+                           options.IncludeScopes = true;
+                           options.FlushOnDispose = true;
+                       });
+
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Error);
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("System", LogLevel.Error);
                    })
                   .UseDefaultServiceProvider((context, options) =>
                    {
@@ -88,7 +91,7 @@ namespace api
                        options.ValidateScopes = isDevelopment;
                        options.ValidateOnBuild = isDevelopment;
                    })
-                  .ConfigureServices((hostContext, services) =>
+                  .ConfigureServices((_, services) =>
                    {
                        services.AddOptions();
                        services.AddRouting();
