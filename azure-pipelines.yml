@@ -36,7 +36,7 @@ stages:
             publishWebProjects: false
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1
-          displayName: "publish api"
+          displayName: "publish artifact"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'api'
@@ -65,13 +65,8 @@ stages:
                csmFile: 'deploy/azuredeploy.json'
                csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
                deploymentMode: 'Incremental'
-#           - task: DownloadPipelineArtifact@2
-#             displayName: Download artifact
-#             inputs:
-#               buildType: 'current'
-#               artifactName: 'api'
-#               targetPath: '$(Pipeline.Workspace)'
            - task: AzureRmWebAppDeployment@4
+             displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-ci
@@ -102,13 +97,8 @@ stages:
                csmFile: 'deploy/azuredeploy.json'
                csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
                deploymentMode: 'Incremental'
-#           - task: DownloadPipelineArtifact@2
-#             displayName: Download artifact
-#             inputs:
-#               buildType: 'current'
-#               artifactName: 'api'
-#               targetPath: '$(Pipeline.Workspace)'
            - task: AzureRmWebAppDeployment@4
+             displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-test
