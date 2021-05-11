@@ -5,6 +5,9 @@
         "brandaris_api_name": {
             "type": "String"
         },
+        "brandaris_ai_name": {
+            "type": "String"
+        },
         "brandaris_api_serviceplan_name": {
             "type": "String"
         },
@@ -86,6 +89,20 @@
         }
     },
     "resources": [
+
+        {
+            "name": "[parameters('brandaris_ai_name')]",
+            "type": "microsoft.insights/components",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-05-01",
+            "kind": "web",
+            "dependsOn": [],
+            "properties": {
+                "ApplicationId": "[parameters('brandaris_ai_name')]",
+                "Application_Type": "web"
+            }
+        },
+
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "[variables('serverfarms-apiversion')]",
@@ -104,7 +121,8 @@
             "name": "[parameters('brandaris_api_name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('brandaris_api_serviceplan_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('brandaris_api_serviceplan_name'))]",
+                "[concat('Microsoft.Insights/components/', parameters('brandaris_ai_name'))]"
             ],
             "kind": "api",
             "properties": {
@@ -132,7 +150,7 @@
                     ],
                     "name": "appsettings",
                     "properties": {
-                        "appsettings": "todo"
+                        "ApplicationInsights:InstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('brandaris_ai_name'))).InstrumentationKey]"
                     }
                 },
                 {
