@@ -13,7 +13,7 @@ variables:
 stages:
  - stage: Build
    jobs:
-     - job: Build       
+     - job: Build
        pool: $(pool)
        steps:
         - task: DotNetCoreCLI@2
@@ -34,7 +34,7 @@ stages:
             projects: $(project)
             zipAfterPublish: true
             publishWebProjects: false
-            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'            
+            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1
           displayName: "publish api"
           inputs:
@@ -51,7 +51,7 @@ stages:
      strategy:
       runOnce:
         deploy:
-          steps:            
+          steps:
            - task: AzureResourceManagerTemplateDeployment@3
              displayName: ARM deployment for CI
              inputs:
@@ -65,19 +65,19 @@ stages:
                csmFile: 'deploy/azuredeploy.json'
                csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
                deploymentMode: 'Incremental'
-           - task: DownloadPipelineArtifact@2
-             displayName: Download artifact
-             inputs:
-               buildType: 'current'
-               artifactName: 'api'
-               targetPath: '$(Pipeline.Workspace)'
+#           - task: DownloadPipelineArtifact@2
+#             displayName: Download artifact
+#             inputs:
+#               buildType: 'current'
+#               artifactName: 'api'
+#               targetPath: '$(Pipeline.Workspace)'
            - task: AzureRmWebAppDeployment@4
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-ci
                appType: 'apiApp'
                WebAppName: 'brandaris-api-ci'
-               packageForLinux: '$(Pipeline.Workspace)/api.zip'
+               packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
 
  - stage: Test
    dependsOn: CI
@@ -88,7 +88,7 @@ stages:
      strategy:
       runOnce:
         deploy:
-          steps:            
+          steps:
            - task: AzureResourceManagerTemplateDeployment@3
              displayName: ARM deployment for Test
              inputs:
@@ -102,16 +102,16 @@ stages:
                csmFile: 'deploy/azuredeploy.json'
                csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
                deploymentMode: 'Incremental'
-           - task: DownloadPipelineArtifact@2
-             displayName: Download artifact
-             inputs:
-               buildType: 'current'
-               artifactName: 'api'
-               targetPath: '$(Pipeline.Workspace)'
+#           - task: DownloadPipelineArtifact@2
+#             displayName: Download artifact
+#             inputs:
+#               buildType: 'current'
+#               artifactName: 'api'
+#               targetPath: '$(Pipeline.Workspace)'
            - task: AzureRmWebAppDeployment@4
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: brandaris-test
                appType: 'apiApp'
                WebAppName: 'brandaris-api-test'
-               packageForLinux: '$(Pipeline.Workspace)/api.zip'
+               packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
