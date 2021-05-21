@@ -1,0 +1,1 @@
+az deployment group create -f ./main.bicep -g rg-bicep --parameters ./parameters.ci.json

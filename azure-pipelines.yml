@@ -63,8 +63,8 @@ stages:
                resourceGroupName: 'brandaris-ci'
                location: 'West Europe'
                templateLocation: 'Linked artifact'
-               csmFile: 'deploy/azuredeploy.json'
-               csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+               csmFile: 'deploy/arm_template/azuredeploy.json'
+               csmParametersFile: 'deploy/arm_template/azuredeploy.parameters.ci.json'
                deploymentMode: 'Incremental'
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
@@ -95,8 +95,8 @@ stages:
                resourceGroupName: 'brandaris-test'
                location: 'West Europe'
                templateLocation: 'Linked artifact'
-               csmFile: 'deploy/azuredeploy.json'
-               csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
+               csmFile: 'deploy/arm_template/azuredeploy.json'
+               csmParametersFile: 'deploy/arm_template/azuredeploy.parameters.test.json'
                deploymentMode: 'Incremental'
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
