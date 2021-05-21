@@ -8,7 +8,8 @@ variables:
   project: 'src/api/api.csproj'
   configuration: 'release'
   pool: Default
-  subscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+  azureSubscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
+  azureServiceConnection: 'azure-sc'
 
 stages:
  - stage: Build
@@ -56,8 +57,8 @@ stages:
              displayName: ARM deployment for CI
              inputs:
                deploymentScope: 'Resource Group'
-               azureResourceManagerConnection: brandaris-ci
-               subscriptionId: $(subscriptionId)
+               azureResourceManagerConnection: $(azureServiceConnection)
+               subscriptionId: $(azureSubscriptionId)
                action: 'Create Or Update Resource Group'
                resourceGroupName: 'brandaris-ci'
                location: 'West Europe'
@@ -69,7 +70,7 @@ stages:
              displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
-               azureSubscription: brandaris-ci
+               azureSubscription: $(azureServiceConnection)
                appType: 'apiApp'
                WebAppName: 'brandaris-api-ci'
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
@@ -88,8 +89,8 @@ stages:
              displayName: ARM deployment for Test
              inputs:
                deploymentScope: 'Resource Group'
-               azureResourceManagerConnection: brandaris-test
-               subscriptionId: $(subscriptionId)
+               azureResourceManagerConnection: $(azureServiceConnection)
+               subscriptionId: $(azureSubscriptionId)
                action: 'Create Or Update Resource Group'
                resourceGroupName: 'brandaris-test'
                location: 'West Europe'
@@ -101,7 +102,7 @@ stages:
              displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
-               azureSubscription: brandaris-test
+               azureSubscription: $(azureServiceConnection)
                appType: 'apiApp'
                WebAppName: 'brandaris-api-test'
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
