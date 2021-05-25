@@ -77,7 +77,7 @@ stages:
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
 
  - stage: Biceps
-   dependsOn: []
+   dependsOn: Build
    jobs:
    - deployment: Deploy
      pool: $(pool)
