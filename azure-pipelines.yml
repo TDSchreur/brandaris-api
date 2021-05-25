@@ -94,7 +94,8 @@ stages:
                azureSubscription: 'azure-sc'
                scriptType: 'bash'
                scriptLocation: 'scriptPath'
-               scriptPath: '$(Build.SourcesDirectory)/deploy/bicep/deploy-ci.sh'
+               scriptPath: 'deploy-ci.sh'
+               workingDirectory: $(Build.SourcesDirectory)/deploy/bicep/
         
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
