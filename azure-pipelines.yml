@@ -93,9 +93,8 @@ stages:
              inputs:
                azureSubscription: 'azure-sc'
                scriptType: 'bash'
-               scriptLocation: 'scriptPath'
-               scriptPath: 'deploy-ci.sh'
-               workingDirectory: $(Build.SourcesDirectory)/deploy/bicep/
+               scriptLocation: 'inlineScript'
+               inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json'
         
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
