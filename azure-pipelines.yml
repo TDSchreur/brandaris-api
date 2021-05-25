@@ -37,11 +37,13 @@ stages:
             publishWebProjects: false
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1
-          displayName: "publish artifact"
+          displayName: "publish artifact api"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'api'
             publishLocation: 'Container'
+            
+
 
  - stage: ARM
    dependsOn: Build
@@ -86,13 +88,13 @@ stages:
       runOnce:
         deploy:
           steps:
-
+          
            - task: AzureCLI@2
              inputs:
                azureSubscription: 'azure-sc'
                scriptType: 'bash'
                scriptLocation: 'scriptPath'
-               scriptPath: 'deploy/bicep/deploy-ci.sh'
+               scriptPath: '$(Build.SourcesDirectory)/deploy/bicep/deploy-ci.sh'
         
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
