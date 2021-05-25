@@ -56,7 +56,7 @@ stages:
         deploy:
           steps:
            - task: AzureResourceManagerTemplateDeployment@3
-             displayName: ARM deployment for ARM
+             displayName: ARM deployment
              inputs:
                deploymentScope: 'Resource Group'
                azureResourceManagerConnection: $(azureServiceConnection)
@@ -90,6 +90,7 @@ stages:
           steps:
           
            - task: AzureCLI@2
+             displayName: Biceps deployment via CLI
              inputs:
                azureSubscription: 'azure-sc'
                scriptType: 'bash'

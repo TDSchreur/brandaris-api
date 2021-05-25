@@ -15,6 +15,7 @@
             "type": "int",
             "defaultValue": 1,
             "minValue": 1,
+            "maxValue": 5,
             "metadata": {
                 "description": "Describes plan's instance count"
             }
@@ -85,7 +86,8 @@
             ],
             "scmIpSecurityRestrictionsUseMain": false,
             "http20Enabled": true,
-            "minTlsVersion": "1.2"
+            "minTlsVersion": "1.2",
+            "healthCheckPath": "/health/readiness"
         }
     },
     "resources": [
@@ -115,6 +117,7 @@
             "kind": "app",
             "properties": "[variables('webplan-configuration')]"
         },
+
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",

@@ -49,6 +49,7 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
         hostType: 'Repository'
       }
     ]
+
     serverFarmId: serviceplan.id
     siteConfig: {
       appSettings: [
@@ -101,5 +102,6 @@ resource functionAppConfig 'Microsoft.Web/sites/config@2020-06-01' = {
     scmIpSecurityRestrictionsUseMain: false
     http20Enabled: true
     minTlsVersion: '1.2'
+    healthCheckPath: '/health/readiness'
   }
 }
