@@ -15,7 +15,7 @@ param api_name string
 
 param ai_instrumentationkey string
 
-var api_name_unique = '${api_name}-${uniqueString(resourceGroup().id)}'
+var api_name_unique = '${api_name}-biceps'
 
 resource serviceplan 'Microsoft.Web/serverfarms@2018-02-01' = {
   name: serviceplan_name

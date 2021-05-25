@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "brandaris_api_name": {
-      "value": "brandaris-api-ci"
+      "value": "brandaris-api-arm"
     },
     "brandaris_api_serviceplan_name": {
       "value": "brandaris-api-serviceplan"
@@ -15,7 +15,7 @@
       "value": "B1"
     },
     "brandaris_ai_name": {
-      "value": "brandaris-insights-ci"
+      "value": "brandaris-insights-arm"
     }
   }
 }
