@@ -37,72 +37,71 @@ stages:
             publishWebProjects: false
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
         - task: PublishBuildArtifacts@1
-          displayName: "publish artifact"
+          displayName: "publish artifact api"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'api'
             publishLocation: 'Container'
+            
 
- - stage: CI
+
+ - stage: ARM
    dependsOn: Build
    jobs:
    - deployment: Deploy
      pool: $(pool)
-     environment: brandaris-ci
+     environment: brandaris-arm
      strategy:
       runOnce:
         deploy:
           steps:
            - task: AzureResourceManagerTemplateDeployment@3
-             displayName: ARM deployment for CI
+             displayName: ARM deployment
              inputs:
                deploymentScope: 'Resource Group'
                azureResourceManagerConnection: $(azureServiceConnection)
                subscriptionId: $(azureSubscriptionId)
                action: 'Create Or Update Resource Group'
-               resourceGroupName: 'brandaris-ci'
+               resourceGroupName: 'brandaris-arm'
                location: 'West Europe'
                templateLocation: 'Linked artifact'
-               csmFile: 'deploy/azuredeploy.json'
-               csmParametersFile: 'deploy/azuredeploy.parameters.ci.json'
+               csmFile: 'deploy/arm_template/azuredeploy.json'
+               csmParametersFile: 'deploy/arm_template/azuredeploy.parameters.ci.json'
                deploymentMode: 'Incremental'
+
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: $(azureServiceConnection)
                appType: 'apiApp'
-               WebAppName: 'brandaris-api-ci'
+               WebAppName: 'brandaris-api-arm'
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
 
- - stage: Test
-   dependsOn: CI
+ - stage: Biceps
+   dependsOn: Build
    jobs:
    - deployment: Deploy
      pool: $(pool)
-     environment: brandaris-test
+     environment: brandaris-biceps
      strategy:
       runOnce:
         deploy:
           steps:
-           - task: AzureResourceManagerTemplateDeployment@3
-             displayName: ARM deployment for Test
+          
+           - task: AzureCLI@2
+             displayName: Biceps deployment via CLI
              inputs:
-               deploymentScope: 'Resource Group'
-               azureResourceManagerConnection: $(azureServiceConnection)
-               subscriptionId: $(azureSubscriptionId)
-               action: 'Create Or Update Resource Group'
-               resourceGroupName: 'brandaris-test'
-               location: 'West Europe'
-               templateLocation: 'Linked artifact'
-               csmFile: 'deploy/azuredeploy.json'
-               csmParametersFile: 'deploy/azuredeploy.parameters.test.json'
-               deploymentMode: 'Incremental'
+               azureSubscription: 'azure-sc'
+               scriptType: 'bash'
+               scriptLocation: 'inlineScript'
+               inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json'
+        
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: $(azureServiceConnection)
                appType: 'apiApp'
-               WebAppName: 'brandaris-api-test'
+               WebAppName: 'brandaris-api-biceps'
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
