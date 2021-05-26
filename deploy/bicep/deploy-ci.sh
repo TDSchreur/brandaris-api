@@ -1,1 +1,1 @@
-az deployment group create -f main.bicep -g brandaris-biceps --parameters parameters.ci.json
+az deployment group create -f .\main.bicep -g brandaris-biceps -p .\parameters.ci.json

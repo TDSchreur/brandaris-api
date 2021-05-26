@@ -13,7 +13,7 @@ param serviceplan_capacity int
 
 param api_name string
 
-param ai_instrumentationkey string
+param insights_instrumentationkey string
 
 var api_name_unique = '${api_name}-biceps'
 
@@ -55,7 +55,7 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: ai_instrumentationkey
+          value: insights_instrumentationkey
         }
       ]
     }

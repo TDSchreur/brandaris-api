@@ -16,7 +16,7 @@ var location = resourceGroup().location
 var storageAccountName = '${namePrefix}${uniqueString(resourceGroup().id)}'
 var ai_name = 'ai-${api_name}'
 
-module stg './storage.bicep' = {
+module stg './modules/storage.bicep' = {
   name: 'storageDeploy'
   params: {
     storageAccountName: storageAccountName
@@ -25,17 +25,17 @@ module stg './storage.bicep' = {
   }
 }
 
-module ai './ai.bicep' = {
+module insights './modules/insights.bicep' = {
   name: 'aiDeploy'
   params: {
-    ai_name: ai_name
+    insights_name: ai_name
   }
 }
 
-module web './web.bicep' = {
+module web './modules/web.bicep' = {
   name: 'webDeploy'
   params: {
-    ai_instrumentationkey: ai.outputs.instrumentationKey
+    insights_instrumentationkey: insights.outputs.instrumentationKey
     serviceplan_name: serviceplan_name
     serviceplan_sku: serviceplan_sku
     serviceplan_capacity: serviceplan_capacity

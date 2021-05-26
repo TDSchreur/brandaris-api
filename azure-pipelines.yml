@@ -17,17 +17,20 @@ stages:
      - job: Build
        pool: $(pool)
        steps:
+
         - task: DotNetCoreCLI@2
           displayName: restore
           inputs:
             command: 'restore'
             projects: $(project)
+        
         - task: DotNetCoreCLI@2
           displayName: build
           inputs:
             command: 'build'
             projects: $(project)
             arguments: '--no-restore -c $(configuration)'
+        
         - task: DotNetCoreCLI@2
           displayName: publish
           inputs:
@@ -36,14 +39,13 @@ stages:
             zipAfterPublish: true
             publishWebProjects: false
             arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
+        
         - task: PublishBuildArtifacts@1
           displayName: "publish artifact api"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'api'
             publishLocation: 'Container'
-            
-
 
  - stage: ARM
    dependsOn: Build
@@ -55,6 +57,7 @@ stages:
       runOnce:
         deploy:
           steps:
+
            - task: AzureResourceManagerTemplateDeployment@3
              displayName: ARM deployment
              inputs:
