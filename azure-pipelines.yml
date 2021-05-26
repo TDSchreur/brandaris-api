@@ -48,7 +48,7 @@ stages:
             publishLocation: 'Container'
 
  - stage: ARM
-   dependsOn: Build
+   dependsOn: Api
    jobs:
    - deployment: Deploy
      pool: $(pool)
@@ -82,7 +82,7 @@ stages:
                packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
 
  - stage: Biceps
-   dependsOn: Build
+   dependsOn: Api
    jobs:
    - deployment: Deploy
      pool: $(pool)
