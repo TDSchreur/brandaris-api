@@ -12,7 +12,7 @@ variables:
   azureServiceConnection: 'azure-sc'
 
 stages:
- - stage: Build
+ - stage: Api
    jobs:
      - job: Build
        pool: $(pool)
