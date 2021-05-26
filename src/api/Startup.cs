@@ -50,6 +50,8 @@ namespace Brandaris.Api
             services.AddControllers();
 
             services.AddHealthChecks();
+
+            services.AddApplicationInsightsTelemetry();
         }
     }
 }

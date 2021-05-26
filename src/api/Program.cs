@@ -81,9 +81,9 @@ namespace Brandaris.Api
                            options.FlushOnDispose = true;
                        });
 
-                       builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
-                       builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Error);
-                       builder.AddFilter<ApplicationInsightsLoggerProvider>("System", LogLevel.Error);
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Debug);
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
+                       builder.AddFilter<ApplicationInsightsLoggerProvider>("System", LogLevel.Warning);
                    })
                   .UseDefaultServiceProvider((context, options) =>
                    {
@@ -91,12 +91,7 @@ namespace Brandaris.Api
                        options.ValidateScopes = isDevelopment;
                        options.ValidateOnBuild = isDevelopment;
                    })
-                  .ConfigureServices((_, services) =>
-                   {
-                       services.AddOptions();
-                       services.AddRouting();
-                       services.AddApplicationInsightsTelemetry();
-                   })
+                  .ConfigureServices((_, services) => { services.AddOptions(); })
                   .ConfigureWebHost(builder =>
                    {
                        builder.ConfigureAppConfiguration((ctx, cb) =>
