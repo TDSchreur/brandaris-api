@@ -1,46 +1,45 @@
-@minLength(3)
-@maxLength(6)
-param namePrefix string = 'tds'
-
-param storage_sku string = 'Standard_LRS'
+param sql_administratorLogin string
+param sql_administratorLoginPassword string
 
 @minValue(1)
 @maxValue(5)
 param serviceplan_capacity int
 param serviceplan_name string
 param serviceplan_sku string
+param serviceplan_tier string
 
 param api_name string
 
 var location = resourceGroup().location
-var storageAccountName = '${namePrefix}${uniqueString(resourceGroup().id)}'
-var ai_name = 'ai-${api_name}'
+var insights_name = 'insights-${api_name}'
 
-module stg './modules/storage.bicep' = {
-  name: 'storageDeploy'
+module sql './modules/sql.bicep' = {
+  name: 'sql-deployment'
   params: {
-    storageAccountName: storageAccountName
-    location: location
-    storageSku: storage_sku
+    administratorLogin: sql_administratorLogin
+    administratorLoginPassword: sql_administratorLoginPassword
   }
 }
 
 module insights './modules/insights.bicep' = {
-  name: 'aiDeploy'
+  name: 'insights-deployment'
   params: {
-    insights_name: ai_name
+    insights_name: insights_name
   }
 }
 
 module web './modules/web.bicep' = {
-  name: 'webDeploy'
+  name: 'web-deployment'
   params: {
     insights_instrumentationkey: insights.outputs.instrumentationKey
     serviceplan_name: serviceplan_name
     serviceplan_sku: serviceplan_sku
+    serviceplan_tier: serviceplan_tier
     serviceplan_capacity: serviceplan_capacity
     api_name: api_name
+    sqlserver_fullyQualifiedDomainName: sql.outputs.sqlserver_fullyQualifiedDomainName
+    sqlserver_database_name: sql.outputs.sqldatabase_name
+    sqlserver_username: sql_administratorLogin
+    sqlserver_password: sql_administratorLoginPassword
   }
 }
-
-output storageId string = stg.outputs.storageId

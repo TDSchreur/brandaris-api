@@ -1,0 +1,1 @@
+az deployment group create -f .\main.bicep -g brandaris-biceps -p .\parameters.ci.json sql_administratorLoginPassword=YRaACThb6B8zvK

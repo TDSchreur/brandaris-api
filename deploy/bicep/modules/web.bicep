@@ -1,4 +1,5 @@
 param serviceplan_name string
+param location string = resourceGroup().location
 
 @allowed([
   'B1'
@@ -6,6 +7,8 @@ param serviceplan_name string
   'S1'
 ])
 param serviceplan_sku string
+
+param serviceplan_tier string
 
 @minValue(1)
 @maxValue(5)
@@ -15,25 +18,30 @@ param api_name string
 
 param insights_instrumentationkey string
 
+param sqlserver_fullyQualifiedDomainName string
+param sqlserver_database_name string
+param sqlserver_username string
+param sqlserver_password string
+
 var api_name_unique = '${api_name}-biceps'
 
-resource serviceplan 'Microsoft.Web/serverfarms@2018-02-01' = {
+resource serviceplan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: serviceplan_name
-  location: resourceGroup().location
+  location: location
   sku: {
     name: serviceplan_sku
+    tier: serviceplan_tier
     capacity: serviceplan_capacity
   }
-  kind: 'app'
+  kind: 'web'
   properties: {
-    perSiteScaling: false
-    isXenon: false
+    reserved: false
   }
 }
 
 resource api 'Microsoft.Web/sites@2018-11-01' = {
   name: api_name_unique
-  location: resourceGroup().location
+  location: location
   kind: 'api'
   properties: {
     enabled: true
@@ -49,24 +57,34 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
         hostType: 'Repository'
       }
     ]
-
     serverFarmId: serviceplan.id
-    siteConfig: {
-      appSettings: [
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: insights_instrumentationkey
-        }
-      ]
+  }
+}
+
+resource siteconfig 'Microsoft.Web/sites/config@2020-06-01' = {
+  parent: api
+  name: 'appsettings'
+  properties: {
+    'APPINSIGHTS_INSTRUMENTATIONKEY': insights_instrumentationkey
+  }
+}
+
+resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
+  parent: api
+  name: 'connectionstrings'
+  properties: {
+    apedb: {
+      type: 'SQLAzure'
+      value: 'Data Source=tcp:${sqlserver_fullyQualifiedDomainName} ,1433;Initial Catalog=${sqlserver_database_name};User Id=${sqlserver_username};Password=${sqlserver_password}'
     }
   }
 }
 
-resource functionAppConfig 'Microsoft.Web/sites/config@2020-06-01' = {
+resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'web'
   properties: {
-    netFrameworkVersion: 'v4.0'
+    netFrameworkVersion: 'v5.0'
     phpVersion: 'off'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false
