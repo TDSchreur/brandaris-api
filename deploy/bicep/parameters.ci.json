@@ -12,7 +12,13 @@
       "value": 1
     },
     "serviceplan_sku": {
-      "value": "B1"
+      "value": "S1"
+    },
+    "serviceplan_tier": {
+      "value": "standard"
+    },
+    "sql_administratorLogin": {
+      "value": "dennis"
     }
   }
 }

@@ -17,7 +17,6 @@ stages:
      - job: Build
        pool: $(pool)
        steps:
-
         - task: DotNetCoreCLI@2
           displayName: restore
           inputs:
@@ -49,6 +48,7 @@ stages:
 
  - stage: ARM
    dependsOn: Api
+   condition: false
    jobs:
    - deployment: Deploy
      pool: $(pool)
@@ -95,7 +95,7 @@ stages:
            - task: AzureCLI@2
              displayName: Biceps deployment via CLI
              inputs:
-               azureSubscription: 'azure-sc'
+               azureSubscription: $(azureServiceConnection)
                scriptType: 'bash'
                scriptLocation: 'inlineScript'
                inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
