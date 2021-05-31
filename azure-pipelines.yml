@@ -13,7 +13,6 @@ variables:
 
 stages:
  - stage: Api
-   condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
    jobs:
      - job: Build
        pool: $(pool)
@@ -49,6 +48,7 @@ stages:
 
  - stage: ARM
    dependsOn: Api
+   condition: false
    jobs:
    - deployment: Deploy
      pool: $(pool)
