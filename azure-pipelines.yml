@@ -13,7 +13,7 @@ variables:
 
 stages:
  - stage: Api
-   condition: 'false'
+   condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
    jobs:
      - job: Build
        pool: $(pool)
