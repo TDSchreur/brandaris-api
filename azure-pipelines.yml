@@ -98,7 +98,7 @@ stages:
                azureSubscription: $(azureServiceConnection)
                scriptType: 'bash'
                scriptLocation: 'inlineScript'
-               inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json'
+               inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
         
            - task: AzureRmWebAppDeployment@4
              displayName: Deploy API
