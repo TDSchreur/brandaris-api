@@ -5,3 +5,10 @@ variable "location" {
 variable "resource_group_name" {
   description = "The name of the resource group"
 }
+
+variable "users" {
+  type = list(object({
+    name  = string
+    email = string
+  }))
+}

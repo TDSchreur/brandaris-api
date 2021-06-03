@@ -10,14 +10,16 @@ resource "azurerm_monitor_action_group" "insights" {
   resource_group_name = var.resource_group_name
   short_name          = "Beccamonitor"
 
-  email_receiver {
-    name          = "Email Dennis"
-    email_address = "t.d.schreur@dnb.nl"
-  }
+  dynamic "email_receiver" {
+    for_each = [for s in var.users : {
+      name  = s.name
+      email = s.email
+    }]
 
-  email_receiver {
-    name          = "Email Dennis2"
-    email_address = "dennis@tdschreur.nl"
+    content {
+      name          = email_receiver.value.name
+      email_address = email_receiver.value.email
+    }
   }
 }
 

@@ -8,3 +8,15 @@ variable "resource_group_name" {
   default     = "rg_terraform"
 }
 
+variable "users" {
+  type = list(object({
+    name  = string
+    email = string
+  }))
+  default = [
+    {
+      name  = "Dennis"
+      email = "t.d.schreur@dnb.nl"
+    }
+  ]
+}
