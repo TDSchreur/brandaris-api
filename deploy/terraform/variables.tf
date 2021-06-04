@@ -5,7 +5,6 @@ variable "location" {
 
 variable "resource_group_name" {
   description = "The name of the resource group"
-  default     = "rg_terraform"
 }
 
 variable "users" {
@@ -13,10 +12,4 @@ variable "users" {
     name  = string
     email = string
   }))
-  default = [
-    {
-      name  = "Dennis"
-      email = "t.d.schreur@dnb.nl"
-    }
-  ]
 }

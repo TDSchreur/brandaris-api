@@ -1,5 +1,6 @@
-param sql_administratorLogin string
+@secure()
 param sql_administratorLoginPassword string
+param sql_administratorLogin string
 
 @minValue(1)
 @maxValue(5)
@@ -18,6 +19,7 @@ module sql './modules/sql.bicep' = {
   params: {
     administratorLogin: sql_administratorLogin
     administratorLoginPassword: sql_administratorLoginPassword
+    location: location
   }
 }
 
@@ -25,6 +27,7 @@ module insights './modules/insights.bicep' = {
   name: 'insights-deployment'
   params: {
     insights_name: insights_name
+    location: location
   }
 }
 
@@ -41,5 +44,6 @@ module web './modules/web.bicep' = {
     sqlserver_database_name: sql.outputs.sqldatabase_name
     sqlserver_username: sql_administratorLogin
     sqlserver_password: sql_administratorLoginPassword
+    location: location
   }
 }
