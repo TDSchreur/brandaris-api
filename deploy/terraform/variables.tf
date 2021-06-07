@@ -13,3 +13,7 @@ variable "users" {
     email = string
   }))
 }
+
+variable "environment" {
+  description = "Name of de environment, used in the alert mail subject"
+}

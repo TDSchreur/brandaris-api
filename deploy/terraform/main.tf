@@ -23,6 +23,7 @@ module "insights" {
   source              = "./modules/insights"
   location            = var.location
   users               = var.users
+  environment         = var.environment
   resource_group_name = var.resource_group_name
   depends_on = [
     azurerm_resource_group.rg

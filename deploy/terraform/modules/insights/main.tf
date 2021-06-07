@@ -61,7 +61,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "alert_error" {
     action_group = [
       azurerm_monitor_action_group.alert_group.id
     ]
-    email_subject = "Brandaris error op production"
+    email_subject = "Brandaris error op ${var.environment}"
   }
   data_source_id = azurerm_application_insights.insights.id
   description    = "Warning with EventId 4001"
