@@ -5,7 +5,7 @@ pr:
   - master
 
 variables:
-  project: 'src/api/api.csproj'
+  project: 'src/Api/Api.csproj'
   configuration: 'release'
   pool: Default
   azureSubscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
