@@ -46,41 +46,6 @@ stages:
             ArtifactName: 'api'
             publishLocation: 'Container'
 
- - stage: ARM
-   dependsOn: Api
-   condition: false
-   jobs:
-   - deployment: Deploy
-     pool: $(pool)
-     environment: brandaris-arm
-     strategy:
-      runOnce:
-        deploy:
-          steps:
-
-           - task: AzureResourceManagerTemplateDeployment@3
-             displayName: ARM deployment
-             inputs:
-               deploymentScope: 'Resource Group'
-               azureResourceManagerConnection: $(azureServiceConnection)
-               subscriptionId: $(azureSubscriptionId)
-               action: 'Create Or Update Resource Group'
-               resourceGroupName: 'brandaris-arm'
-               location: 'West Europe'
-               templateLocation: 'Linked artifact'
-               csmFile: 'deploy/arm_template/azuredeploy.json'
-               csmParametersFile: 'deploy/arm_template/azuredeploy.parameters.ci.json'
-               deploymentMode: 'Incremental'
-
-           - task: AzureRmWebAppDeployment@4
-             displayName: Deploy API
-             inputs:
-               ConnectionType: 'AzureRM'
-               azureSubscription: $(azureServiceConnection)
-               appType: 'apiApp'
-               WebAppName: 'brandaris-api-arm'
-               packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
-
  - stage: Biceps
    dependsOn: Api
    jobs:
