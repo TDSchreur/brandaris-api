@@ -73,7 +73,7 @@ resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'connectionstrings'
   properties: {
-    apedb: {
+    default: {
       type: 'SQLAzure'
       value: 'Data Source=tcp:${sqlserver_fullyQualifiedDomainName} ,1433;Initial Catalog=${sqlserver_database_name};User Id=${sqlserver_username};Password=${sqlserver_password}'
     }

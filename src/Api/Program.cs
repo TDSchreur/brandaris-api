@@ -71,22 +71,22 @@ namespace Brandaris.Api
                 {
                     builder.ClearProviders();
 
-                    if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
-                    {
-                        LoggerConfiguration loggerBuilder = new LoggerConfiguration()
-                                                           .Enrich.FromLogContext()
-                                                           .MinimumLevel.Information();
+                    ////if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
+                    ////{
+                    LoggerConfiguration loggerBuilder = new LoggerConfiguration()
+                                                       .Enrich.FromLogContext()
+                                                       .MinimumLevel.Information();
 
-                        loggerBuilder.Enrich.WithMachineName()
-                                     .Enrich.WithEnvironmentName()
-                                     .MinimumLevel.Debug()
-                                     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                     .MinimumLevel.Override("System", LogEventLevel.Warning)
-                                     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level} {EnvironmentName}-{MachineName}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                                                      theme: AnsiConsoleTheme.Literate);
+                    loggerBuilder.Enrich.WithMachineName()
+                                 .Enrich.WithEnvironmentName()
+                                 .MinimumLevel.Debug()
+                                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                 .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level} {EnvironmentName}-{MachineName}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                                  theme: AnsiConsoleTheme.Literate);
 
-                        builder.AddSerilog(loggerBuilder.CreateLogger());
-                    }
+                    builder.AddSerilog(loggerBuilder.CreateLogger());
+                    ////}
 
                     builder.AddApplicationInsights(options =>
                     {
