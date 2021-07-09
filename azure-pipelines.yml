@@ -72,4 +72,4 @@ stages:
                azureSubscription: $(azureServiceConnection)
                appType: 'apiApp'
                WebAppName: 'brandaris-api-biceps'
-               packageForLinux: '$(Pipeline.Workspace)/api/api.zip'
+               packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
