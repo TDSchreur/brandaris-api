@@ -30,6 +30,7 @@ namespace Features.AddTestData
 
         public async Task<bool> Handle(AddTestDataQuery request, CancellationToken cancellationToken)
         {
+            await _dataContext.Database.MigrateAsync(cancellationToken);
             await ClearData(cancellationToken);
             await AddPersons(cancellationToken);
             await AddProducts(cancellationToken);

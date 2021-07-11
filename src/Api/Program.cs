@@ -11,9 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+#if DEBUG
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+#endif
 
 namespace Brandaris.Api
 {
@@ -21,6 +23,7 @@ namespace Brandaris.Api
     {
         public static async Task<int> Main(string[] args)
         {
+#if DEBUG
             LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                                .Enrich.FromLogContext()
                                                .MinimumLevel.Information()
@@ -32,7 +35,7 @@ namespace Brandaris.Api
             Log.Logger = loggerBuilder.CreateLogger();
 
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-
+#endif
             try
             {
                 IHost host = CreateHostBuilder(args).Build();
@@ -43,9 +46,12 @@ namespace Brandaris.Api
             }
             catch (Exception e)
             {
+#if DEBUG
                 Log.Logger.Error(e, e.Message);
                 Log.CloseAndFlush();
-
+#elif RELEASE
+                Console.WriteLine(e.Message);
+#endif
                 await Task.Delay(1000);
                 return -1;
             }
@@ -71,22 +77,21 @@ namespace Brandaris.Api
                 {
                     builder.ClearProviders();
 
-                    ////if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
-                    ////{
+#if DEBUG
                     LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                                        .Enrich.FromLogContext()
                                                        .MinimumLevel.Information();
 
                     loggerBuilder.Enrich.WithMachineName()
                                  .Enrich.WithEnvironmentName()
-                                 .MinimumLevel.Debug()
-                                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                 .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                 .MinimumLevel.Information()
+                                  ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                  ////.MinimumLevel.Override("System", LogEventLevel.Warning)
                                  .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level} {EnvironmentName}-{MachineName}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                   theme: AnsiConsoleTheme.Literate);
 
                     builder.AddSerilog(loggerBuilder.CreateLogger());
-                    ////}
+#endif
 
                     builder.AddApplicationInsights(options =>
                     {

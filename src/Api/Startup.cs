@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Features.GetPerson;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +30,10 @@ namespace Brandaris.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health/readiness");
@@ -35,9 +42,9 @@ namespace Brandaris.Api
                                                               {
                                                                   Predicate = _ => false
                                                               });
-            });
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                endpoints.MapControllers(); //// .RequireAuthorization();
+            });
 
             app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
         }
@@ -45,7 +52,35 @@ namespace Brandaris.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(GetPersonHandler).Assembly);
+            services.AddMediatR(typeof(GetPersonsHandler).Assembly);
+
+            services.AddAuthorization(opt =>
+            {
+                AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")
+                                       .RequireAuthenticatedUser()
+                                       .Build();
+
+                opt.DefaultPolicy = defaultPolicy;
+            });
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer("AAD", opt =>
+            {
+                opt.RequireHttpsMetadata = false;
+                opt.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
+                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    // Both App ID URI and client id are valid audiences in the access token
+                    ValidAudiences = new List<string>
+                    {
+                        Configuration["Authentication:AppIdUri"],
+                        Configuration["Authentication:ClientId"]
+                    }
+                };
+            });
 
             services.AddControllers();
 

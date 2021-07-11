@@ -14,6 +14,9 @@ namespace Brandaris.Api.Controllers
         public PersonController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("")]
-        public async Task<ActionResult<GetPersonResponse>> Get([FromQuery] GetPersonQuery query) => await _mediator.Send(query);
+        public async Task<ActionResult<GetPersonsResponse>> GetPersons([FromQuery] GetPersonsQuery query) => (await _mediator.Send(query)).FormatResponse();
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query) => (await _mediator.Send(query)).FormatResponse();
     }
 }

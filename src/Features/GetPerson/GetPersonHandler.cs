@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
@@ -15,17 +14,16 @@ namespace Features.GetPerson
 
         public async Task<GetPersonResponse> Handle(GetPersonQuery request, CancellationToken cancellationToken)
         {
-            List<PersonModel> persons = await _query.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
-                                                    .Where(x => !request.HasLastName || x.LastName == request.LastName)
+            PersonModel person = await _query.Where(x => x.Id == request.Id)
                                                     .Select(x => new PersonModel
-                                                                 {
-                                                                     Id = x.Id,
-                                                                     FirstName = x.FirstName,
-                                                                     LastName = x.LastName
-                                                                 })
-                                                    .ToListAsync(cancellationToken);
+                                                    {
+                                                        Id = x.Id,
+                                                        FirstName = x.FirstName,
+                                                        LastName = x.LastName
+                                                    })
+                                                    .FirstOrDefaultAsync(cancellationToken);
 
-            return new GetPersonResponse(persons);
+            return new GetPersonResponse(person);
         }
     }
 }
