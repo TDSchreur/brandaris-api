@@ -1,14 +1,11 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using System;
+﻿using System;
 using Data;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace UnitTests
 {
-    public class PersonDatabaseFixture : IDisposable
+    public sealed class PersonDatabaseFixture : IDisposable
     {
         public PersonDatabaseFixture()
         {

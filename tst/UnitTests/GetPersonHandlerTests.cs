@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Core;
 using Data;
 using Data.Entities;
 using DataAccess;
+using Features.GetPerson;
 using Xunit;
 
 namespace UnitTests
 {
-    public class GetPersonHandletTests : IClassFixture<PersonDatabaseFixture>
+    public class GetPersonHandlerTests : IClassFixture<PersonDatabaseFixture>
     {
-        public GetPersonHandletTests(PersonDatabaseFixture fixture) => Context = fixture.Context;
+        public GetPersonHandlerTests(PersonDatabaseFixture fixture) => Context = fixture.Context;
 
         public DataContext Context { get; }
 
@@ -25,27 +25,27 @@ namespace UnitTests
             // arrange
             Query<Person> query = new(Context);
 
-            GetPersonHandler sut = new(query);
+            GetPersonsHandler sut = new(query);
 
             // act
-            GetPersons request = new()
+            GetPersonsQuery request = new()
                                  {
                                      FirstName = firstname, LastName = lastName
                                  };
-            ICollection<PersonModel> result = await sut.Handle(request, CancellationToken.None);
+            GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert
             if (!string.IsNullOrWhiteSpace(firstname))
             {
-                Assert.All(result, x => Assert.Equal(firstname, x.FirstName));
+                Assert.All(result.Value, x => Assert.Equal(firstname, x.FirstName));
             }
 
             if (!string.IsNullOrWhiteSpace(lastName))
             {
-                Assert.All(result, x => Assert.Equal(lastName, x.LastName));
+                Assert.All(result.Value, x => Assert.Equal(lastName, x.LastName));
             }
 
-            Assert.Equal(expectedResults, result.Count);
+            Assert.Equal(expectedResults, result.Value.Count);
         }
     }
 }
