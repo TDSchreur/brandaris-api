@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Data;
 using DataAccess;
+using Features;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+
 #endif
 
 namespace Brandaris.Api
@@ -71,6 +73,11 @@ namespace Brandaris.Api
                            .AddEnvironmentVariables()
                            .AddCommandLine(args);
 
+                    if (env.IsDevelopment())
+                    {
+                        builder.AddUserSecrets<Startup>();
+                    }
+
                     context.Configuration = builder.Build();
                 })
                .ConfigureLogging((_, builder) =>
@@ -113,6 +120,7 @@ namespace Brandaris.Api
                 {
                     services.AddOptions();
                     services.AddDataAccess<DataContext>(() => hostContext.Configuration.GetConnectionString("Default"));
+                    services.AddFeatures();
                     services.AddHostedService<MigratorHostedService>();
                 })
                .ConfigureWebHost(builder =>

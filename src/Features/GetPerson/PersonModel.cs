@@ -1,6 +1,6 @@
 ﻿namespace Features.GetPerson
 {
-    public class PersonModel
+    public class PersonModel : IResponseModel
     {
         public string FirstName { get; set; }
 

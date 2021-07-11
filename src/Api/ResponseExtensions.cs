@@ -2,7 +2,7 @@
 using Features;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Brandaris.Api.Controllers
+namespace Brandaris.Api
 {
     public static class ResponseExtensions
     {

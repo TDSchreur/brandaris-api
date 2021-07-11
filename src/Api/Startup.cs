@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Features.GetPerson;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Brandaris.Api
 {
@@ -30,9 +30,15 @@ namespace Brandaris.Api
 
             app.UseRouting();
 
+            app.UseHttpsRedirection();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Brandaris V1"); });
 
             app.UseEndpoints(endpoints =>
             {
@@ -52,13 +58,11 @@ namespace Brandaris.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(GetPersonsHandler).Assembly);
-
             services.AddAuthorization(opt =>
             {
                 AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")
-                                       .RequireAuthenticatedUser()
-                                       .Build();
+                                                   .RequireAuthenticatedUser()
+                                                   .Build();
 
                 opt.DefaultPolicy = defaultPolicy;
             });
@@ -69,17 +73,25 @@ namespace Brandaris.Api
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer("AAD", opt =>
             {
-                opt.RequireHttpsMetadata = false;
+                opt.RequireHttpsMetadata = true;
                 opt.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
-                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    // Both App ID URI and client id are valid audiences in the access token
-                    ValidAudiences = new List<string>
-                    {
-                        Configuration["Authentication:AppIdUri"],
-                        Configuration["Authentication:ClientId"]
-                    }
-                };
+                opt.TokenValidationParameters = new TokenValidationParameters
+                                                {
+                                                    // Both App ID URI and client id are valid audiences in the access token
+                                                    ValidAudiences = new List<string>
+                                                                     {
+                                                                         Configuration["Authentication:AppIdUri"], Configuration["Authentication:ClientId"]
+                                                                     }
+                                                };
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                                   {
+                                       Title = "Brandaris", Version = "v1"
+                                   });
+                c.UseAllOfForInheritance();
             });
 
             services.AddControllers();

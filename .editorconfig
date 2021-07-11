@@ -22,15 +22,18 @@ generated_code = true
 [*.cs]
 
 dotnet_diagnostic.CA1014.severity = none
+dotnet_diagnostic.CA1040.severity = none
 dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.CA1716.severity = none
 dotnet_diagnostic.CA1724.severity = none
+dotnet_diagnostic.CA1819.severity = none
 dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.CA2227.severity = none
 
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1116.severity = none
+dotnet_diagnostic.SA1127.severity = none
 dotnet_diagnostic.SA1128.severity = none
 dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA1228.severity = none
@@ -181,7 +184,6 @@ dotnet_code_quality.CA1822.api_surface = private, internal
 dotnet_code_quality.CA2208.api_surface = public
 
 # License header
-file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.
 dotnet_diagnostic.SA1600.severity=silent
 dotnet_diagnostic.SA1502.severity=silent
 dotnet_diagnostic.SA1601.severity=silent

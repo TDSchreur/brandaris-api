@@ -6,10 +6,10 @@ namespace Features.GetPerson
     {
         public string FirstName { get; init; }
 
-        public bool HasFirstName => !string.IsNullOrWhiteSpace(FirstName);
-
-        public bool HasLastName => !string.IsNullOrWhiteSpace(LastName);
-
         public string LastName { get; init; }
+
+        internal bool HasFirstName => !string.IsNullOrWhiteSpace(FirstName);
+
+        internal bool HasLastName => !string.IsNullOrWhiteSpace(LastName);
     }
 }

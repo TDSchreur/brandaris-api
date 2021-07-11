@@ -6,12 +6,12 @@ namespace Features.GetProduct
 {
     public class GetProductQuery : IRequest<GetProductResponse>
     {
-        public bool HasName => !string.IsNullOrWhiteSpace(Name);
-
-        public bool HasProductIds => ProductIds.Count > 0;
-
         public string Name { get; init; }
 
-        public IReadOnlyCollection<int> ProductIds { get; init; } = Array.Empty<int>();
+        public int[] ProductIds { get; init; } = Array.Empty<int>();
+
+        internal bool HasName => !string.IsNullOrWhiteSpace(Name);
+
+        internal bool HasProductIds => ProductIds.Length > 0;
     }
 }
