@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Features.AddProduct;
 using Features.GetProduct;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,11 @@ namespace Brandaris.Api.Controllers
         private readonly IMediator _mediator;
 
         public ProductController(IMediator mediator) => _mediator = mediator;
+
+        [HttpPost("")]
+        [ProducesResponseType(typeof(AddProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AddProductResponse>> AddPerson([FromBody] AddProductCommand command) => (await _mediator.Send(command)).FormatResponse();
 
         [HttpGet("")]
         [ProducesResponseType(typeof(GetProductsResponse), StatusCodes.Status200OK)]

@@ -1,4 +1,4 @@
-﻿namespace Features.GetPerson
+﻿namespace Features.Models
 {
     public class PersonModel : IResponseModel
     {

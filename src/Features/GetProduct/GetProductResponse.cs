@@ -1,4 +1,6 @@
-﻿namespace Features.GetProduct
+﻿using Features.Models;
+
+namespace Features.GetProduct
 {
     public class GetProductResponse : ResponseBase<ProductModel>
     {

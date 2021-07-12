@@ -1,19 +1,13 @@
-﻿using System;
-using Data.Entities;
+﻿using Data.Entities;
 using DataAccess;
 using FluentValidation;
 
-namespace Features.GetPerson
+namespace Features.AddPerson
 {
     public class AddPersonCommandValidator : AbstractValidator<AddPersonCommand>
     {
         public AddPersonCommandValidator(IQuery<Person> query)
         {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
-
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
             RuleFor(x => x).CustomAsync(async (command, context, cancellationToken) =>

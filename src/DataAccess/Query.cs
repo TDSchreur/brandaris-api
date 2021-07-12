@@ -15,6 +15,8 @@ namespace DataAccess
 
         public Query(DbContext context) => _query = context.Set<TEntity>().AsNoTracking();
 
+        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => _query.AnyAsync(predicate, cancellationToken);
+
         public IQueryable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector) => _query.Select(selector);
 
         public Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken = default) => _query.ToListAsync(cancellationToken);
@@ -24,11 +26,6 @@ namespace DataAccess
             _query = _query.Where(predicate);
 
             return this;
-        }
-
-        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-        {
-            return _query.AnyAsync(predicate, cancellationToken);
         }
     }
 }
