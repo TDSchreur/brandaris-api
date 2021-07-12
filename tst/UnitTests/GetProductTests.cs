@@ -17,10 +17,7 @@ namespace UnitTests
         [Theory]
         [InlineData("Banaan", new int[] { }, 1)]
         [InlineData("Peer", new int[] { }, 1)]
-        [InlineData("", new int[] { 1, 4 }, 2)]
-        ////[InlineData("Dennis", "Schreur", 1)]
-        ////[InlineData("", "Pan", 1)]
-        ////[InlineData("", "", 4)]
+        [InlineData("", new[] { 1, 4 }, 2)]
         public async Task GetPersons(string name, int[] productIds, int expectedResults)
         {
             // arrange

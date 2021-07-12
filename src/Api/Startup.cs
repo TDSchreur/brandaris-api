@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Features.GetPerson;
+using Features.AddPerson;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

@@ -1,4 +1,4 @@
-﻿namespace Features.GetProduct
+﻿namespace Features.Models
 {
     public class ProductModel : IResponseModel
     {

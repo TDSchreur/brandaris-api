@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
+using Features.Models;
 using MediatR;
 
 namespace Features.GetPerson

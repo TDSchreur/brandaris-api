@@ -1,4 +1,6 @@
-﻿namespace Features.GetPerson
+﻿using Features.Models;
+
+namespace Features.GetPerson
 {
     public class GetPersonResponse : ResponseBase<PersonModel>
     {
