@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param server_name string = uniqueString('sql', resourceGroup().id)
-param database_name string = 'ApeDB'
+param database_name string = 'BrandarisDB'
 param administratorLogin string
 
 @secure()
