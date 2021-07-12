@@ -15,5 +15,7 @@ namespace DataAccess
         Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken = default);
 
         IQuery<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
+
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 }

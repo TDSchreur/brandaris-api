@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Data.Entities;
-using Features.GetById;
 using Features.GetProduct;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,19 +15,13 @@ namespace Brandaris.Api.Controllers
         public ProductController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("")]
-        public async Task<ActionResult<GetProductResponse>> Get([FromQuery] GetProductQuery query) => await _mediator.Send(query);
+        [ProducesResponseType(typeof(GetProductsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductsResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetProductsResponse>> Get([FromQuery] GetProductsQuery query) => await _mediator.Send(query);
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(GetByIdResponse<ProductModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GetByIdResponse<ProductModel>), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GetByIdResponse<ProductModel>>> GetProduct([FromRoute] int id) =>
-            (await _mediator.Send(new GetByIdRequest<Product, ProductModel>
-                                  {
-                                      Id = id,
-                                      Selector = x => new ProductModel
-                                                      {
-                                                          Id = x.Id, Name = x.Name
-                                                      }
-                                  })).FormatResponse();
+        [ProducesResponseType(typeof(GetProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetProductResponse>> GetProduct([FromRoute] GetProductQuery query) => (await _mediator.Send(query)).FormatResponse();
     }
 }

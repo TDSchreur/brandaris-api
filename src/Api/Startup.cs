@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Features.GetPerson;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -94,7 +96,8 @@ namespace Brandaris.Api
                 c.UseAllOfForInheritance();
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient));
 
             services.AddHealthChecks();
 

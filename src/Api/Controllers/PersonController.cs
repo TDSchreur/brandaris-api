@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Data.Entities;
-using Features.GetById;
 using Features.GetPerson;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,23 +15,18 @@ namespace Brandaris.Api.Controllers
         public PersonController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(GetByIdResponse<PersonModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GetByIdResponse<PersonModel>), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GetByIdResponse<PersonModel>>> GetPerson([FromRoute] int id) =>
-            (await _mediator.Send(new GetByIdRequest<Person, PersonModel>
-                                  {
-                                      Id = id,
-                                      Selector = x => new PersonModel
-                                                      {
-                                                          Id = x.Id,
-                                                          FirstName = x.FirstName,
-                                                          LastName = x.LastName
-                                                      }
-                                  })).FormatResponse();
+        [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query) => (await _mediator.Send(query)).FormatResponse();
 
         [HttpGet("")]
-        [ProducesResponseType(typeof(GetByIdResponse<PersonModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GetByIdResponse<PersonModel>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetPersonsResponse>> GetPersons([FromQuery] GetPersonsQuery query) => (await _mediator.Send(query)).FormatResponse();
+
+        [HttpPost("")]
+        [ProducesResponseType(typeof(AddPersonResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AddPersonResponse>> AddPerson([FromBody] AddPersonCommand command) => (await _mediator.Send(command)).FormatResponse();
     }
 }
