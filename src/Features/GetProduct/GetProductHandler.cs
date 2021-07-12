@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
@@ -16,15 +14,14 @@ namespace Features.GetProduct
 
         public async Task<GetProductResponse> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
-            List<ProductModel> products = await _query.Where(x => !request.HasProductIds || request.ProductIds.Contains(x.Id))
-                                                      .Where(x => !request.HasName || x.Name == request.Name)
-                                                      .Select(x => new ProductModel
-                                                                   {
-                                                                       Id = x.Id, Name = x.Name
-                                                                   })
-                                                      .ToListAsync(cancellationToken);
+            ProductModel product = await _query.Where(x => request.Id == x.Id)
+                                               .Select(x => new ProductModel
+                                                            {
+                                                                Id = x.Id, Name = x.Name
+                                                            })
+                                               .FirstOrDefaultAsync(cancellationToken);
 
-            return new GetProductResponse(products);
+            return new GetProductResponse(product);
         }
     }
 }

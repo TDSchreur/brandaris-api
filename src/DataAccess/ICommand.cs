@@ -8,6 +8,6 @@ namespace DataAccess
     {
         void Add(params TEntity[] persons);
 
-        Task<int> SaveChanges(CancellationToken token = default);
+        Task<int> SaveChangesAsync(CancellationToken token = default);
     }
 }

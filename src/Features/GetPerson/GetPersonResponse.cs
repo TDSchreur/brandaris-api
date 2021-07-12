@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Features.GetPerson
+﻿namespace Features.GetPerson
 {
-    public class GetPersonResponse : ResponseBase<IEnumerable<PersonModel>>
+    public class GetPersonResponse : ResponseBase<PersonModel>
     {
-        public GetPersonResponse(IEnumerable<PersonModel> value, bool succes = true) : base(value, succes) { }
+        public GetPersonResponse(PersonModel value, bool succes = true) : base(value, succes) { }
     }
 }

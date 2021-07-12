@@ -25,5 +25,10 @@ namespace DataAccess
 
             return this;
         }
+
+        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return _query.AnyAsync(predicate, cancellationToken);
+        }
     }
 }

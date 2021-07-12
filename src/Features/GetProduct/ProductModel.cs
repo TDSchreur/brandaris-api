@@ -1,6 +1,6 @@
 ﻿namespace Features.GetProduct
 {
-    public class ProductModel
+    public class ProductModel : IResponseModel
     {
         public int Id { get; set; }
 

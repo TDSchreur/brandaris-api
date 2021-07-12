@@ -4,15 +4,22 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Brandaris.Api</RootNamespace>
     <NoWarn>CA1014</NoWarn>
+    <UserSecretsId>21319940-ce36-4d4d-bdae-66add41fac45</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0-dev-00780" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />

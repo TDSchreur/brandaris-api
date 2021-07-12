@@ -18,6 +18,6 @@ namespace DataAccess
 
         public void Add(params TEntity[] persons) => _entities.AddRange(persons);
 
-        public Task<int> SaveChanges(CancellationToken token = default) => _dataContext.SaveChangesAsync(token);
+        public Task<int> SaveChangesAsync(CancellationToken token = default) => _dataContext.SaveChangesAsync(token);
     }
 }
