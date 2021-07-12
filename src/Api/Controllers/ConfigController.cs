@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Features.GetConfig;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Brandaris.Api.Controllers
 {
     [ApiController]
+    [Authorize("GetConfigPolicy")]
     [Route("api/[controller]")]
     public class ConfigController : ControllerBase
     {
