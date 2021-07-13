@@ -85,19 +85,7 @@ namespace Brandaris.Api
                     builder.ClearProviders();
 
 #if DEBUG
-                    LoggerConfiguration loggerBuilder = new LoggerConfiguration()
-                                                       .Enrich.FromLogContext()
-                                                       .MinimumLevel.Information();
-
-                    loggerBuilder.Enrich.WithMachineName()
-                                 .Enrich.WithEnvironmentName()
-                                 .MinimumLevel.Information()
-                                  ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                  ////.MinimumLevel.Override("System", LogEventLevel.Warning)
-                                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level} {EnvironmentName}-{MachineName}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                                                  theme: AnsiConsoleTheme.Literate);
-
-                    builder.AddSerilog(loggerBuilder.CreateLogger());
+                    builder.AddSerilog(Log.Logger);
 #endif
 
                     builder.AddApplicationInsights(options =>
