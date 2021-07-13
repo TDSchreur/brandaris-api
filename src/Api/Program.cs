@@ -28,9 +28,9 @@ namespace Brandaris.Api
 #if DEBUG
             LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                                .Enrich.FromLogContext()
-                                               .MinimumLevel.Debug()
-                                               .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                               .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                               .MinimumLevel.Information()
+                                               ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                               ////.MinimumLevel.Override("System", LogEventLevel.Warning)
                                                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                                 theme: AnsiConsoleTheme.Literate);
 
