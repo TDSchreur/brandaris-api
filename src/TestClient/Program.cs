@@ -1,34 +1,76 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Identity.Client;
-
-#pragma warning disable CA2000
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace TestClient
 {
-    public class Program
+    public static class Program
     {
-        public static async Task Main()
+        public static async Task<int> Main()
         {
-            TokenHelper helper = new();
+            LoggerConfiguration loggerBuilder = new LoggerConfiguration()
+                                               .Enrich.FromLogContext()
+                                               .MinimumLevel.Debug()
+                                               .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                               .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                               .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                                                theme: AnsiConsoleTheme.Literate);
 
-            AuthenticationResult result = await helper.Test2Async();
+            Log.Logger = loggerBuilder.CreateLogger();
 
-            Console.WriteLine(result.AccessToken);
+            try
+            {
+                IHost host = CreateHostBuilder().Build();
 
-            HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + result.AccessToken);
+                await host.RunAsync()
+                          .ContinueWith(_ => { })
+                          .ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, e.Message);
+                Log.CloseAndFlush();
+                await Task.Delay(1000);
+                return -1;
+            }
 
-            HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:5001/api/config");
-
-            HttpResponseMessage response = await httpClient.SendAsync(request);
-
-            Console.WriteLine(response.StatusCode);
-
-            string data = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine(data);
+            return 0;
         }
+
+        private static IHostBuilder CreateHostBuilder() =>
+            new HostBuilder()
+               .ConfigureAppConfiguration((context, builder) =>
+                {
+                    IHostEnvironment env = context.HostingEnvironment;
+
+                    builder.AddJsonFile("appsettings.json", false, false)
+                           .AddUserSecrets<ServiceWorker>()
+                           .AddEnvironmentVariables();
+
+                    context.Configuration = builder.Build();
+                })
+               .ConfigureLogging((_, builder) =>
+                {
+                    builder.ClearProviders();
+                    builder.AddSerilog(Log.Logger);
+                })
+               .UseDefaultServiceProvider((context, options) =>
+                {
+                    bool isDevelopment = context.HostingEnvironment.IsDevelopment();
+                    options.ValidateScopes = isDevelopment;
+                    options.ValidateOnBuild = isDevelopment;
+                })
+               .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddOptions();
+                    services.AddHostedService<ServiceWorker>();
+                    services.AddSingleton<TokenHelper>();
+                });
     }
 }
