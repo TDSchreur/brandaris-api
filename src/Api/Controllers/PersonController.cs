@@ -10,7 +10,6 @@ namespace Brandaris.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [AllowAnonymous]
     public class PersonController : Controller
     {
         private readonly IMediator _mediator;
@@ -25,7 +24,12 @@ namespace Brandaris.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query) => (await _mediator.Send(query)).FormatResponse();
+        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query)
+        {
+            var claims = User.Claims;
+
+            return (await _mediator.Send(query)).FormatResponse();
+        }
 
         [HttpGet("")]
         [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status200OK)]

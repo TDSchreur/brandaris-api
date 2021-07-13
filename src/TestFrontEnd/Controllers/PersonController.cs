@@ -1,6 +1,12 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 #pragma warning disable SA1201
@@ -25,6 +31,44 @@ namespace TestFrontEnd.Controllers
             var person = await _brandarisApiServiceAgent.GetPersonAsync(id);
 
             return person;
+        }
+
+        [HttpGet("claims")]
+        public ActionResult<IEnumerable<KeyValuePair<string, string>>> Get()
+        {
+            IEnumerable<KeyValuePair<string, string>> claims = HttpContext.User.Claims
+                                                                          .OrderBy(x => x.Type)
+                                                                          .Select(kv => new KeyValuePair<string, string>(kv.Type, kv.Value));
+
+            return Ok(claims);
+        }
+    }
+
+    [Route("[controller]")]
+    public class AccountController : ControllerBase
+    {
+#pragma warning disable CA1054
+        [AllowAnonymous]
+        [HttpGet("signin")]
+        public IActionResult SignIn([FromQuery] string returnUrl)
+        {
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                returnUrl = "/";
+            }
+
+            return Challenge(
+                new AuthenticationProperties { RedirectUri = returnUrl },
+                OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("signout")]
+        public override SignOutResult SignOut()
+        {
+            return SignOut(
+                new AuthenticationProperties { RedirectUri = "/" },
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
 
@@ -51,7 +95,7 @@ namespace TestFrontEnd.Controllers
 
     public interface IBrandarisApiServiceAgent
     {
-        Task<GetPersonResponse> GetPersonAsync(int id = 1);
+        Task<GetPersonResponse> GetPersonAsync(int id);
     }
 
     public class BrandarisApiServiceAgent : IBrandarisApiServiceAgent
@@ -63,7 +107,7 @@ namespace TestFrontEnd.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<GetPersonResponse> GetPersonAsync(int id = 1)
+        public async Task<GetPersonResponse> GetPersonAsync(int id)
         {
 #pragma warning disable CA2234
             var response = await _httpClient.GetAsync($"/api/person/{id}");

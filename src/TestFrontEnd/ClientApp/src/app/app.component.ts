@@ -8,6 +8,7 @@ import { IBaseResponse, IPerson } from './models/iperson';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+    public claims: string = '';
     public person: string = '';
     public personId: number = 1;
 
@@ -16,6 +17,12 @@ export class AppComponent {
     GetPerson() {
         this.dataService.getPerson(this.personId).subscribe((person: IBaseResponse<IPerson>) => {
             this.person = JSON.stringify(person, null, 2);
+        });
+    }
+
+    GetClaims() {
+        this.dataService.getClaims().subscribe((data: any) => {
+            this.claims = JSON.stringify(data, null, 2);
         });
     }
 }

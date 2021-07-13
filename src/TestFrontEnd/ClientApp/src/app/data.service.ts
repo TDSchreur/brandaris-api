@@ -12,4 +12,8 @@ export class DataService {
     getPerson(personId: number): Observable<IBaseResponse<IPerson>> {
         return this.http.get<IBaseResponse<IPerson>>(`api/person/${personId}`);
     }
+
+    getClaims(): Observable<any> {
+        return this.http.get<any>('api/person/claims');
+    }
 }

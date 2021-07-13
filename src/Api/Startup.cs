@@ -28,9 +28,9 @@ namespace Brandaris.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
             app.UseHttpsRedirection();
+
+            app.UseRouting();
 
             app.UseAuthentication();
 
