@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using TestFrontEnd.Controllers;
+using TestFrontEnd.ServiceAgents;
 
 namespace TestFrontEnd
 {
@@ -21,8 +21,8 @@ namespace TestFrontEnd
             LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                                .Enrich.FromLogContext()
                                                .MinimumLevel.Information()
-                                               ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                               ////.MinimumLevel.Override("System", LogEventLevel.Warning)
+                                                ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                                ////.MinimumLevel.Override("System", LogEventLevel.Warning)
                                                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                                 theme: AnsiConsoleTheme.Literate);
 
@@ -53,53 +53,50 @@ namespace TestFrontEnd
             new HostBuilder()
                .UseContentRoot(Directory.GetCurrentDirectory())
                .ConfigureAppConfiguration((context, builder) =>
-               {
-                   IHostEnvironment env = context.HostingEnvironment;
+                {
+                    IHostEnvironment env = context.HostingEnvironment;
 
-                   builder.AddJsonFile("appsettings.json", false, false)
-                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
-                          .AddEnvironmentVariables()
-                          .AddCommandLine(args);
+                    builder.AddJsonFile("appsettings.json", false, false)
+                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                           .AddEnvironmentVariables()
+                           .AddCommandLine(args);
 
-                   if (env.IsDevelopment())
-                   {
-                       builder.AddUserSecrets<Startup>();
-                   }
+                    if (env.IsDevelopment())
+                    {
+                        builder.AddUserSecrets<Startup>();
+                    }
 
-                   context.Configuration = builder.Build();
-               })
+                    context.Configuration = builder.Build();
+                })
                .ConfigureLogging((_, builder) =>
-               {
-                   builder.ClearProviders();
-                   builder.AddSerilog(Log.Logger);
-               })
+                {
+                    builder.ClearProviders();
+                    builder.AddSerilog(Log.Logger);
+                })
                .UseDefaultServiceProvider((context, options) =>
-               {
-                   bool isDevelopment = context.HostingEnvironment.IsDevelopment();
-                   options.ValidateScopes = isDevelopment;
-                   options.ValidateOnBuild = isDevelopment;
-               })
+                {
+                    bool isDevelopment = context.HostingEnvironment.IsDevelopment();
+                    options.ValidateScopes = isDevelopment;
+                    options.ValidateOnBuild = isDevelopment;
+                })
                .ConfigureServices((hostContext, services) =>
-               {
-                   services.AddOptions();
-                   services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
-                   {
-                       client.BaseAddress = new Uri("https://localhost:5001");
-                   });
-               })
+                {
+                    services.AddOptions();
+                    services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client => { client.BaseAddress = new Uri("https://localhost:5001"); });
+                })
                .ConfigureWebHost(builder =>
-               {
-                   builder.ConfigureAppConfiguration((ctx, cb) =>
-                   {
-                       if (ctx.HostingEnvironment.IsDevelopment())
-                       {
-                           StaticWebAssetsLoader.UseStaticWebAssets(ctx.HostingEnvironment, ctx.Configuration);
-                       }
-                   });
-                   builder.UseContentRoot(Directory.GetCurrentDirectory());
-                   builder.UseKestrel((context, options) => { options.Configure(context.Configuration.GetSection("Kestrel")); });
-                   builder.UseIIS();
-                   builder.UseStartup<Startup>();
-               });
+                {
+                    builder.ConfigureAppConfiguration((ctx, cb) =>
+                    {
+                        if (ctx.HostingEnvironment.IsDevelopment())
+                        {
+                            StaticWebAssetsLoader.UseStaticWebAssets(ctx.HostingEnvironment, ctx.Configuration);
+                        }
+                    });
+                    builder.UseContentRoot(Directory.GetCurrentDirectory());
+                    builder.UseKestrel((context, options) => { options.Configure(context.Configuration.GetSection("Kestrel")); });
+                    builder.UseIIS();
+                    builder.UseStartup<Startup>();
+                });
     }
 }

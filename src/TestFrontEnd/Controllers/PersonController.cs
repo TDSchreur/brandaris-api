@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TestFrontEnd.Models;
+using TestFrontEnd.ServiceAgents;
 
 #pragma warning disable SA1201
 #pragma warning disable SA1402
@@ -20,18 +16,7 @@ namespace TestFrontEnd.Controllers
     {
         private readonly IBrandarisApiServiceAgent _brandarisApiServiceAgent;
 
-        public PersonController(IBrandarisApiServiceAgent brandarisApiServiceAgent)
-        {
-            _brandarisApiServiceAgent = brandarisApiServiceAgent;
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<GetPersonResponse>> GetAsync(int id)
-        {
-            var person = await _brandarisApiServiceAgent.GetPersonAsync(id);
-
-            return person;
-        }
+        public PersonController(IBrandarisApiServiceAgent brandarisApiServiceAgent) => _brandarisApiServiceAgent = brandarisApiServiceAgent;
 
         [HttpGet("claims")]
         public ActionResult<IEnumerable<KeyValuePair<string, string>>> Get()
@@ -42,77 +27,13 @@ namespace TestFrontEnd.Controllers
 
             return Ok(claims);
         }
-    }
 
-    [Route("[controller]")]
-    public class AccountController : ControllerBase
-    {
-#pragma warning disable CA1054
-        [AllowAnonymous]
-        [HttpGet("signin")]
-        public IActionResult SignIn([FromQuery] string returnUrl)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<GetPersonResponse>> GetAsync(int id)
         {
-            if (string.IsNullOrWhiteSpace(returnUrl))
-            {
-                returnUrl = "/";
-            }
+            GetPersonResponse person = await _brandarisApiServiceAgent.GetPersonAsync(id);
 
-            return Challenge(
-                new AuthenticationProperties { RedirectUri = returnUrl },
-                OpenIdConnectDefaults.AuthenticationScheme);
-        }
-
-        [HttpGet("signout")]
-        public override SignOutResult SignOut()
-        {
-            return SignOut(
-                new AuthenticationProperties { RedirectUri = "/" },
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                OpenIdConnectDefaults.AuthenticationScheme);
-        }
-    }
-
-    public class PersonModel
-    {
-        public string FirstName { get; set; }
-
-        public int Id { get; set; }
-
-        public string LastName { get; set; }
-    }
-
-    public class GetPersonResponse : ResponseBase<PersonModel>
-    {
-        public GetPersonResponse() : base() { }
-    }
-
-    public abstract class ResponseBase<TValue>
-    {
-        public bool Success { get; set; }
-
-        public TValue Value { get; set; }
-    }
-
-    public interface IBrandarisApiServiceAgent
-    {
-        Task<GetPersonResponse> GetPersonAsync(int id);
-    }
-
-    public class BrandarisApiServiceAgent : IBrandarisApiServiceAgent
-    {
-        private readonly HttpClient _httpClient;
-
-        public BrandarisApiServiceAgent(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
-        public async Task<GetPersonResponse> GetPersonAsync(int id)
-        {
-#pragma warning disable CA2234
-            var response = await _httpClient.GetAsync($"/api/person/{id}");
-#pragma warning restore CA2234
-            return await response.Content.ReadFromJsonAsync<GetPersonResponse>();
+            return person;
         }
     }
 }

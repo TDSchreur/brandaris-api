@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Brandaris.Api.Controllers
 {
     [ApiController]
+    [Authorize("GetPersonPolicy")]
     [Route("api/[controller]")]
     public class PersonController : Controller
     {
@@ -24,12 +25,7 @@ namespace Brandaris.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query)
-        {
-            var claims = User.Claims;
-
-            return (await _mediator.Send(query)).FormatResponse();
-        }
+        public async Task<ActionResult<GetPersonResponse>> GetPerson([FromRoute] GetPersonQuery query) =>  (await _mediator.Send(query)).FormatResponse();
 
         [HttpGet("")]
         [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status200OK)]
