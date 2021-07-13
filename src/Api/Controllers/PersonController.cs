@@ -2,6 +2,7 @@
 using Features.AddPerson;
 using Features.GetPerson;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Brandaris.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class PersonController : Controller
     {
         private readonly IMediator _mediator;

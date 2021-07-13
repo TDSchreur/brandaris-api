@@ -24,7 +24,7 @@ namespace Features.GetPerson
                                                           })
                                              .FirstOrDefaultAsync(cancellationToken);
 
-            return new GetPersonResponse(person);
+            return new GetPersonResponse(person, person != null ? true : false);
         }
     }
 }

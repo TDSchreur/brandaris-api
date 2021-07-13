@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using TestFrontEnd.Controllers;
 
 namespace TestFrontEnd
 {
@@ -81,6 +82,10 @@ namespace TestFrontEnd
                .ConfigureServices((hostContext, services) =>
                {
                    services.AddOptions();
+                   services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
+                   {
+                       client.BaseAddress = new Uri("https://localhost:5001");
+                   });
                })
                .ConfigureWebHost(builder =>
                {
