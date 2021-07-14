@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Features.AddPerson;
 using Features.GetPerson;
+using Features.UpdatePerson;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,5 +32,10 @@ namespace Brandaris.Api.Controllers
         [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetPersonsResponse>> GetPersons([FromQuery] GetPersonsQuery query) => (await _mediator.Send(query)).FormatResponse();
+
+        [HttpPatch("")]
+        [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UpdatePersonResponse>> UpdatePerson([FromBody] UpdatePersonCommand query) => (await _mediator.Send(query)).FormatResponse();
     }
 }

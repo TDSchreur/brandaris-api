@@ -8,8 +8,8 @@ namespace Features.AddPerson
     {
         public AddPersonCommandValidator(IQuery<Person> query)
         {
-            RuleFor(x => x.FirstName).NotEmpty();
-            RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(x => x.FirstName).NotEmpty().MaximumLength(20);
+            RuleFor(x => x.LastName).NotEmpty().MaximumLength(20);
             RuleFor(x => x).CustomAsync(async (command, context, cancellationToken) =>
             {
                 bool exists = await query.AnyAsync(x => x.FirstName == command.FirstName &&

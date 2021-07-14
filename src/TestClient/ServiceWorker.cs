@@ -59,12 +59,23 @@ namespace TestClient
             using HttpClient httpClient = new();
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + result.AccessToken);
 
-            using HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:5001/api/config");
-            HttpResponseMessage response = await httpClient.SendAsync(request, stoppingToken);
-            _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);
+            using (HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:5001/api/config"))
+            {
+                HttpResponseMessage response = await httpClient.SendAsync(request, stoppingToken);
+                _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);
 
-            string data = await response.Content.ReadAsStringAsync(stoppingToken);
-            _logger.LogInformation("Content: {Content}", data);
+                string data = await response.Content.ReadAsStringAsync(stoppingToken);
+                _logger.LogInformation("Content: {Content}", data);
+            }
+
+            using (HttpRequestMessage request = new(HttpMethod.Get, "https://localhost:5001/api/person"))
+            {
+                HttpResponseMessage response = await httpClient.SendAsync(request, stoppingToken);
+                _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);
+
+                string data = await response.Content.ReadAsStringAsync(stoppingToken);
+                _logger.LogInformation("Content: {Content}", data);
+            }
 
             _hostApplicationLifetime.StopApplication();
         }

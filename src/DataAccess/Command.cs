@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +18,17 @@ namespace DataAccess
             _entities = dataContext.Set<TEntity>();
         }
 
-        public void Add(params TEntity[] persons) => _entities.AddRange(persons);
+        public void Add(params TEntity[] entity) => _entities.AddRange(entity);
+
+        public void Update<TProperty>(TEntity entity, params Expression<Func<TEntity, TProperty>>[] propertyExpressions)
+        {
+            _entities.Attach(entity);
+
+            foreach (Expression<Func<TEntity, TProperty>> propertyExpression in propertyExpressions)
+            {
+                _dataContext.Entry(entity).Property(propertyExpression).IsModified = true;
+            }
+        }
 
         public Task<int> SaveChangesAsync(CancellationToken token = default) => _dataContext.SaveChangesAsync(token);
     }

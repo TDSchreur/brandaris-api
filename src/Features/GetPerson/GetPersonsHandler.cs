@@ -19,11 +19,11 @@ namespace Features.GetPerson
             List<PersonModel> persons = await _query.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
                                                     .Where(x => !request.HasLastName || x.LastName == request.LastName)
                                                     .Select(x => new PersonModel
-                                                                 {
-                                                                     Id = x.Id,
-                                                                     FirstName = x.FirstName,
-                                                                     LastName = x.LastName
-                                                                 })
+                                                    {
+                                                        Id = x.Id,
+                                                        FirstName = x.FirstName,
+                                                        LastName = x.LastName
+                                                    })
                                                     .ToListAsync(cancellationToken);
 
             return new GetPersonsResponse(persons);

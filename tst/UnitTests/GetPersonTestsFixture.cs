@@ -9,7 +9,7 @@ namespace UnitTests
     {
         public GetPersonTestsFixture()
         {
-            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase("Persons").Options;
+            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(GetPersonTestsFixture)).Options;
             Context = new DataContext(options);
             Context.Persons.Add(new Person { Id = 1, FirstName = "Dennis", LastName = "Schreur" });
             Context.Persons.Add(new Person { Id = 2, FirstName = "Tess", LastName = "Schreur" });

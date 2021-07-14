@@ -73,9 +73,9 @@ namespace TestFrontEnd
                 endpoints.MapHealthChecks("/health/readiness");
 
                 endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-                                                              {
-                                                                  Predicate = _ => false
-                                                              });
+                {
+                    Predicate = _ => false
+                });
 
                 endpoints.MapControllers().RequireAuthorization();
             });

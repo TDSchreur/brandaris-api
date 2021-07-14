@@ -17,14 +17,14 @@ namespace Features.GetPerson
         {
             PersonModel person = await _query.Where(x => x.Id == request.Id)
                                              .Select(x => new PersonModel
-                                                          {
-                                                              Id = x.Id,
-                                                              FirstName = x.FirstName,
-                                                              LastName = x.LastName
-                                                          })
+                                             {
+                                                 Id = x.Id,
+                                                 FirstName = x.FirstName,
+                                                 LastName = x.LastName
+                                             })
                                              .FirstOrDefaultAsync(cancellationToken);
 
-            return new GetPersonResponse(person, person != null ? true : false);
+            return new GetPersonResponse(person, person != null);
         }
     }
 }

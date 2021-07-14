@@ -8,7 +8,7 @@ namespace Features.AddProduct
     {
         public AddProductCommandValidator(IQuery<Product> query)
         {
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x).CustomAsync(async (command, context, cancellationToken) =>
             {
                 bool exists = await query.AnyAsync(x => x.Name == command.Name,

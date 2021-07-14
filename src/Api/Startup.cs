@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace Brandaris.Api
 {
@@ -27,6 +26,16 @@ namespace Brandaris.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
+                {
+                    context.Response.StatusCode = 500;
+                    await context
+                          .Response
+                          .WriteAsync("An unexpected error on server happened, please try again later.");
+                }));
+            }
 
             app.UseHttpsRedirection();
 
@@ -36,20 +45,18 @@ namespace Brandaris.Api
 
             app.UseAuthorization();
 
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Brandaris V1"); });
+            app.UseOpenApi();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health/readiness");
 
                 endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-                                                              {
-                                                                  Predicate = _ => false
-                                                              });
+                {
+                    Predicate = _ => false
+                });
 
-                endpoints.MapControllers().RequireAuthorization();
+                endpoints.MapControllers(); ////.RequireAuthorization();
             });
 
             app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
@@ -79,11 +86,13 @@ namespace Brandaris.Api
                 });
             });
 
-            services.AddAuthentication(opt =>
+            services
+                .AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer("AAD", options =>
+            })
+                .AddJwtBearer("AAD", options =>
             {
                 options.RequireHttpsMetadata = true;
                 options.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
@@ -98,13 +107,10 @@ namespace Brandaris.Api
                                                                    };
             });
 
-            services.AddSwaggerGen(c =>
+            services.AddOpenApiDocument(opt =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                                   {
-                                       Title = "Brandaris", Version = "v1"
-                                   });
-                c.UseAllOfForInheritance();
+                opt.Title = "Brandaris";
+                opt.Version = "0.0.1";
             });
 
             services.AddControllers()

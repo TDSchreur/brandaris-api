@@ -17,9 +17,10 @@ namespace Features.GetProduct
         {
             ProductModel product = await _query.Where(x => request.Id == x.Id)
                                                .Select(x => new ProductModel
-                                                            {
-                                                                Id = x.Id, Name = x.Name
-                                                            })
+                                               {
+                                                   Id = x.Id,
+                                                   Name = x.Name
+                                               })
                                                .FirstOrDefaultAsync(cancellationToken);
 
             return new GetProductResponse(product);
