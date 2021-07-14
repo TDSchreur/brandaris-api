@@ -30,6 +30,7 @@ dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA1819.severity = none
 dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.CA2227.severity = none
+dotnet_diagnostic.CA5394.severity = suggestion
 
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1101.severity = none
@@ -41,6 +42,7 @@ dotnet_diagnostic.SA1228.severity = none
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1413.severity = none
 dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1649.severity = suggestion
 
 # New line preferences
 csharp_new_line_before_open_brace = all

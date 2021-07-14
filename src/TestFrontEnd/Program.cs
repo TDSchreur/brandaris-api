@@ -2,29 +2,22 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Data;
-using DataAccess;
-using Features;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.ApplicationInsights;
-#if DEBUG
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using TestFrontEnd.ServiceAgents;
 
-#endif
-
-namespace Brandaris.Api
+namespace TestFrontEnd
 {
-    public static class Program
+    public class Program
     {
         public static async Task<int> Main(string[] args)
         {
-#if DEBUG
             LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                                .Enrich.FromLogContext()
                                                .MinimumLevel.Information()
@@ -36,7 +29,7 @@ namespace Brandaris.Api
             Log.Logger = loggerBuilder.CreateLogger();
 
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-#endif
+
             try
             {
                 IHost host = CreateHostBuilder(args).Build();
@@ -47,12 +40,8 @@ namespace Brandaris.Api
             }
             catch (Exception e)
             {
-#if DEBUG
                 Log.Logger.Error(e, e.Message);
                 Log.CloseAndFlush();
-#elif RELEASE
-                Console.WriteLine(e.Message);
-#endif
                 await Task.Delay(1000);
                 return -1;
             }
@@ -82,20 +71,7 @@ namespace Brandaris.Api
                .ConfigureLogging((_, builder) =>
                 {
                     builder.ClearProviders();
-
-#if DEBUG
                     builder.AddSerilog(Log.Logger);
-#endif
-
-                    builder.AddApplicationInsights(options =>
-                    {
-                        options.IncludeScopes = true;
-                        options.FlushOnDispose = true;
-                    });
-
-                    builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Debug);
-                    builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
-                    builder.AddFilter<ApplicationInsightsLoggerProvider>("System", LogLevel.Warning);
                 })
                .UseDefaultServiceProvider((context, options) =>
                 {
@@ -106,9 +82,7 @@ namespace Brandaris.Api
                .ConfigureServices((hostContext, services) =>
                 {
                     services.AddOptions();
-                    services.AddDataAccess<DataContext>(() => hostContext.Configuration.GetConnectionString("Default"));
-                    services.AddFeatures();
-                    services.AddHostedService<MigratorHostedService>();
+                    services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client => { client.BaseAddress = new Uri("https://localhost:5001"); });
                 })
                .ConfigureWebHost(builder =>
                 {

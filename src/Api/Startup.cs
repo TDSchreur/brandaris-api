@@ -28,9 +28,9 @@ namespace Brandaris.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
             app.UseHttpsRedirection();
+
+            app.UseRouting();
 
             app.UseAuthentication();
 
@@ -70,6 +70,12 @@ namespace Brandaris.Api
                 {
                     policy.Combine(defaultPolicy);
                     policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "get-config-role");
+                });
+
+                opt.AddPolicy("GetPersonPolicy", policy =>
+                {
+                    policy.Combine(defaultPolicy);
+                    policy.RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "get-person");
                 });
             });
 

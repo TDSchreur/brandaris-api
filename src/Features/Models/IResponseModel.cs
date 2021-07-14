@@ -1,4 +1,4 @@
-﻿namespace Features
+﻿namespace Features.Models
 {
     public interface IResponseModel
     {

@@ -1,0 +1,28 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnType": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "html.format.enable": true,
+
+    "files.exclude": {
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/*.js": {
+            "when": "$(basename).ts"
+        },
+        "**/*.js.map": {
+            "when": "$(basename)"
+        },
+        "**/dist": true,
+        "**/obj": true,
+        "**/bin": true,
+        "**/distST": true,
+        "**/distACC": true,
+        "**/distPROD": true
+    },
+    "files.defaultLanguage": "typescript",
+    "angular.enable-strict-mode-prompt": false,
+    "typescript.preferences.importModuleSpecifier": "relative"
+}

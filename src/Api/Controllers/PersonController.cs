@@ -2,12 +2,14 @@
 using Features.AddPerson;
 using Features.GetPerson;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Brandaris.Api.Controllers
 {
     [ApiController]
+    [Authorize("GetPersonPolicy")]
     [Route("api/[controller]")]
     public class PersonController : Controller
     {
