@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using TestFrontEnd.Models;
 using TestFrontEnd.ServiceAgents;
 
-#pragma warning disable SA1201
-#pragma warning disable SA1402
-
 namespace TestFrontEnd.Controllers
 {
     [ApiController]
