@@ -5,26 +5,30 @@ using DataAccess;
 using Features.Models;
 using MediatR;
 
-namespace Features.AddPerson
+namespace Features.UpdatePerson
 {
-    public class AddPersonHandler : IRequestHandler<AddPersonCommand, AddPersonResponse>
+    public class UpdatePersonHandler : IRequestHandler<UpdatePersonCommand, UpdatePersonResponse>
     {
         private readonly ICommand<Person> _command;
 
-        public AddPersonHandler(ICommand<Person> command) => _command = command;
+        public UpdatePersonHandler(ICommand<Person> command) => _command = command;
 
-        public async Task<AddPersonResponse> Handle(AddPersonCommand request, CancellationToken cancellationToken)
+        public async Task<UpdatePersonResponse> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
         {
             Person person = new()
             {
+                Id = request.Id,
                 FirstName = request.FirstName,
                 LastName = request.LastName
             };
-            _command.Add(person);
+            _command.Update(
+                person,
+                x => x.FirstName,
+                x => x.LastName);
 
             await _command.SaveChangesAsync(cancellationToken);
 
-            return new AddPersonResponse(new PersonModel
+            return new UpdatePersonResponse(new PersonModel
             {
                 Id = person.Id,
                 FirstName = person.FirstName,

@@ -20,6 +20,8 @@ generated_code = true
 
 # C# files
 [*.cs]
+dotnet_analyzer_diagnostic.category-Style.severity = warning
+dotnet_diagnostic.IDE0058.severity = silent
 
 dotnet_diagnostic.CA1014.severity = none
 dotnet_diagnostic.CA1040.severity = none

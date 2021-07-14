@@ -28,9 +28,10 @@ namespace Brandaris.Api.Controllers
         public async Task<ActionResult<GetConfigResponse>> Get()
         {
             using IDisposable scope = _logger.BeginScope(new Dictionary<string, object>
-                                                         {
-                                                             ["User"] = "T.D.Schreur", ["BIC"] = "ABC123"
-                                                         });
+            {
+                ["User"] = "T.D.Schreur",
+                ["BIC"] = "ABC123"
+            });
 
             return await _mediator.Send(new GetConfigQuery());
         }

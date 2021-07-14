@@ -24,32 +24,32 @@ namespace Data.Migrations
             migrationBuilder.CreateTable(
                                          "Person",
                                          table => new
-                                                  {
-                                                      Id = table.Column<int>("int", nullable: false)
+                                         {
+                                             Id = table.Column<int>("int", nullable: false)
                                                                 .Annotation("SqlServer:Identity", "1, 1"),
-                                                      FirstName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true),
-                                                      LastName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true)
-                                                  },
+                                             FirstName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true),
+                                             LastName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true)
+                                         },
                                          constraints: table => { table.PrimaryKey("PK_Person", x => x.Id); });
 
             migrationBuilder.CreateTable(
                                          "Product",
                                          table => new
-                                                  {
-                                                      Id = table.Column<int>("int", nullable: false)
+                                         {
+                                             Id = table.Column<int>("int", nullable: false)
                                                                 .Annotation("SqlServer:Identity", "1, 1"),
-                                                      Name = table.Column<string>("nvarchar(50)", maxLength: 50, nullable: true)
-                                                  },
+                                             Name = table.Column<string>("nvarchar(50)", maxLength: 50, nullable: true)
+                                         },
                                          constraints: table => { table.PrimaryKey("PK_Product", x => x.Id); });
 
             migrationBuilder.CreateTable(
                                          "Order",
                                          table => new
-                                                  {
-                                                      Id = table.Column<int>("int", nullable: false)
+                                         {
+                                             Id = table.Column<int>("int", nullable: false)
                                                                 .Annotation("SqlServer:Identity", "1, 1"),
-                                                      PersonId = table.Column<int>("int", nullable: false)
-                                                  },
+                                             PersonId = table.Column<int>("int", nullable: false)
+                                         },
                                          constraints: table =>
                                          {
                                              table.PrimaryKey("PK_Order", x => x.Id);
@@ -64,12 +64,12 @@ namespace Data.Migrations
             migrationBuilder.CreateTable(
                                          "OrderLine",
                                          table => new
-                                                  {
-                                                      Id = table.Column<int>("int", nullable: false)
+                                         {
+                                             Id = table.Column<int>("int", nullable: false)
                                                                 .Annotation("SqlServer:Identity", "1, 1"),
-                                                      OrderId = table.Column<int>("int", nullable: false),
-                                                      ProductId = table.Column<int>("int", nullable: false)
-                                                  },
+                                             OrderId = table.Column<int>("int", nullable: false),
+                                             ProductId = table.Column<int>("int", nullable: false)
+                                         },
                                          constraints: table =>
                                          {
                                              table.PrimaryKey("PK_OrderLine", x => x.Id);

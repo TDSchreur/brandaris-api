@@ -73,9 +73,9 @@ namespace TestFrontEnd
                 endpoints.MapHealthChecks("/health/readiness");
 
                 endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-                                                              {
-                                                                  Predicate = _ => false
-                                                              });
+                {
+                    Predicate = _ => false
+                });
 
                 endpoints.MapControllers().RequireAuthorization();
             });
@@ -86,7 +86,7 @@ namespace TestFrontEnd
 
                 if (env.IsDevelopment())
                 {
-                    ////spa.UseAngularCliServer(npmScript: "start");
+                    //// spa.UseAngularCliServer(npmScript: "start");
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });

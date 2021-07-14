@@ -26,9 +26,9 @@ namespace UnitTests
 
             // act
             GetPersonQuery request = new()
-                                     {
-                                         Id = id
-                                     };
+            {
+                Id = id
+            };
             GetPersonResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert
@@ -46,9 +46,9 @@ namespace UnitTests
 
             // act
             GetPersonQuery request = new()
-                                     {
-                                         Id = int.MaxValue
-                                     };
+            {
+                Id = int.MaxValue
+            };
             GetPersonResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert
@@ -69,9 +69,10 @@ namespace UnitTests
 
             // act
             GetPersonsQuery request = new()
-                                      {
-                                          FirstName = firstname, LastName = lastName
-                                      };
+            {
+                FirstName = firstname,
+                LastName = lastName
+            };
             GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert

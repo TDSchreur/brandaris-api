@@ -4,6 +4,8 @@
     <DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
     <LangVersion>9.0</LangVersion>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 </Project>

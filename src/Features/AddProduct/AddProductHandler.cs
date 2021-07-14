@@ -16,17 +16,18 @@ namespace Features.AddProduct
         public async Task<AddProductResponse> Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
             Product product = new()
-                              {
-                                  Name = request.Name
-                              };
+            {
+                Name = request.Name
+            };
             _command.Add(product);
 
             await _command.SaveChangesAsync(cancellationToken);
 
             return new AddProductResponse(new ProductModel
-                                          {
-                                              Id = product.Id, Name = product.Name
-                                          });
+            {
+                Id = product.Id,
+                Name = product.Name
+            });
         }
     }
 }

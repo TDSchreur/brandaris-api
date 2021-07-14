@@ -10,8 +10,6 @@ namespace Brandaris.Api
 {
     public class MigratorHostedService : IHostedService
     {
-        // We need to inject the IServiceProvider so we can create
-        // the scoped service, MyDbContext
         private readonly IServiceProvider _serviceProvider;
 
         public MigratorHostedService(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
@@ -25,7 +23,6 @@ namespace Brandaris.Api
             }
         }
 
-        // noop
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }
