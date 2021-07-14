@@ -47,6 +47,8 @@ namespace Brandaris.Api
 
             app.UseOpenApi();
 
+            app.UseSwaggerUi3();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health/readiness");
@@ -56,7 +58,7 @@ namespace Brandaris.Api
                     Predicate = _ => false
                 });
 
-                endpoints.MapControllers(); ////.RequireAuthorization();
+                endpoints.MapControllers().RequireAuthorization();
             });
 
             app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
@@ -110,7 +112,6 @@ namespace Brandaris.Api
             services.AddOpenApiDocument(opt =>
             {
                 opt.Title = "Brandaris";
-                opt.Version = "0.0.1";
             });
 
             services.AddControllers()

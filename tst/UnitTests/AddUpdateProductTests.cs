@@ -18,7 +18,6 @@ namespace UnitTests
             // arrange
             DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(AddProduct)).Options;
             using var context = new DataContext(options);
-            ////Context.Products.Add(new Product { Id = 1, Name = "Appel" });
             context.SaveChanges();
             Command<Product> command = new(context);
 
