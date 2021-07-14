@@ -1,7 +1,7 @@
 <h1>Hello!</h1>
-<!-- <p>
-    <a href="/signout">Log off</a>
-</p> -->
+<p>
+    <a href="/account/logout">Log off</a>
+</p>
 
 <p>
     <label for="personId">PersonID: </label>
@@ -13,6 +13,7 @@
 
 <p>
     <button (click)="GetClaims()">GetClaims</button>
+    <button (click)="GetClaimsRemote()">GetClaimsRemote</button>
 </p>
 
 <pre>{{ claims }}</pre>

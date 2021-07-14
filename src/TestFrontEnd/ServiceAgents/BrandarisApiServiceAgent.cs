@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -28,11 +29,22 @@ namespace TestFrontEnd.ServiceAgents
             };
             string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
             using HttpRequestMessage request = new(HttpMethod.Get, $"/api/person/{id}");
-
-            // Add token to the Authorization header and make the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             HttpResponseMessage response = await _httpClient.SendAsync(request);
             return await response.Content.ReadFromJsonAsync<GetPersonResponse>();
+        }
+
+        public async Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync()
+        {
+            string[] scope =
+            {
+                "api://brandaris-api/get-person"
+            };
+            string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
+            using HttpRequestMessage request = new(HttpMethod.Get, "/api/user");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            return await response.Content.ReadFromJsonAsync<IEnumerable<KeyValuePair<string, string>>>();
         }
     }
 }

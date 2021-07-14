@@ -10,8 +10,9 @@ namespace TestFrontEnd.Controllers
     public class AccountController : ControllerBase
     {
 #pragma warning disable CA1054
-        [AllowAnonymous]
+
         [HttpGet("Login")]
+        [AllowAnonymous]
         public IActionResult SignIn([FromQuery] string returnUrl)
         {
             if (string.IsNullOrWhiteSpace(returnUrl))
@@ -28,13 +29,13 @@ namespace TestFrontEnd.Controllers
         }
 
         [HttpGet("Logout")]
-        public override SignOutResult SignOut() =>
-            SignOut(
-                    new AuthenticationProperties
-                    {
-                        RedirectUri = "/"
-                    },
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    OpenIdConnectDefaults.AuthenticationScheme);
+#pragma warning disable CS0114
+        public SignOutResult SignOut() => SignOut(
+                                                  new AuthenticationProperties
+                                                  {
+                                                      RedirectUri = "/"
+                                                  },
+                                                  CookieAuthenticationDefaults.AuthenticationScheme,
+                                                  OpenIdConnectDefaults.AuthenticationScheme);
     }
 }

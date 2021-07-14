@@ -25,4 +25,10 @@ export class AppComponent {
             this.claims = JSON.stringify(data, null, 2);
         });
     }
+
+    GetClaimsRemote() {
+        this.dataService.getClaimsRemote().subscribe((data: any) => {
+            this.claims = JSON.stringify(data, null, 2);
+        });
+    }
 }

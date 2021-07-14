@@ -15,8 +15,16 @@ namespace TestFrontEnd.Controllers
 
         public PersonController(IBrandarisApiServiceAgent brandarisApiServiceAgent) => _brandarisApiServiceAgent = brandarisApiServiceAgent;
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<GetPersonResponse>> GetAsync(int id)
+        {
+            GetPersonResponse person = await _brandarisApiServiceAgent.GetPersonAsync(id);
+
+            return person;
+        }
+
         [HttpGet("claims")]
-        public ActionResult<IEnumerable<KeyValuePair<string, string>>> Get()
+        public ActionResult<IEnumerable<KeyValuePair<string, string>>> GetClaims()
         {
             IEnumerable<KeyValuePair<string, string>> claims = HttpContext.User.Claims
                                                                           .OrderBy(x => x.Type)
@@ -25,12 +33,12 @@ namespace TestFrontEnd.Controllers
             return Ok(claims);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<GetPersonResponse>> GetAsync(int id)
+        [HttpGet("claims_remote")]
+        public async Task<ActionResult<IEnumerable<KeyValuePair<string, string>>>> GetClaimsRemoteAsync()
         {
-            GetPersonResponse person = await _brandarisApiServiceAgent.GetPersonAsync(id);
+            IEnumerable<KeyValuePair<string, string>> claims = await _brandarisApiServiceAgent.GetRemoteClaimsAsync();
 
-            return person;
+            return Ok(claims);
         }
     }
 }

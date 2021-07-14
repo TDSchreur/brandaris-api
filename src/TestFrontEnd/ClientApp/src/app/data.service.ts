@@ -16,4 +16,8 @@ export class DataService {
     getClaims(): Observable<any> {
         return this.http.get<any>('api/person/claims');
     }
+
+    getClaimsRemote(): Observable<any> {
+        return this.http.get<any>('api/person/claims_remote');
+    }
 }
