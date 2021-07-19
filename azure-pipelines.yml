@@ -111,10 +111,10 @@ stages:
                packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
 
            - task: AzureRmWebAppDeployment@4
-             displayName: Deploy API
+             displayName: Deploy Functions
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: $(azureServiceConnection)
                appType: 'functionApp'
                WebAppName: 'nta7tp2n6crj4'
-               packageForLinux: '$(Pipeline.Workspace)/function/Function.zip'
+               packageForLinux: '$(Pipeline.Workspace)/function/SecureFunction.zip'
