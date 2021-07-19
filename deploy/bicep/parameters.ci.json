@@ -1,24 +1,33 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "api_name": {
-      "value": "brandaris-api"
-    },
-    "serviceplan_name": {
-      "value": "brandaris-api-serviceplan"
-    },
-    "serviceplan_capacity": {
-      "value": 1
-    },
-    "serviceplan_sku": {
-      "value": "S1"
-    },
-    "serviceplan_tier": {
-      "value": "standard"
-    },
-    "sql_administratorLogin": {
-      "value": "dennis"
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "api_name": {
+            "value": "brandaris-api"
+        },
+        "serviceplan_name": {
+            "value": "brandaris-api-serviceplan"
+        },
+        "serviceplan_capacity": {
+            "value": 1
+        },
+        "serviceplan_sku": {
+            "value": "S1"
+        },
+        "serviceplan_tier": {
+            "value": "standard"
+        },
+        "sql_administratorLogin": {
+            "value": "dennis"
+        },
+        "storage_account_name": {
+            "value": "functions"
+        },
+        "functionapp_name": {
+            "value": "secure_functions"
+        },
+        "function_serviceplan_name": {
+            "value": "functions_serviceplan"
+        }
     }
-  }
 }

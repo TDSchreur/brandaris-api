@@ -6,6 +6,7 @@ pr:
 
 variables:
   project: 'src/Api/Api.csproj'
+  functionproject: 'src/SecureFunction/SecureFunction.csproj'
   configuration: 'release'
   pool: Default
   azureSubscriptionId: 'f395fc6c-f196-4abe-a248-e9b7d37c9f66'
@@ -46,8 +47,43 @@ stages:
             ArtifactName: 'api'
             publishLocation: 'Container'
 
- - stage: Biceps
+ - stage: Function
    dependsOn: Api
+   jobs:
+     - job: Build
+       pool: $(pool)
+       steps:
+        - task: DotNetCoreCLI@2
+          displayName: restore
+          inputs:
+            command: 'restore'
+            projects: $(functionproject)
+                 
+        - task: DotNetCoreCLI@2
+          displayName: build
+          inputs:
+            command: 'build'
+            projects: $(functionproject)
+            arguments: '--no-restore -c $(configuration)'
+                 
+        - task: DotNetCoreCLI@2
+          displayName: publish
+          inputs:
+            command: 'publish'
+            projects: $(functionproject)
+            zipAfterPublish: true
+            publishWebProjects: false
+            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
+                 
+        - task: PublishBuildArtifacts@1
+          displayName: "publish artifact function"
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'function'
+            publishLocation: 'Container'
+
+ - stage: Biceps
+   dependsOn: Function
    jobs:
    - deployment: Deploy
      pool: $(pool)
@@ -73,3 +109,12 @@ stages:
                appType: 'apiApp'
                WebAppName: 'brandaris-api-biceps'
                packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
+
+           - task: AzureRmWebAppDeployment@4
+             displayName: Deploy API
+             inputs:
+               ConnectionType: 'AzureRM'
+               azureSubscription: $(azureServiceConnection)
+               appType: 'apiApp'
+               WebAppName: 'nta7tp2n6crj4'
+               packageForLinux: '$(Pipeline.Workspace)/function/Function.zip'
