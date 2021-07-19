@@ -115,6 +115,6 @@ stages:
              inputs:
                ConnectionType: 'AzureRM'
                azureSubscription: $(azureServiceConnection)
-               appType: 'apiApp'
+               appType: 'functionApp'
                WebAppName: 'nta7tp2n6crj4'
                packageForLinux: '$(Pipeline.Workspace)/function/Function.zip'
