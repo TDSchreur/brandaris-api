@@ -11,6 +11,10 @@ param serviceplan_tier string
 
 param api_name string
 
+param storage_account_name string
+param functionapp_name string
+param function_serviceplan_name string
+
 var location = resourceGroup().location
 var insights_name = 'insights-${api_name}'
 
@@ -45,5 +49,16 @@ module web './modules/web.bicep' = {
     sqlserver_username: sql_administratorLogin
     sqlserver_password: sql_administratorLoginPassword
     location: location
+  }
+}
+
+module function './modules/functions.bicep' = {
+  name: 'function-deployment'
+  params: {
+    insights_instrumentationkey: insights.outputs.instrumentationKey
+    location: location
+    storage_account_name: storage_account_name
+    functionapp_name: functionapp_name
+    serviceplan_name: function_serviceplan_name
   }
 }
