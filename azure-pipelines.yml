@@ -83,7 +83,7 @@ stages:
             ArtifactName: 'function'
             publishLocation: 'Container'
 
- - stage: Biceps
+ - stage: Deploy
    dependsOn: 
    - Api
    - Function
@@ -114,6 +114,7 @@ stages:
                packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
                
            - task: AzureFunctionApp@1
+             displayName: Deploy Functions
              inputs:
                azureSubscription: $(azureServiceConnection)
                appType: 'functionApp'
