@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 
 namespace SecureFunction
 {
@@ -12,23 +12,32 @@ namespace SecureFunction
     {
         [Function("GetData")]
         public static HttpResponseData Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
+            HttpRequestData req,
             FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("GetData");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            Dictionary<string, StringValues> queryDictionary = QueryHelpers.ParseQuery(req.Url.Query);
-            string responseText = queryDictionary.TryGetValue("name", out StringValues name)
-                ? $"Welcome to Azure Functions {name}!"
-                : "Welcome to Azure Functions John Doe!";
+            bool hasRequiredClaim = req.Identities.SelectMany(x => x.Claims).Any(x => x.Type == "roles" && x.Value == "get-master-data");
 
-            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            if (!hasRequiredClaim)
+            {
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.Forbidden);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                response.WriteString("Go away");
+                return response;
+            }
+            else
+            {
+                IEnumerable<string> claims = req.Identities.SelectMany(x => x.Claims).Select(x => $"{x.Type}:{x.Value}");
 
-            response.WriteString(responseText);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                response.WriteString($"Claims:{Environment.NewLine}{string.Join(Environment.NewLine, claims)}");
 
-            return response;
+                return response;
+            }
         }
     }
 }

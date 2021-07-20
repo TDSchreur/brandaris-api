@@ -3,9 +3,12 @@ param storage_account_name string
 param serviceplan_name string
 param functionapp_name string
 param location string = resourceGroup().location
+param openId_issuer string
+param allowed_audiences array
+param clientid string
 
-param storagename string = uniqueString(storage_account_name, resourceGroup().id)
-param functionappname string = uniqueString(functionapp_name, resourceGroup().id)
+var storagename = uniqueString(storage_account_name, resourceGroup().id)
+var functionappname = uniqueString(functionapp_name, resourceGroup().id)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storagename
@@ -56,9 +59,42 @@ resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
         }
-        // WEBSITE_CONTENTSHARE will also be auto-generated - https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#website_contentshare
-        // WEBSITE_RUN_FROM_PACKAGE will be set to 1 by func azure functionapp publish
       ]
+    }
+  }
+}
+
+resource authsettings 'Microsoft.Web/sites/config@2020-12-01' = {
+  parent: functionApp
+  name: 'authsettingsV2'
+  properties: {
+    platform: {
+      enabled: true
+    }
+    globalValidation: {
+      requireAuthentication: true
+      unauthenticatedClientAction: 'Return401'
+    }
+    identityProviders: {
+      azureActiveDirectory: {
+        enabled: true
+        registration: {
+          openIdIssuer: openId_issuer
+          clientId: clientid
+        }
+        validation: {
+          allowedAudiences: allowed_audiences
+        }
+        isAutoProvisioned: false
+      }
+    }
+    login: {
+      tokenStore: {
+        enabled: false
+      }
+    }
+    httpSettings: {
+      requireHttps: true
     }
   }
 }
