@@ -90,7 +90,7 @@ namespace TestClient
             using HttpClient httpClient = new();
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + authenticationResult.AccessToken);
 
-            using (HttpRequestMessage request = new(HttpMethod.Get, "https://nta7tp2n6crj4.azurewebsites.net/api/GetData?code=W4DAd/z3eedyshbEYMfTEYi0ka0iknxANuvoasEvMeoxEtimsOS0Zw=="))
+            using (HttpRequestMessage request = new(HttpMethod.Get, "https://nta7tp2n6crj4.azurewebsites.net/api/GetData"))
             {
                 HttpResponseMessage response = await httpClient.SendAsync(request, stoppingToken);
                 _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);

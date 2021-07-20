@@ -3,9 +3,12 @@ param storage_account_name string
 param serviceplan_name string
 param functionapp_name string
 param location string = resourceGroup().location
+param openId_issuer string
+param allowed_audiences array
+param clientid string
 
-param storagename string = uniqueString(storage_account_name, resourceGroup().id)
-param functionappname string = uniqueString(functionapp_name, resourceGroup().id)
+var storagename = uniqueString(storage_account_name, resourceGroup().id)
+var functionappname = uniqueString(functionapp_name, resourceGroup().id)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storagename
@@ -76,13 +79,11 @@ resource authsettings 'Microsoft.Web/sites/config@2020-12-01' = {
       azureActiveDirectory: {
         enabled: true
         registration: {
-          openIdIssuer: 'https://sts.windows.net/ae86fed2-d115-4a00-b6ed-68ff87b986f7/'
-          clientId: 'a869e24d-3449-4123-a17c-a519075f102d'
+          openIdIssuer: openId_issuer
+          clientId: clientid
         }
         validation: {
-          allowedAudiences: [
-            'https://nta7tp2n6crj4.azurewebsites.net'
-          ]
+          allowedAudiences: allowed_audiences
         }
         isAutoProvisioned: false
       }
