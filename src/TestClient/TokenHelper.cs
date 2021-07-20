@@ -7,35 +7,40 @@ namespace TestClient
 {
     public class TokenHelper
     {
+        private readonly string _authority;
         private readonly string _clientId;
         private readonly string _clientSecret;
-        private readonly string _scope;
         private readonly string _tenantId;
+        private IConfidentialClientApplication _client;
 
         public TokenHelper(IConfiguration configuration)
         {
             _clientId = configuration["Authentication:ClientId"];
             _clientSecret = configuration["Authentication:ClientSecret"];
             _tenantId = configuration["Authentication:TenantId"];
-            _scope = configuration["Authentication:Scope"];
+            _authority = $"https://login.microsoftonline.com/{_tenantId}";
         }
 
-        public Task<AuthenticationResult> GetTokens()
+        public Task<AuthenticationResult> GetTokens(params string[] scope)
         {
-            string authority = $"https://login.microsoftonline.com/{_tenantId}";
+            CreateClient();
 
-            IConfidentialClientApplication client = ConfidentialClientApplicationBuilder
-                                                   .Create(_clientId)
-                                                   .WithClientSecret(_clientSecret)
-                                                   .WithAuthority(new Uri(authority))
-                                                   .Build();
-
-            AcquireTokenForClientParameterBuilder request = client.AcquireTokenForClient(new[]
-                                                                                         {
-                                                                                             _scope
-                                                                                         });
+            AcquireTokenForClientParameterBuilder request = _client.AcquireTokenForClient(scope);
 
             return request.ExecuteAsync();
+        }
+
+        private void CreateClient()
+        {
+            if (_client != null)
+            {
+                return;
+            }
+
+            _client = ConfidentialClientApplicationBuilder.Create(_clientId)
+                                                          .WithClientSecret(_clientSecret)
+                                                          .WithAuthority(new Uri(_authority))
+                                                          .Build();
         }
     }
 }

@@ -56,9 +56,44 @@ resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
         }
-        // WEBSITE_CONTENTSHARE will also be auto-generated - https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#website_contentshare
-        // WEBSITE_RUN_FROM_PACKAGE will be set to 1 by func azure functionapp publish
       ]
+    }
+  }
+}
+
+resource authsettings 'Microsoft.Web/sites/config@2020-12-01' = {
+  parent: functionApp
+  name: 'authsettingsV2'
+  properties: {
+    platform: {
+      enabled: true
+    }
+    globalValidation: {
+      requireAuthentication: true
+      unauthenticatedClientAction: 'Return401'
+    }
+    identityProviders: {
+      azureActiveDirectory: {
+        enabled: true
+        registration: {
+          openIdIssuer: 'https://sts.windows.net/ae86fed2-d115-4a00-b6ed-68ff87b986f7/'
+          clientId: 'a869e24d-3449-4123-a17c-a519075f102d'
+        }
+        validation: {
+          allowedAudiences: [
+            'https://nta7tp2n6crj4.azurewebsites.net'
+          ]
+        }
+        isAutoProvisioned: false
+      }
+    }
+    login: {
+      tokenStore: {
+        enabled: false
+      }
+    }
+    httpSettings: {
+      requireHttps: true
     }
   }
 }
