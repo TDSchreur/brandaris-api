@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -70,6 +71,7 @@ namespace TestClient
                     services.AddOptions();
                     services.AddHostedService<ServiceWorker>();
                     services.AddSingleton<TokenHelper>();
+                    services.AddSingleton<IMsalHttpClientFactory, MsalHttpClientFactory>();
                 });
     }
 }

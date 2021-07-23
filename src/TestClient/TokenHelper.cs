@@ -11,14 +11,16 @@ namespace TestClient
         private readonly string _clientId;
         private readonly string _clientSecret;
         private readonly string _tenantId;
+        private readonly IMsalHttpClientFactory _httpClientFactory;
         private IConfidentialClientApplication _client;
 
-        public TokenHelper(IConfiguration configuration)
+        public TokenHelper(IConfiguration configuration, IMsalHttpClientFactory httpClientFactory)
         {
             _clientId = configuration["Authentication:ClientId"];
             _clientSecret = configuration["Authentication:ClientSecret"];
             _tenantId = configuration["Authentication:TenantId"];
             _authority = $"https://login.microsoftonline.com/{_tenantId}";
+            _httpClientFactory = httpClientFactory;
         }
 
         public Task<AuthenticationResult> GetTokens(params string[] scope)
@@ -40,6 +42,7 @@ namespace TestClient
             _client = ConfidentialClientApplicationBuilder.Create(_clientId)
                                                           .WithClientSecret(_clientSecret)
                                                           .WithAuthority(new Uri(_authority))
+                                                          .WithHttpClientFactory(_httpClientFactory)
                                                           .Build();
         }
     }
