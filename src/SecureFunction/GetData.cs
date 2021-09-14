@@ -19,7 +19,9 @@ namespace SecureFunction
             ILogger logger = executionContext.GetLogger("GetData");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            bool hasRequiredClaim = req.Identities.SelectMany(x => x.Claims).Any(x => x.Type == "roles" && x.Value == "get-master-data");
+            bool hasRequiredClaim =
+                req.Identities.GetEnumerator().Current != null &&
+                req.Identities.ToList().SelectMany(x => x.Claims).Any(x => x.Type == "roles" && x.Value == "get-master-data");
 
             if (!hasRequiredClaim)
             {

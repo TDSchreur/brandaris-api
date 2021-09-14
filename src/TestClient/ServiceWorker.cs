@@ -14,6 +14,7 @@ namespace TestClient
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly ILogger<ServiceWorker> _logger;
         private readonly TokenHelper _tokenHelper;
+        private readonly HttpClient _httpClient;
         private CancellationTokenSource _cts = default!;
         private Task _executingTask = default!;
 
@@ -21,10 +22,12 @@ namespace TestClient
             IHostApplicationLifetime hostApplicationLifetime,
             TokenHelper tokenHelper,
             IConfiguration configuration,
+            IMsalHttpClientFactory msalHttpClientFactory,
             ILogger<ServiceWorker> logger)
         {
             _hostApplicationLifetime = hostApplicationLifetime;
             _tokenHelper = tokenHelper;
+            _httpClient = msalHttpClientFactory.GetHttpClient();
             _configuration = configuration;
             _logger = logger;
         }
@@ -87,12 +90,11 @@ namespace TestClient
 
             _logger.LogInformation("AccessToken: {AccessToken}", authenticationResult.AccessToken);
 
-            using HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + authenticationResult.AccessToken);
-
             using (HttpRequestMessage request = new(HttpMethod.Get, "https://nta7tp2n6crj4.azurewebsites.net/api/GetData"))
             {
-                HttpResponseMessage response = await httpClient.SendAsync(request, stoppingToken);
+                request.Headers.Add("Authorization", "Bearer " + authenticationResult.AccessToken);
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request, stoppingToken);
                 _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);
 
                 string data = await response.Content.ReadAsStringAsync(stoppingToken);

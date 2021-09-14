@@ -39,10 +39,22 @@ resource serviceplan 'Microsoft.Web/serverfarms@2020-12-01' = {
   }
 }
 
+resource symbolicname 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: 'api_identity'
+  location: location
+}
+
 resource api 'Microsoft.Web/sites@2018-11-01' = {
   name: api_name_unique
   location: location
   kind: 'api'
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${symbolicname.id}': {}
+    }
+  }
+
   properties: {
     enabled: true
     hostNameSslStates: [
