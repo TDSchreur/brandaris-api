@@ -42,16 +42,16 @@ namespace TestClient
         {
             if (_httpClient == null)
             {
-                var proxy = new WebProxy { BypassProxyOnLocal = false, Address = new Uri("http://localhost:8001") };
+                // var proxy = new WebProxy { BypassProxyOnLocal = false, Address = new Uri("http://localhost:8001") };
 #pragma warning disable CA5399
 #pragma warning disable CA5400
                 _httpClientHandler = new HttpClientHandler
                 {
-                    Proxy = proxy,
-                    CheckCertificateRevocationList = false,
+                    // Proxy = proxy,
+                    // CheckCertificateRevocationList = false,
                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
-                _httpClient = new(_httpClientHandler);
+                _httpClient = new HttpClient(_httpClientHandler);
             }
         }
     }
