@@ -8,9 +8,9 @@ import { IBaseResponse, IPerson } from './models/iperson';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    public claims: string = '';
-    public person: string = '';
-    public personId: number = 1;
+    public claims = '';
+    public person = '';
+    public personId = 1;
 
     constructor(protected dataService: DataService) {}
 
