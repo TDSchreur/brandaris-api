@@ -1,6 +1,7 @@
 using System;
 using Features.AddPerson;
 using FluentValidation.AspNetCore;
+using IPFiltering;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,8 @@ namespace Brandaris.Api
                 }));
             }
 
+            app.UseIpFilter();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -67,6 +70,8 @@ namespace Brandaris.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIpFilter(() => Configuration.GetSection("IpSafeList").Get<IpSafeList>());
+
             services.AddAuthorization(opt =>
             {
                 AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")
