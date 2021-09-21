@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Features\Features.csproj" />
+    <ProjectReference Include="..\IPFiltering\IPFiltering.csproj" />
   </ItemGroup>
 
 </Project>
