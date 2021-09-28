@@ -1,28 +1,39 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Data;
 using Data.Entities;
 using DataAccess;
 using Features.GetPerson;
+using MockQueryable.Moq;
 using Xunit;
 
 namespace UnitTests
 {
-    public class GetPersonTests : IClassFixture<GetPersonTestsFixture>
+    public class GetPersonTests
     {
-        public GetPersonTests(GetPersonTestsFixture fixture) => Context = fixture.Context;
+        public GetPersonTests()
+        {
+            List<Person> testdata = new()
+            {
+                new Person { Id = 1, FirstName = "Dennis", LastName = "Schreur" },
+                new Person { Id = 2, FirstName = "Tess", LastName = "Schreur" },
+                new Person { Id = 3, FirstName = "Daan", LastName = "Schreur" },
+                new Person { Id = 4, FirstName = "Peter", LastName = "Pan" }
+            };
 
-        public DataContext Context { get; }
+            Query = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
+        }
+
+        public Query<Person> Query { get; init; }
 
         [Theory]
         [InlineData(1, "Dennis", "Schreur")]
         [InlineData(4, "Peter", "Pan")]
-        public async Task GetPerson(int id, string firstName, string lastName)
+        public async Task GetPersonAsync(int id, string firstName, string lastName)
         {
             // arrange
-            Query<Person> query = new(Context);
-
-            GetPersonHandler sut = new(query);
+            GetPersonHandler sut = new(Query);
 
             // act
             GetPersonQuery request = new()
@@ -40,9 +51,7 @@ namespace UnitTests
         public async Task GetPerson_ShouldReturnNull()
         {
             // arrange
-            Query<Person> query = new(Context);
-
-            GetPersonHandler sut = new(query);
+            GetPersonHandler sut = new(Query);
 
             // act
             GetPersonQuery request = new()
@@ -63,9 +72,7 @@ namespace UnitTests
         public async Task GetPersons(string firstname, string lastName, int expectedResults)
         {
             // arrange
-            Query<Person> query = new(Context);
-
-            GetPersonsHandler sut = new(query);
+            GetPersonsHandler sut = new(Query);
 
             // act
             GetPersonsQuery request = new()

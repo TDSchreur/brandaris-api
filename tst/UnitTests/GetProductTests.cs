@@ -1,18 +1,31 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Data;
 using Data.Entities;
 using DataAccess;
 using Features.GetProduct;
+using MockQueryable.Moq;
 using Xunit;
 
 namespace UnitTests
 {
-    public class GetProductTests : IClassFixture<GetProductTestsFixture>
+    public class GetProductTests
     {
-        public GetProductTests(GetProductTestsFixture fixture) => Context = fixture.Context;
+        public GetProductTests()
+        {
+            List<Product> testdata = new()
+            {
+                new Product { Id = 1, Name = "Appel" },
+                new Product { Id = 2, Name = "Banaan" },
+                new Product { Id = 3, Name = "Peer" },
+                new Product { Id = 4, Name = "Sinasappel" }
+            };
 
-        public DataContext Context { get; }
+            Query = new Query<Product>(testdata.AsQueryable().BuildMock().Object);
+        }
+
+        public Query<Product> Query { get; init; }
 
         [Theory]
         [InlineData("Banaan", new int[] { }, 1)]
@@ -21,9 +34,7 @@ namespace UnitTests
         public async Task GetPersons(string name, int[] productIds, int expectedResults)
         {
             // arrange
-            Query<Product> query = new(Context);
-
-            GetProductsHandler sut = new(query);
+            GetProductsHandler sut = new(Query);
 
             // act
             GetProductsQuery request = new()
@@ -43,9 +54,7 @@ namespace UnitTests
         public async Task GetProduct(int id, string name)
         {
             // arrange
-            Query<Product> query = new(Context);
-
-            GetProductHandler sut = new(query);
+            GetProductHandler sut = new(Query);
 
             // act
             GetProductQuery request = new()
@@ -62,9 +71,7 @@ namespace UnitTests
         public async Task GetProduct_ShouldReturnNull()
         {
             // arrange
-            Query<Product> query = new(Context);
-
-            GetProductHandler sut = new(query);
+            GetProductHandler sut = new(Query);
 
             // act
             GetProductQuery request = new()
