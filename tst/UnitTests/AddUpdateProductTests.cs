@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Data;
 using Data.Entities;
@@ -16,6 +17,8 @@ namespace UnitTests
         public async Task AddProduct()
         {
             // arrange
+            List<Product> testdata = new();
+
             DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(AddProduct)).Options;
             using var context = new DataContext(options);
             context.SaveChanges();

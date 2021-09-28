@@ -15,6 +15,13 @@ namespace DataAccess
 
         public Query(DbContext context) => _query = context.Set<TEntity>().AsNoTracking();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Query{TEntity}"/> class.
+        /// Only for unit testing.
+        /// </summary>
+        /// <param name="query">The mock query.</param>
+        public Query(IQueryable<TEntity> query) => _query = query;
+
         public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => _query.AnyAsync(predicate, cancellationToken);
 
         public IQueryable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector) => _query.Select(selector);
