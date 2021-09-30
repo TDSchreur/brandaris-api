@@ -57,6 +57,9 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
 
   properties: {
     enabled: true
+    siteConfig: {
+      netFrameworkVersion: 'v6.0'
+    }
     hostNameSslStates: [
       {
         name: '${api_name_unique}.azurewebsites.net'
