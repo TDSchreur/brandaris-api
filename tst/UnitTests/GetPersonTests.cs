@@ -25,7 +25,7 @@ namespace UnitTests
             Query = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
         }
 
-        public Query<Person> Query { get; init; }
+        public Query<Person> Query { get; }
 
         [Theory]
         [InlineData(1, "Dennis", "Schreur")]

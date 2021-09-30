@@ -1,11 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
-using Data;
 using Data.Entities;
 using DataAccess;
 using Features.AddPerson;
 using Features.UpdatePerson;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace UnitTests
@@ -16,55 +17,71 @@ namespace UnitTests
         public async Task AddPerson()
         {
             // arrange
-            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(AddPerson)).Options;
-            using var context = new DataContext(options);
-            context.SaveChanges();
-            Command<Person> command = new(context);
-
-            AddPersonHandler sut = new(command);
-
-            // act
+            const string donald = nameof(donald);
+            const string duck = nameof(duck);
             AddPersonCommand request = new()
             {
-                FirstName = "Donald",
-                LastName = "Duck"
+                FirstName = donald,
+                LastName = duck
             };
+
+            var qm = new Mock<ICommand<Person>>(MockBehavior.Strict);
+            qm.Setup(x => x.Add(It.IsAny<Person>()))
+             .Callback((Person[] p) => p[0].Id = 1);
+            qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+              .ReturnsAsync(1);
+
+            AddPersonHandler sut = new(qm.Object);
+
+            // act
             AddPersonResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert
             Assert.Equal(1, result.Value.Id);
+            Assert.Equal(donald, result.Value.FirstName);
+            Assert.Equal(duck, result.Value.LastName);
         }
 
         [Fact]
         public async Task UpdatePerson()
         {
             // arrange
-            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(UpdatePerson)).Options;
-            using (var context = new DataContext(options))
+            const string tony = nameof(tony);
+            const string stark = nameof(stark);
+            UpdatePersonCommand request = new()
             {
-                context.Persons.Add(new Person { Id = 1, FirstName = "Peter", LastName = "Pan" });
-                context.SaveChanges();
-            }
+                Id = 1,
+                FirstName = tony,
+                LastName = stark
+            };
 
-            using (var context = new DataContext(options))
-            {
-                Command<Person> command = new(context);
+            string newFirstName = string.Empty;
+            string newLastName = string.Empty;
 
-                UpdatePersonHandler sut = new(command);
+            var qm = new Mock<ICommand<Person>>(MockBehavior.Strict);
+            qm.Setup(x => x.Update(It.IsAny<Person>(),
+                                   It.IsAny<Expression<Func<Person, string>>>(),
+                                   It.IsAny<Expression<Func<Person, string>>>()))
+              .Callback((Person p,
+                         Expression<Func<Person, string>>[] _) =>
+               {
+                   newFirstName = p.FirstName;
+                   newLastName = p.LastName;
+               });
 
-                // act
-                UpdatePersonCommand request = new()
-                {
-                    Id = 1,
-                    FirstName = "Tony",
-                    LastName = "Stark"
-                };
-                UpdatePersonResponse result = await sut.Handle(request, CancellationToken.None);
+            qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+              .ReturnsAsync(1);
 
-                // assert
-                Assert.Equal("Tony", result.Value.FirstName);
-                Assert.Equal("Stark", result.Value.LastName);
-            }
+            UpdatePersonHandler sut = new(qm.Object);
+
+            // act
+            UpdatePersonResponse result = await sut.Handle(request, CancellationToken.None);
+
+            // assert
+            Assert.Equal(tony, result.Value.FirstName);
+            Assert.Equal(tony, newFirstName);
+            Assert.Equal(stark, result.Value.LastName);
+            Assert.Equal(stark, newLastName);
         }
     }
 }
