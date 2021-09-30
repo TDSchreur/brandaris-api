@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Data;
 using Data.Entities;
 using DataAccess;
 using Features.AddProduct;
 using Features.UpdateProduct;
-using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace UnitTests
@@ -17,20 +17,18 @@ namespace UnitTests
         public async Task AddProduct()
         {
             // arrange
-            List<Product> testdata = new();
+            const string meloen = nameof(meloen);
+            AddProductCommand request = new() { Name = meloen };
 
-            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(AddProduct)).Options;
-            using var context = new DataContext(options);
-            context.SaveChanges();
-            Command<Product> command = new(context);
+            var qm = new Mock<ICommand<Product>>(MockBehavior.Strict);
+            qm.Setup(x => x.Add(It.IsAny<Product>()))
+              .Callback((Product[] p) => p[0].Id = 1);
+            qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+              .ReturnsAsync(1);
 
-            AddProductHandler sut = new(command);
+            AddProductHandler sut = new(qm.Object);
 
             // act
-            AddProductCommand request = new()
-            {
-                Name = "Meloen"
-            };
             AddProductResponse result = await sut.Handle(request, CancellationToken.None);
 
             // assert
@@ -41,30 +39,25 @@ namespace UnitTests
         public async Task UpdateProduct()
         {
             // arrange
-            DbContextOptions<DataContext> options = new DbContextOptionsBuilder<DataContext>().UseInMemoryDatabase(nameof(UpdateProduct)).Options;
-            using (var context = new DataContext(options))
-            {
-                context.Products.Add(new Product { Id = 1, Name = "Appel" });
-                context.SaveChanges();
-            }
+            const string meloen = nameof(meloen);
+            UpdateProductCommand request = new() { Id = 1, Name = meloen };
+            string newName = string.Empty;
 
-            using (var context = new DataContext(options))
-            {
-                Command<Product> command = new(context);
+            var qm = new Mock<ICommand<Product>>(MockBehavior.Strict);
+            qm.Setup(x => x.Update(It.IsAny<Product>(),
+                                   It.IsAny<Expression<Func<Product, string>>>()))
+              .Callback((Product p, Expression<Func<Product, string>>[] _) => newName = p.Name);
+            qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+              .ReturnsAsync(1);
 
-                UpdateProductHandler sut = new(command);
+            UpdateProductHandler sut = new(qm.Object);
 
-                // act
-                UpdateProductCommand request = new()
-                {
-                    Id = 1,
-                    Name = "Meloen"
-                };
-                UpdateProductResponse result = await sut.Handle(request, CancellationToken.None);
+            // act
+            UpdateProductResponse result = await sut.Handle(request, CancellationToken.None);
 
-                // assert
-                Assert.Equal("Meloen", result.Value.Name);
-            }
+            // assert
+            Assert.Equal(meloen, result.Value.Name);
+            Assert.Equal(meloen, newName);
         }
     }
 }
