@@ -6,4 +6,6 @@
 
         public string IpNetworks { get; set; } = string.Empty;
     }
+#pragma warning restore
+
 }

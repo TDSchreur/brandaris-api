@@ -59,7 +59,7 @@ namespace Features.AddTestData
             _personCommand.Add(persons);
             int addedRecords = await _personCommand.SaveChangesAsync(stoppingToken);
 
-            _logger.LogInformation("Added {number} persons.", addedRecords);
+            _logger.LogInformation("Added {Number} persons.", addedRecords);
         }
 
         private async Task AddProducts(CancellationToken stoppingToken)
@@ -87,7 +87,7 @@ namespace Features.AddTestData
             _productCommand.Add(products);
             int addedRecords = await _productCommand.SaveChangesAsync(stoppingToken);
 
-            _logger.LogInformation("Added {number} products.", addedRecords);
+            _logger.LogInformation("Added {Number} products.", addedRecords);
         }
 
         private Task ClearData(CancellationToken cancellationToken)
