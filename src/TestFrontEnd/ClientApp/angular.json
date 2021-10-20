@@ -82,9 +82,16 @@
                     }
                 },
                 "lint": {
-                    "builder": "@nrwl/linter:eslint",
+                    "builder": "@angular-eslint/builder:lint",
                     "options": {
                         "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular/jest:jest",
+                    "options": {
+                        "jestConfig": "jest.config.js",
+                        "passWithNoTests": true
                     }
                 }
             }

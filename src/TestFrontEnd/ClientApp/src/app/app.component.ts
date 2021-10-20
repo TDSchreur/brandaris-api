@@ -21,13 +21,13 @@ export class AppComponent {
     }
 
     GetClaims() {
-        this.dataService.getClaims().subscribe((data: any) => {
+        this.dataService.getClaims().subscribe((data: { name: string; value: string }[]) => {
             this.claims = JSON.stringify(data, null, 2);
         });
     }
 
     GetClaimsRemote() {
-        this.dataService.getClaimsRemote().subscribe((data: any) => {
+        this.dataService.getClaimsRemote().subscribe((data: { name: string; value: string }[]) => {
             this.claims = JSON.stringify(data, null, 2);
         });
     }

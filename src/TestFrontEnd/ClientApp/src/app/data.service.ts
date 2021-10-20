@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { IBaseResponse, IPerson } from './models/iperson';
 
 @Injectable({
@@ -9,15 +10,36 @@ import { IBaseResponse, IPerson } from './models/iperson';
 export class DataService {
     constructor(protected http: HttpClient) {}
 
-    getPerson(personId: number): Observable<IBaseResponse<IPerson>> {
-        return this.http.get<IBaseResponse<IPerson>>(`api/person/${personId}`);
+    getPerson(personId: number) {
+        return this.http
+            .get<IBaseResponse<IPerson>>(`api/person/${personId}`)
+            .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
     }
 
-    getClaims(): Observable<any> {
-        return this.http.get<any>('api/person/claims');
+    getClaims() {
+        return this.http
+            .get<{ name: string; value: string }[]>('api/person/claims')
+            .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
     }
 
-    getClaimsRemote(): Observable<any> {
-        return this.http.get<any>('api/person/claims_remote');
+    getClaimsRemote() {
+        return this.http
+            .get<{ name: string; value: string }[]>('api/person/claims_remote')
+            .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
+    }
+
+    private handleError(err: HttpErrorResponse) {
+        let errorMessage = '';
+        if (err.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+        }
+        console.log(errorMessage);
+
+        return throwError(errorMessage);
     }
 }
