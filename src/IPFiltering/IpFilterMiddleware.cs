@@ -31,6 +31,13 @@ namespace IPFiltering
 
         public async Task Invoke(HttpContext context)
         {
+            Endpoint? endpoint = context.GetEndpoint();
+            if (endpoint?.Metadata?.GetMetadata<IExcludeIpFilter>() is object)
+            {
+                await _next(context);
+                return;
+            }
+
             IPAddress remoteIp = context.Connection.RemoteIpAddress ?? throw new ArgumentException("Remote IP is NULL, may due to missing ForwardedHeaders.");
 
             _logger.LogDebug("Remote IpAddress: {RemoteIp}", remoteIp);
@@ -43,7 +50,7 @@ namespace IPFiltering
             if (!_ipAddresses.Contains(remoteIp) &&
                 !_ipNetworks.Any(x => x.Contains(remoteIp)))
             {
-                _logger.LogWarning($"Forbidden Request from IP: {remoteIp}");
+                _logger.LogWarning("Forbidden Request from IP: {RemoteIp}", remoteIp);
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return;
             }
