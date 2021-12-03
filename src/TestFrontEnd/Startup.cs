@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,9 +98,12 @@ namespace TestFrontEnd
         {
             services.AddControllers();
 
+            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+                                                           options => options.Events = new RejectSessionCookieWhenAccountNotInCacheEvents());
+
             string[] scope =
             {
-                "api://brandaris-api/get-person"
+                "api://brandaris-api/manage-data"
             };
 
             services.AddMicrosoftIdentityWebAppAuthentication(Configuration)

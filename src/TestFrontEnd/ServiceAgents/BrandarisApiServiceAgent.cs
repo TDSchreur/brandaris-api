@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using TestFrontEnd.Models;
 
@@ -25,7 +27,7 @@ namespace TestFrontEnd.ServiceAgents
         {
             string[] scope =
             {
-                "api://brandaris-api/get-person"
+                "api://brandaris-api/manage-data"
             };
             string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
             using HttpRequestMessage request = new(HttpMethod.Get, $"/api/person/{id}");
@@ -38,7 +40,7 @@ namespace TestFrontEnd.ServiceAgents
         {
             string[] scope =
             {
-                "api://brandaris-api/get-person"
+                "api://brandaris-api/manage-data"
             };
             string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
             using HttpRequestMessage request = new(HttpMethod.Get, "/api/user");

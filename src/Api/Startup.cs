@@ -101,6 +101,7 @@ namespace Brandaris.Api
             })
                 .AddJwtBearer("AAD", options =>
             {
+                options.MapInboundClaims = false;
                 options.RequireHttpsMetadata = true;
                 options.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
                 options.TokenValidationParameters.ValidateTokenReplay = true;
