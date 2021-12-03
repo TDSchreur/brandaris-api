@@ -1,52 +1,45 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Identity.Client;
+﻿using System.Net.Http.Headers;
 using Microsoft.Identity.Web;
 using TestFrontEnd.Models;
 
-namespace TestFrontEnd.ServiceAgents
+namespace TestFrontEnd.ServiceAgents;
+
+public class BrandarisApiServiceAgent : IBrandarisApiServiceAgent
 {
-    public class BrandarisApiServiceAgent : IBrandarisApiServiceAgent
+    private readonly HttpClient _httpClient;
+    private readonly ITokenAcquisition _tokenAcquisition;
+
+    public BrandarisApiServiceAgent(
+        ITokenAcquisition tokenAcquisition,
+        HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-        private readonly ITokenAcquisition _tokenAcquisition;
+        _tokenAcquisition = tokenAcquisition;
+        _httpClient = httpClient;
+    }
 
-        public BrandarisApiServiceAgent(
-            ITokenAcquisition tokenAcquisition,
-            HttpClient httpClient)
+    public async Task<GetPersonResponse> GetPersonAsync(int id)
+    {
+        string[] scope =
         {
-            _tokenAcquisition = tokenAcquisition;
-            _httpClient = httpClient;
-        }
+            "api://brandaris-api/manage-data"
+        };
+        string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
+        using HttpRequestMessage request = new(HttpMethod.Get, $"/api/person/{id}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        HttpResponseMessage response = await _httpClient.SendAsync(request);
+        return await response.Content.ReadFromJsonAsync<GetPersonResponse>();
+    }
 
-        public async Task<GetPersonResponse> GetPersonAsync(int id)
+    public async Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync()
+    {
+        string[] scope =
         {
-            string[] scope =
-            {
-                "api://brandaris-api/manage-data"
-            };
-            string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
-            using HttpRequestMessage request = new(HttpMethod.Get, $"/api/person/{id}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
-            return await response.Content.ReadFromJsonAsync<GetPersonResponse>();
-        }
-
-        public async Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync()
-        {
-            string[] scope =
-            {
-                "api://brandaris-api/manage-data"
-            };
-            string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
-            using HttpRequestMessage request = new(HttpMethod.Get, "/api/user");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
-            return await response.Content.ReadFromJsonAsync<IEnumerable<KeyValuePair<string, string>>>();
-        }
+            "api://brandaris-api/manage-data"
+        };
+        string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
+        using HttpRequestMessage request = new(HttpMethod.Get, "/api/user");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        HttpResponseMessage response = await _httpClient.SendAsync(request);
+        return await response.Content.ReadFromJsonAsync<IEnumerable<KeyValuePair<string, string>>>();
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Features.Models
-{
-    public class ProductModel : IResponseModel
-    {
-        public int Id { get; set; }
+﻿namespace Features.Models;
 
-        public string Name { get; set; }
-    }
+public class ProductModel : IResponseModel
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
 }

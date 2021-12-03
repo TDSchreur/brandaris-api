@@ -1,13 +1,12 @@
 ﻿using MediatR;
 
-namespace Features.UpdatePerson
+namespace Features.UpdatePerson;
+
+public class UpdatePersonCommand : IRequest<UpdatePersonResponse>
 {
-    public class UpdatePersonCommand : IRequest<UpdatePersonResponse>
-    {
-        public int Id { get; init; }
+    public string FirstName { get; init; }
 
-        public string FirstName { get; init; }
+    public int Id { get; init; }
 
-        public string LastName { get; init; }
-    }
+    public string LastName { get; init; }
 }

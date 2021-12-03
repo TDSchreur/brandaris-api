@@ -1,12 +1,5 @@
-﻿using System;
+﻿namespace IPFiltering;
 
-namespace IPFiltering
-{
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public sealed class ExcludeIpFilterAttribute : Attribute, IExcludeIpFilter
-    {
-        public ExcludeIpFilterAttribute() { }
-    }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public sealed class ExcludeIpFilterAttribute : Attribute, IExcludeIpFilter { }
 #pragma warning restore
-
-}

@@ -1,49 +1,45 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
+﻿using Microsoft.Identity.Client;
 
-namespace TestClient
+namespace TestClient;
+
+public class TokenHelper
 {
-    public class TokenHelper
+    private readonly string _authority;
+    private readonly string _clientId;
+    private readonly string _clientSecret;
+    private readonly IMsalHttpClientFactory _httpClientFactory;
+    private readonly string _tenantId;
+    private IConfidentialClientApplication _client;
+
+    public TokenHelper(IConfiguration configuration, IMsalHttpClientFactory httpClientFactory)
     {
-        private readonly string _authority;
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _tenantId;
-        private readonly IMsalHttpClientFactory _httpClientFactory;
-        private IConfidentialClientApplication _client;
+        _clientId = configuration["Authentication:ClientId"];
+        _clientSecret = configuration["Authentication:ClientSecret"];
+        _tenantId = configuration["Authentication:TenantId"];
+        _authority = $"https://login.microsoftonline.com/{_tenantId}";
+        _httpClientFactory = httpClientFactory;
+    }
 
-        public TokenHelper(IConfiguration configuration, IMsalHttpClientFactory httpClientFactory)
+    public Task<AuthenticationResult> GetTokens(params string[] scope)
+    {
+        CreateClient();
+
+        AcquireTokenForClientParameterBuilder request = _client.AcquireTokenForClient(scope);
+
+        return request.ExecuteAsync();
+    }
+
+    private void CreateClient()
+    {
+        if (_client != null)
         {
-            _clientId = configuration["Authentication:ClientId"];
-            _clientSecret = configuration["Authentication:ClientSecret"];
-            _tenantId = configuration["Authentication:TenantId"];
-            _authority = $"https://login.microsoftonline.com/{_tenantId}";
-            _httpClientFactory = httpClientFactory;
+            return;
         }
 
-        public Task<AuthenticationResult> GetTokens(params string[] scope)
-        {
-            CreateClient();
-
-            AcquireTokenForClientParameterBuilder request = _client.AcquireTokenForClient(scope);
-
-            return request.ExecuteAsync();
-        }
-
-        private void CreateClient()
-        {
-            if (_client != null)
-            {
-                return;
-            }
-
-            _client = ConfidentialClientApplicationBuilder.Create(_clientId)
-                                                          .WithClientSecret(_clientSecret)
-                                                          .WithAuthority(new Uri(_authority))
-                                                          .WithHttpClientFactory(_httpClientFactory)
-                                                          .Build();
-        }
+        _client = ConfidentialClientApplicationBuilder.Create(_clientId)
+                                                      .WithClientSecret(_clientSecret)
+                                                      .WithAuthority(new Uri(_authority))
+                                                      .WithHttpClientFactory(_httpClientFactory)
+                                                      .Build();
     }
 }

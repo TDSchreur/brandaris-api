@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using DataAccess;
+﻿using DataAccess;
 
-namespace Data.Entities
+namespace Data.Entities;
+
+public class Product : IEntity
 {
-    public class Product : IEntity
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public ICollection<OrderLine> Orderlines { get; set; } = new HashSet<OrderLine>();
+    public ICollection<OrderLine> Orderlines { get; set; } = new HashSet<OrderLine>();
 
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 
-namespace Features.GetConfig
-{
-    public class GetConfigQuery : IRequest<GetConfigResponse> { }
-}
+namespace Features.GetConfig;
+
+public class GetConfigQuery : IRequest<GetConfigResponse> { }

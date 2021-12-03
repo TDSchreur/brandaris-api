@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using DataAccess;
+﻿using DataAccess;
 
-namespace Data.Entities
+namespace Data.Entities;
+
+public class Order : IEntity
 {
-    public class Order : IEntity
-    {
-        public ICollection<OrderLine> Orderlines { get; set; } = new HashSet<OrderLine>();
+    public ICollection<OrderLine> Orderlines { get; set; } = new HashSet<OrderLine>();
 
-        public Person Person { get; set; }
+    public Person Person { get; set; }
 
-        public int PersonId { get; set; }
+    public int PersonId { get; set; }
 
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

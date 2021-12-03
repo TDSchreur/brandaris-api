@@ -1,32 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Data.Entities;
+﻿using Data.Entities;
 using DataAccess;
 using Features.Models;
 using MediatR;
 
-namespace Features.GetProduct
+namespace Features.GetProduct;
+
+public class GetProductsHandler : IRequestHandler<GetProductsQuery, GetProductsResponse>
 {
-    public class GetProductsHandler : IRequestHandler<GetProductsQuery, GetProductsResponse>
+    private readonly IQuery<Product> _query;
+
+    public GetProductsHandler(IQuery<Product> query) => _query = query;
+
+    public async Task<GetProductsResponse> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
-        private readonly IQuery<Product> _query;
+        List<ProductModel> products = await _query.Where(x => !request.HasProductIds || request.ProductIds.Contains(x.Id))
+                                                  .Where(x => !request.HasName || x.Name == request.Name)
+                                                  .Select(x => new ProductModel
+                                                  {
+                                                      Id = x.Id,
+                                                      Name = x.Name
+                                                  })
+                                                  .ToListAsync(cancellationToken);
 
-        public GetProductsHandler(IQuery<Product> query) => _query = query;
-
-        public async Task<GetProductsResponse> Handle(GetProductsQuery request, CancellationToken cancellationToken)
-        {
-            List<ProductModel> products = await _query.Where(x => !request.HasProductIds || request.ProductIds.Contains(x.Id))
-                                                      .Where(x => !request.HasName || x.Name == request.Name)
-                                                      .Select(x => new ProductModel
-                                                      {
-                                                          Id = x.Id,
-                                                          Name = x.Name
-                                                      })
-                                                      .ToListAsync(cancellationToken);
-
-            return new GetProductsResponse(products);
-        }
+        return new GetProductsResponse(products);
     }
 }

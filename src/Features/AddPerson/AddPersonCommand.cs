@@ -1,11 +1,10 @@
 ﻿using MediatR;
 
-namespace Features.AddPerson
-{
-    public class AddPersonCommand : IRequest<AddPersonResponse>
-    {
-        public string FirstName { get; init; }
+namespace Features.AddPerson;
 
-        public string LastName { get; init; }
-    }
+public class AddPersonCommand : IRequest<AddPersonResponse>
+{
+    public string FirstName { get; init; }
+
+    public string LastName { get; init; }
 }

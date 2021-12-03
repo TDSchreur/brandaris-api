@@ -1,7 +1,6 @@
-﻿namespace Features.Models
+﻿namespace Features.Models;
+
+public interface IResponseModel
 {
-    public interface IResponseModel
-    {
-        // Marker interface
-    }
+    // Marker interface
 }

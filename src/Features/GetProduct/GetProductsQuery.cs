@@ -1,16 +1,14 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 
-namespace Features.GetProduct
+namespace Features.GetProduct;
+
+public class GetProductsQuery : IRequest<GetProductsResponse>
 {
-    public class GetProductsQuery : IRequest<GetProductsResponse>
-    {
-        public string Name { get; init; }
+    public string Name { get; init; }
 
-        public int[] ProductIds { get; init; } = Array.Empty<int>();
+    public int[] ProductIds { get; init; } = Array.Empty<int>();
 
-        internal bool HasName => !string.IsNullOrWhiteSpace(Name);
+    internal bool HasName => !string.IsNullOrWhiteSpace(Name);
 
-        internal bool HasProductIds => ProductIds.Length > 0;
-    }
+    internal bool HasProductIds => ProductIds.Length > 0;
 }

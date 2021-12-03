@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Features.GetProduct
+namespace Features.GetProduct;
+
+public class GetProductQuery : IRequest<GetProductResponse>
 {
-    public class GetProductQuery : IRequest<GetProductResponse>
-    {
-        public int Id { get; init; }
-    }
+    public int Id { get; init; }
 }

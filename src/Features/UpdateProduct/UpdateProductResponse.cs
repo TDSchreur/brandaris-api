@@ -1,9 +1,8 @@
 ﻿using Features.Models;
 
-namespace Features.UpdateProduct
+namespace Features.UpdateProduct;
+
+public class UpdateProductResponse : ResponseBase<ProductModel>
 {
-    public class UpdateProductResponse : ResponseBase<ProductModel>
-    {
-        public UpdateProductResponse(ProductModel value, bool success = true) : base(value, success) { }
-    }
+    public UpdateProductResponse(ProductModel value, bool success = true) : base(value, success) { }
 }
