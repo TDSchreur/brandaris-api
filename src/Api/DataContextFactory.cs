@@ -1,29 +1,25 @@
-﻿using System;
-using System.IO;
-using Data;
+﻿using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
-namespace Brandaris.Api
+namespace Brandaris.Api;
+
+public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
 {
-    public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
+    public DataContext CreateDbContext(string[] args)
     {
-        public DataContext CreateDbContext(string[] args)
-        {
-            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                                              .SetBasePath(Directory.GetCurrentDirectory())
-                                              .AddJsonFile("appsettings.json", false, false)
-                                              .AddJsonFile($"appsettings.{env}.json", true, false)
-                                              .Build();
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+                                          .SetBasePath(Directory.GetCurrentDirectory())
+                                          .AddJsonFile("appsettings.json", false, false)
+                                          .AddJsonFile($"appsettings.{env}.json", true, false)
+                                          .Build();
 
-            string connectionString = configuration.GetConnectionString("Default");
-            DbContextOptionsBuilder<DataContext> optionsBuilder = new();
-            optionsBuilder.UseSqlServer(connectionString);
+        string connectionString = configuration.GetConnectionString("Default");
+        DbContextOptionsBuilder<DataContext> optionsBuilder = new();
+        optionsBuilder.UseSqlServer(connectionString);
 
-            return new DataContext(optionsBuilder.Options);
-        }
+        return new DataContext(optionsBuilder.Options);
     }
 }

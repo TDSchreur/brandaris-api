@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Features.Models;
+﻿using Features.Models;
 
-namespace Features.GetProduct
+namespace Features.GetProduct;
+
+public class GetProductsResponse : ResponseBase<ICollection<ProductModel>>
 {
-    public class GetProductsResponse : ResponseBase<ICollection<ProductModel>>
-    {
-        public GetProductsResponse(ICollection<ProductModel> value, bool success = true) : base(value, success) { }
-    }
+    public GetProductsResponse(ICollection<ProductModel> value, bool success = true) : base(value, success) { }
 }

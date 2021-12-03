@@ -1,106 +1,100 @@
-using System;
 using Features.AddPerson;
 using FluentValidation.AspNetCore;
 using IPFiltering;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
-namespace Brandaris.Api
+namespace Brandaris.Api;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration) => Configuration = configuration;
+
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        if (env.IsDevelopment())
         {
-            if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler(appBuilder => appBuilder.Run(async context =>
-                {
-                    context.Response.StatusCode = 500;
-                    await context
-                          .Response
-                          .WriteAsync("An unexpected error on server happened, please try again later.");
-                }));
-            }
-
-            app.UseIpFilter();
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseOpenApi();
-
-            app.UseSwaggerUi3();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks("/health/readiness");
-
-                endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-                {
-                    Predicate = _ => false
-                });
-
-                endpoints.MapControllers().RequireAuthorization();
-            });
-
-            app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
+                context.Response.StatusCode = 500;
+                await context
+                     .Response
+                     .WriteAsync("An unexpected error on server happened, please try again later.");
+            }));
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        app.UseIpFilter();
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+
+        app.UseAuthorization();
+
+        app.UseOpenApi();
+
+        app.UseSwaggerUi3();
+
+        app.UseEndpoints(endpoints =>
         {
-            services.AddIpFilter(() => Configuration.GetSection("IpSafeList").Get<IpSafeList>());
+            endpoints.MapHealthChecks("/health/readiness");
 
-            services.AddAuthorization(opt =>
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {
-                AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")
-                                                   .RequireAuthenticatedUser()
-                                                   .Build();
-
-                opt.DefaultPolicy = defaultPolicy;
-
-                opt.AddPolicy("GetConfigPolicy", policy =>
-                {
-                    policy.Combine(defaultPolicy);
-                    policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "get-config-role");
-                });
-
-                opt.AddPolicy("GetPersonPolicy", policy =>
-                {
-                    policy.Combine(defaultPolicy);
-                    policy.RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "get-person");
-                });
+                Predicate = _ => false
             });
 
-            services
-                .AddAuthentication(opt =>
+            endpoints.MapControllers().RequireAuthorization();
+        });
+
+        app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
+    }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddIpFilter(() => Configuration.GetSection("IpSafeList").Get<IpSafeList>());
+
+        services.AddAuthorization(opt =>
+        {
+            AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")
+                                               .RequireAuthenticatedUser()
+                                               .Build();
+
+            opt.DefaultPolicy = defaultPolicy;
+
+            opt.AddPolicy("GetConfigPolicy", policy =>
+            {
+                policy.Combine(defaultPolicy);
+                policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "get-config-role");
+            });
+
+            opt.AddPolicy("GetPersonPolicy", policy =>
+            {
+                policy.Combine(defaultPolicy);
+                policy.RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "get-person");
+            });
+        });
+
+        services
+           .AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer("AAD", options =>
+           .AddJwtBearer("AAD", options =>
             {
+                options.MapInboundClaims = false;
                 options.RequireHttpsMetadata = true;
                 options.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
                 options.TokenValidationParameters.ValidateTokenReplay = true;
@@ -114,17 +108,13 @@ namespace Brandaris.Api
                                                                    };
             });
 
-            services.AddOpenApiDocument(opt =>
-            {
-                opt.Title = "Brandaris";
-            });
+        services.AddOpenApiDocument(opt => { opt.Title = "Brandaris"; });
 
-            services.AddControllers()
-                    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient));
+        services.AddControllers()
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient));
 
-            services.AddHealthChecks();
+        services.AddHealthChecks();
 
-            services.AddApplicationInsightsTelemetry();
-        }
+        services.AddApplicationInsightsTelemetry();
     }
 }

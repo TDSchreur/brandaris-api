@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="IPNetwork2" Version="2.5.353" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <PackageReference Include="IPNetwork2" Version="2.5.381"/>
   </ItemGroup>
 
 </Project>

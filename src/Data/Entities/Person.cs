@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using DataAccess;
+﻿using DataAccess;
 
-namespace Data.Entities
+namespace Data.Entities;
+
+public class Person : IEntity
 {
-    public class Person : IEntity
-    {
-        public string FirstName { get; set; }
+    public string FirstName { get; set; }
 
-        public string LastName { get; set; }
+    public string LastName { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+    public ICollection<Order> Orders { get; set; }
 
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

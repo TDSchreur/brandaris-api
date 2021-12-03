@@ -13,111 +13,112 @@ variables:
   azureServiceConnection: 'azure-sc'
 
 stages:
- - stage: Api
-   dependsOn: []
-   jobs:
-     - job: Build
-       pool: $(pool)
-       steps:
-        - task: DotNetCoreCLI@2
-          displayName: restore
-          inputs:
-            command: 'restore'
-            projects: $(project)
-        
-        - task: DotNetCoreCLI@2
-          displayName: build
-          inputs:
-            command: 'build'
-            projects: $(project)
-            arguments: '--no-restore -c $(configuration)'
-        
-        - task: DotNetCoreCLI@2
-          displayName: publish
-          inputs:
-            command: 'publish'
-            projects: $(project)
-            zipAfterPublish: true
-            publishWebProjects: false
-            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
-        
-        - task: PublishBuildArtifacts@1
-          displayName: "publish artifact api"
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'api'
-            publishLocation: 'Container'
+  - stage: Api
+    dependsOn: [ ]
+    jobs:
+      - job: Build
+        pool: $(pool)
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: restore
+            inputs:
+              command: 'restore'
+              projects: $(project)
 
- - stage: Function
-   dependsOn: []
-   jobs:
-     - job: Build
-       pool: $(pool)
-       steps:
-        - task: DotNetCoreCLI@2
-          displayName: restore
-          inputs:
-            command: 'restore'
-            projects: $(functionproject)
-                 
-        - task: DotNetCoreCLI@2
-          displayName: build
-          inputs:
-            command: 'build'
-            projects: $(functionproject)
-            arguments: '--no-restore -c $(configuration)'
-                 
-        - task: DotNetCoreCLI@2
-          displayName: publish
-          inputs:
-            command: 'publish'
-            projects: $(functionproject)
-            zipAfterPublish: true
-            publishWebProjects: false
-            arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
-                 
-        - task: PublishBuildArtifacts@1
-          displayName: "publish artifact function"
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'function'
-            publishLocation: 'Container'
+          - task: DotNetCoreCLI@2
+            displayName: build
+            inputs:
+              command: 'build'
+              projects: $(project)
+              arguments: '--no-restore -c $(configuration)'
 
- - stage: Deploy
-   dependsOn: 
-   - Api
-   - Function
-   jobs:
-   - deployment: Deploy
-     pool: $(pool)
-     environment: brandaris-biceps
-     strategy:
-      runOnce:
-        deploy:
-          steps:
-          
-           - task: AzureCLI@2
-             displayName: Biceps deployment via CLI
-             inputs:
-               azureSubscription: $(azureServiceConnection)
-               scriptType: 'pscore'
-               scriptLocation: 'inlineScript'
-               inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
-        
-           - task: AzureRmWebAppDeployment@4
-             displayName: Deploy API
-             inputs:
-               ConnectionType: 'AzureRM'
-               azureSubscription: $(azureServiceConnection)
-               appType: 'apiApp'
-               WebAppName: 'brandaris-api-biceps'
-               packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
-               
-           - task: AzureFunctionApp@1
-             displayName: Deploy Functions
-             inputs:
-               azureSubscription: $(azureServiceConnection)
-               appType: 'functionApp'
-               appName: 'nta7tp2n6crj4'
-               package: '$(Pipeline.Workspace)/function/SecureFunction.zip'
-               deploymentMethod: 'auto'
+          - task: DotNetCoreCLI@2
+            displayName: publish
+            inputs:
+              command: 'publish'
+              projects: $(project)
+              zipAfterPublish: true
+              publishWebProjects: false
+              arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
+
+          - task: PublishBuildArtifacts@1
+            displayName: "publish artifact api"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'api'
+              publishLocation: 'Container'
+
+  - stage: Function
+    dependsOn: [ ]
+    jobs:
+      - job: Build
+        pool: $(pool)
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: restore
+            inputs:
+              command: 'restore'
+              projects: $(functionproject)
+
+          - task: DotNetCoreCLI@2
+            displayName: build
+            inputs:
+              command: 'build'
+              projects: $(functionproject)
+              arguments: '--no-restore -c $(configuration)'
+
+          - task: DotNetCoreCLI@2
+            displayName: publish
+            inputs:
+              command: 'publish'
+              projects: $(functionproject)
+              zipAfterPublish: true
+              publishWebProjects: false
+              arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
+
+          - task: PublishBuildArtifacts@1
+            displayName: "publish artifact function"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'function'
+              publishLocation: 'Container'
+
+  - stage: Deploy
+    dependsOn:
+      - Api
+      - Function
+    condition: false
+    jobs:
+      - deployment: Deploy
+        pool: $(pool)
+        environment: brandaris-biceps
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+                - task: AzureCLI@2
+                  displayName: Biceps deployment via CLI
+                  inputs:
+                    azureSubscription: $(azureServiceConnection)
+                    scriptType: 'pscore'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
+
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy API
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: $(azureServiceConnection)
+                    appType: 'apiApp'
+                    WebAppName: 'brandaris-api-biceps'
+                    packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
+
+                - task: AzureFunctionApp@1
+                  displayName: Deploy Functions
+                  inputs:
+                    azureSubscription: $(azureServiceConnection)
+                    appType: 'functionApp'
+                    appName: 'nta7tp2n6crj4'
+                    package: '$(Pipeline.Workspace)/function/SecureFunction.zip'
+                    deploymentMethod: 'auto'

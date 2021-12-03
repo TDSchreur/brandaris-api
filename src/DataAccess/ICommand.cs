@@ -1,17 +1,13 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
-namespace DataAccess
+namespace DataAccess;
+
+public interface ICommand<TEntity>
+    where TEntity : IEntity
 {
-    public interface ICommand<TEntity>
-        where TEntity : IEntity
-    {
-        void Add(params TEntity[] entity);
+    void Add(params TEntity[] entity);
 
-        void Update<TProperty>(TEntity entity, params Expression<Func<TEntity, TProperty>>[] propertyExpressions);
+    Task<int> SaveChangesAsync(CancellationToken token = default);
 
-        Task<int> SaveChangesAsync(CancellationToken token = default);
-    }
+    void Update<TProperty>(TEntity entity, params Expression<Func<TEntity, TProperty>>[] propertyExpressions);
 }

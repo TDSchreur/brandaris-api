@@ -1,4 +1,3 @@
-﻿namespace TestFrontEnd.Models
-{
-    public class GetPersonResponse : ResponseBase<PersonModel> { }
-}
+﻿namespace TestFrontEnd.Models;
+
+public class GetPersonResponse : ResponseBase<PersonModel> { }

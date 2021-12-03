@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Features.GetPerson
+namespace Features.GetPerson;
+
+public class GetPersonQuery : IRequest<GetPersonResponse>
 {
-    public class GetPersonQuery : IRequest<GetPersonResponse>
-    {
-        public int Id { get; init; }
-    }
+    public int Id { get; init; }
 }

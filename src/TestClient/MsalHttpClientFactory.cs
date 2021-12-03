@@ -1,57 +1,54 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.Identity.Client;
+﻿using Microsoft.Identity.Client;
 
-namespace TestClient
+namespace TestClient;
+
+public class MsalHttpClientFactory : IMsalHttpClientFactory, IDisposable
 {
-    public class MsalHttpClientFactory : IMsalHttpClientFactory, IDisposable
+    private bool _disposedValue;
+    private HttpClient _httpClient;
+    private HttpClientHandler _httpClientHandler;
+
+    public void Dispose()
     {
-        private HttpClient _httpClient;
-        private HttpClientHandler _httpClientHandler;
-        private bool _disposedValue;
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        public HttpClient GetHttpClient()
-        {
-            Initialize();
-            return _httpClient;
-        }
+    public HttpClient GetHttpClient()
+    {
+        Initialize();
+        return _httpClient;
+    }
 
-        public void Dispose()
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _httpClientHandler?.Dispose();
-                    _httpClient?.Dispose();
-                }
-
-                _disposedValue = true;
+                _httpClientHandler?.Dispose();
+                _httpClient?.Dispose();
             }
-        }
 
-        private void Initialize()
+            _disposedValue = true;
+        }
+    }
+
+    private void Initialize()
+    {
+        if (_httpClient == null)
         {
-            if (_httpClient == null)
-            {
-                // var proxy = new WebProxy { BypassProxyOnLocal = false, Address = new Uri("http://localhost:8001") };
+            // var proxy = new WebProxy { BypassProxyOnLocal = false, Address = new Uri("http://localhost:8001") };
 #pragma warning disable CA5399
 #pragma warning disable CA5400
-                _httpClientHandler = new HttpClientHandler
-                {
-                    // Proxy = proxy,
-                    // CheckCertificateRevocationList = false,
-                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
-                _httpClient = new HttpClient(_httpClientHandler);
-            }
+            _httpClientHandler = new HttpClientHandler
+            {
+                // Proxy = proxy,
+                // CheckCertificateRevocationList = false,
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+            _httpClient = new HttpClient(_httpClientHandler);
         }
     }
 }

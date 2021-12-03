@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using TestFrontEnd.Models;
+﻿using TestFrontEnd.Models;
 
-namespace TestFrontEnd.ServiceAgents
+namespace TestFrontEnd.ServiceAgents;
+
+public interface IBrandarisApiServiceAgent
 {
-    public interface IBrandarisApiServiceAgent
-    {
-        Task<GetPersonResponse> GetPersonAsync(int id);
+    Task<GetPersonResponse> GetPersonAsync(int id);
 
-        Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync();
-    }
+    Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync();
 }

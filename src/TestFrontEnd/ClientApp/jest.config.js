@@ -21,7 +21,7 @@ module.exports = {
         [
             'jest-junit',
             {
-                suiteName: 'Unittests',
+                suiteName: 'APE-FE Unittests',
                 outputName: 'test-report.xml',
                 outputDirectory: 'coverage',
                 classNameTemplate: '{classname} / {title}',

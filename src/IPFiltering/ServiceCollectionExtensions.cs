@@ -1,15 +1,13 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace IPFiltering
+namespace IPFiltering;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static void AddIpFilter(this IServiceCollection services, Func<IpSafeList> safelistFunc)
     {
-        public static void AddIpFilter(this IServiceCollection services, Func<IpSafeList> safelistFunc)
-        {
-            IpSafeList ipSafeList = safelistFunc.Invoke() ?? throw new ArgumentException("IpSafeList is null, check configuration");
+        IpSafeList ipSafeList = safelistFunc.Invoke() ?? throw new ArgumentException("IpSafeList is null, check configuration");
 
-            services.AddSingleton(ipSafeList);
-        }
+        services.AddSingleton(ipSafeList);
     }
 }

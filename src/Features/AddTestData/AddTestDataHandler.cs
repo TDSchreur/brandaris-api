@@ -1,98 +1,96 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Data;
+﻿using Data;
 using Data.Entities;
 using DataAccess;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Features.AddTestData
+namespace Features.AddTestData;
+
+public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
 {
-    public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
+    private readonly DataContext _dataContext;
+    private readonly ILogger<AddTestDataHandler> _logger;
+    private readonly ICommand<Person> _personCommand;
+    private readonly ICommand<Product> _productCommand;
+
+    public AddTestDataHandler(
+        DataContext dataContext,
+        ICommand<Person> personCommand,
+        ICommand<Product> productCommand,
+        ILogger<AddTestDataHandler> logger)
     {
-        private readonly DataContext _dataContext;
-        private readonly ILogger<AddTestDataHandler> _logger;
-        private readonly ICommand<Person> _personCommand;
-        private readonly ICommand<Product> _productCommand;
+        _dataContext = dataContext;
+        _personCommand = personCommand;
+        _productCommand = productCommand;
+        _logger = logger;
+    }
 
-        public AddTestDataHandler(
-            DataContext dataContext,
-            ICommand<Person> personCommand,
-            ICommand<Product> productCommand,
-            ILogger<AddTestDataHandler> logger)
+    public async Task<bool> Handle(AddTestDataQuery request, CancellationToken cancellationToken)
+    {
+        await _dataContext.Database.MigrateAsync(cancellationToken);
+        await ClearData(cancellationToken);
+        await AddPersons(cancellationToken);
+        await AddProducts(cancellationToken);
+
+        return true;
+    }
+
+    private async Task AddPersons(CancellationToken stoppingToken)
+    {
+        Person[] persons =
         {
-            _dataContext = dataContext;
-            _personCommand = personCommand;
-            _productCommand = productCommand;
-            _logger = logger;
-        }
-
-        public async Task<bool> Handle(AddTestDataQuery request, CancellationToken cancellationToken)
-        {
-            await _dataContext.Database.MigrateAsync(cancellationToken);
-            await ClearData(cancellationToken);
-            await AddPersons(cancellationToken);
-            await AddProducts(cancellationToken);
-
-            return true;
-        }
-
-        private async Task AddPersons(CancellationToken stoppingToken)
-        {
-            Person[] persons =
+            new()
             {
-                new()
-                {
-                    FirstName = "Dennis", LastName = "Schreur"
-                },
-                new()
-                {
-                    FirstName = "Tess", LastName = "Schreur"
-                },
-                new()
-                {
-                    FirstName = "Daan", LastName = "Schreur"
-                }
-            };
-
-            _personCommand.Add(persons);
-            int addedRecords = await _personCommand.SaveChangesAsync(stoppingToken);
-
-            _logger.LogInformation("Added {Number} persons.", addedRecords);
-        }
-
-        private async Task AddProducts(CancellationToken stoppingToken)
-        {
-            Product[] products =
+                FirstName = "Dennis", LastName = "Schreur"
+            },
+            new()
             {
-                new()
-                {
-                    Name = "Appel"
-                },
-                new()
-                {
-                    Name = "Banaan"
-                },
-                new()
-                {
-                    Name = "Peer"
-                },
-                new()
-                {
-                    Name = "Sinasappel"
-                }
-            };
+                FirstName = "Tess", LastName = "Schreur"
+            },
+            new()
+            {
+                FirstName = "Daan", LastName = "Schreur"
+            }
+        };
 
-            _productCommand.Add(products);
-            int addedRecords = await _productCommand.SaveChangesAsync(stoppingToken);
+        _personCommand.Add(persons);
+        int addedRecords = await _personCommand.SaveChangesAsync(stoppingToken);
 
-            _logger.LogInformation("Added {Number} products.", addedRecords);
-        }
+        _logger.LogInformation("Added {Number} persons.", addedRecords);
+    }
 
-        private Task ClearData(CancellationToken cancellationToken)
+    private async Task AddProducts(CancellationToken stoppingToken)
+    {
+        Product[] products =
         {
-            string sql = @"
+            new()
+            {
+                Name = "Appel"
+            },
+            new()
+            {
+                Name = "Banaan"
+            },
+            new()
+            {
+                Name = "Peer"
+            },
+            new()
+            {
+                Name = "Sinasappel"
+            }
+        };
+
+        _productCommand.Add(products);
+        int addedRecords = await _productCommand.SaveChangesAsync(stoppingToken);
+
+        _logger.LogInformation("Added {Number} products.", addedRecords);
+    }
+
+    private Task ClearData(CancellationToken cancellationToken)
+    {
+        string sql = @"
 DELETE FROM dbo.OrderLine
 DBCC CHECKIDENT ('dbo.Orderline',RESEED, 0)
 
@@ -106,7 +104,6 @@ DELETE FROM dbo.Product
 DBCC CHECKIDENT ('dbo.Product',RESEED, 0)
 ";
 
-            return _dataContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);
-        }
+        return _dataContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);
     }
 }

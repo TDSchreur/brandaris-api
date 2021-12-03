@@ -2,25 +2,24 @@
 using Features;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Brandaris.Api
+namespace Brandaris.Api;
+
+public static class ResponseExtensions
 {
-    public static class ResponseExtensions
+    public static ActionResult FormatResponse<T>(this ResponseBase<T> response)
     {
-        public static ActionResult FormatResponse<T>(this ResponseBase<T> response)
+        if (response.Value == null)
         {
-            if (response.Value == null)
-            {
-                return new NotFoundObjectResult(response);
-            }
+            return new NotFoundObjectResult(response);
+        }
 
 #pragma warning disable CA1508
-            if (response.Value is ICollection collection && collection.Count == 0)
-            {
-                return new NotFoundObjectResult(response);
-            }
+        if (response.Value is ICollection collection && collection.Count == 0)
+        {
+            return new NotFoundObjectResult(response);
+        }
 #pragma warning restore CA1508
 
-            return new OkObjectResult(response);
-        }
+        return new OkObjectResult(response);
     }
 }
