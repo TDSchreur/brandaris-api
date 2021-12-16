@@ -1,7 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 
 namespace TestFrontEnd;
@@ -72,6 +75,31 @@ public class Startup
             });
 
             endpoints.MapControllers().RequireAuthorization();
+
+            endpoints.MapReverseProxy(proxyPipeline =>
+            {
+                proxyPipeline.Use(async (context, next) =>
+                {
+                    string[] scope = { "api://brandaris-api/manage-data" };
+                    ITokenAcquisition tokenAcquisition = context.RequestServices.GetRequiredService<ITokenAcquisition>();
+
+                    try
+                    {
+                        string accessToken = await tokenAcquisition.GetAccessTokenForUserAsync(scope);
+                        context.Request.Headers.Add("Authorization", $"Bearer {accessToken}");
+
+                        await next().ConfigureAwait(false);
+                    }
+                    catch (MicrosoftIdentityWebChallengeUserException)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    }
+                    catch (MsalUiRequiredException)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    }
+                });
+            });
         });
 
         app.UseSpa(spa =>
@@ -99,7 +127,10 @@ public class Startup
             "api://brandaris-api/manage-data"
         };
 
-        services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+        services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApp(Configuration)
                 .EnableTokenAcquisitionToCallDownstreamApi(scope)
                 .AddInMemoryTokenCaches();
 
@@ -108,7 +139,9 @@ public class Startup
             AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder(CookieAuthenticationDefaults.AuthenticationScheme).RequireAuthenticatedUser()
                                                                                                                                  .Build();
 
-            options.AddPolicy(CookieAuthenticationDefaults.AuthenticationScheme, defaultPolicy);
+            options.DefaultPolicy = defaultPolicy;
+
+            // options.AddPolicy(CookieAuthenticationDefaults.AuthenticationScheme, defaultPolicy);
         });
 
         services.AddHealthChecks();
@@ -117,5 +150,9 @@ public class Startup
 
         // In production, the Angular files will be served from this directory
         services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+        services.AddReverseProxy().LoadFromConfig(Configuration.GetSection("ReverseProxy"));
+
+        services.AddCors();
     }
 }

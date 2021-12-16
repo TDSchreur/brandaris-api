@@ -18,13 +18,13 @@ export class DataService {
 
     getClaims() {
         return this.http
-            .get<{ name: string; value: string }[]>('api/person/claims')
+            .get<{ name: string; value: string }[]>('account/claims')
             .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
     }
 
     getClaimsRemote() {
         return this.http
-            .get<{ name: string; value: string }[]>('api/person/claims_remote')
+            .get<{ name: string; value: string }[]>('account/claims_remote')
             .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
     }
 

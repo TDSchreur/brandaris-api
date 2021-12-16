@@ -82,7 +82,8 @@ public class Startup
             opt.AddPolicy("GetPersonPolicy", policy =>
             {
                 policy.Combine(defaultPolicy);
-                policy.RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "get-person");
+                policy.RequireClaim("scp", "manage-data");
+                policy.RequireClaim("roles", "manage-master-data");
             });
         });
 

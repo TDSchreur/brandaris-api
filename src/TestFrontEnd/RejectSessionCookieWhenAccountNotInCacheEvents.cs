@@ -10,12 +10,9 @@ internal class RejectSessionCookieWhenAccountNotInCacheEvents : CookieAuthentica
     {
         try
         {
+            string[] scope = { "api://brandaris-api/manage-data" };
             ITokenAcquisition tokenAcquisition = context.HttpContext.RequestServices.GetRequiredService<ITokenAcquisition>();
-            _ = await tokenAcquisition.GetAccessTokenForUserAsync(new[]
-                                                                  {
-                                                                      "profile"
-                                                                  },
-                                                                  user: context.Principal);
+            _ = await tokenAcquisition.GetAccessTokenForUserAsync(scope, user: context.Principal);
         }
         catch (MicrosoftIdentityWebChallengeUserException ex) when (AccountDoesNotExitInTokenCache(ex))
         {
