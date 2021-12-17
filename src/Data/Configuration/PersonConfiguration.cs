@@ -15,7 +15,7 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
 
         builder.HasKey(x => x.Id);
 
-        builder.ToTable(nameof(Person));
+        builder.ToTable(nameof(Person), x => x.IsTemporal());
 
         builder.Property(x => x.FirstName)
                .HasMaxLength(20);

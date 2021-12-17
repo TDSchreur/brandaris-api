@@ -15,7 +15,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasKey(x => x.Id);
 
-        builder.ToTable(nameof(Order));
+        builder.ToTable(nameof(Order), x => x.IsTemporal());
 
         builder.HasOne(x => x.Person)
                .WithMany(x => x.Orders)

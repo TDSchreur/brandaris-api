@@ -15,7 +15,7 @@ public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
 
         builder.HasKey(x => x.Id);
 
-        builder.ToTable(nameof(OrderLine));
+        builder.ToTable(nameof(OrderLine), x => x.IsTemporal());
 
         builder.HasOne(x => x.Product)
                .WithMany(x => x.Orderlines)

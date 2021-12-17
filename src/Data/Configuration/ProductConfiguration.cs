@@ -15,7 +15,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasKey(x => x.Id);
 
-        builder.ToTable(nameof(Product));
+        builder.ToTable(nameof(Product), x => x.IsTemporal());
 
         builder.Property(x => x.Name)
                .HasMaxLength(50);
