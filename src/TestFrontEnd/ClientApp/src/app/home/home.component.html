@@ -2,13 +2,23 @@
     <label for="personId">PersonID: </label>
     <input type="number" id="personId" [defaultValue]="1" [(ngModel)]="personId" />
     <button (click)="GetPerson()">GetPerson</button>
+    <button (click)="GetClaims()">GetClaims</button>
+    <button (click)="GetClaimsRemote()">GetClaimsRemote</button>
 </p>
 
 <pre>{{ person }}</pre>
 
-<p>
-    <button (click)="GetClaims()">GetClaims</button>
-    <button (click)="GetClaimsRemote()">GetClaimsRemote</button>
-</p>
+<p>Org: {{date}}</p>
+<p>Date: {{date | date:'mediumDate'}}</p>
+<p>Full: {{date | date:'full'}}</p>
+
+<form [formGroup]="mainForm">
+    <mat-form-field class="mat-form-field-table" [style.width.px]="100">
+        <mat-label>startdatum</mat-label>
+        <input matInput id="dnbtest-input-startdatum" [matDatepicker]="picker" formControlName="date" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</form>
 
 <pre>{{ claims }}</pre>

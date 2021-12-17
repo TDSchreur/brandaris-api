@@ -1,6 +1,7 @@
 export interface IPerson {
     firstName: string;
     lastName: string;
+    date: Date;
 }
 
 export interface IBaseResponse<T> {
