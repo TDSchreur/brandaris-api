@@ -1,8 +1,12 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IBaseResponse, IPerson } from './models/iperson';
+
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+};
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +18,10 @@ export class DataService {
         return this.http
             .get<IBaseResponse<IPerson>>(`api/person/${personId}`)
             .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
+    }
+
+    savePerson(person: IPerson) {
+        return this.http.put<IPerson>(`api/person`, person, httpOptions);
     }
 
     getClaims() {
