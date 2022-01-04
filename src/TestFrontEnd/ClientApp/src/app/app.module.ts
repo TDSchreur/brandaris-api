@@ -11,10 +11,9 @@ import { MessageComponent } from './message/message.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { HomeComponent } from './home/home.component';
 import { ApiInterceptor } from './interceptor/api.interceptor';
-import { ToNumberPipe } from './pipes/to-number.pipe';
 
 @NgModule({
-    declarations: [AppComponent, MessageComponent, ForbiddenComponent, HomeComponent, ToNumberPipe],
+    declarations: [AppComponent, MessageComponent, ForbiddenComponent, HomeComponent],
     imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, MaterialModule],
     providers: [{ provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }],
     bootstrap: [AppComponent],

@@ -13,7 +13,7 @@
 <p>Date: {{date | date:'mediumDate'}}</p>
 <p>Full: {{date | date:'full'}}</p>
 <p>Number: {{number}}</p>
-<p>Decimal: {{number | number}}</p>
+<!-- <p>Decimal: {{number | number}}</p> -->
 
 <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
     <input type="hidden" formControlName="id" />
@@ -33,7 +33,7 @@
     </mat-form-field>
     <mat-form-field>
         <mat-label>Number</mat-label>
-        <input type="text" matInput formControlName="number" />
+        <input type="number" matInput formControlName="number" />
         <mat-error *ngIf="hasError('number', 'pattern')">Name is required</mat-error>
     </mat-form-field>
     <button type="submit">Submit</button>

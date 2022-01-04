@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { DecimalPipe } from '@angular/common';
-import { isExpressionFactoryMetadata } from '@angular/compiler/src/render3/r3_factory';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from '../data.service';
 import { IBaseResponse, IPerson } from '../models/iperson';
-import { ToNumberPipe } from '../pipes/to-number.pipe';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    providers: [DecimalPipe],
 })
 export class HomeComponent implements OnInit {
     public claims = '';
@@ -21,14 +17,14 @@ export class HomeComponent implements OnInit {
     public number: number | undefined;
     public mainForm!: FormGroup;
 
-    constructor(protected dataService: DataService, private fb: FormBuilder, private decimalPipe: DecimalPipe) {}
+    constructor(protected dataService: DataService, private fb: FormBuilder) {}
     ngOnInit(): void {
         this.mainForm = this.fb.group({
             id: [null],
             firstName: [''],
             lastName: [''],
             date: [''],
-            number: [this.decimalPipe.transform('1.01'), [Validators.pattern('^[-]?[0-9]{1,3}[,]?[0-9]{0,2}')]],
+            number: ['', [Validators.pattern('^[-]?[0-9]{1,3}[,]?[0-9]{0,2}')]],
         });
     }
 
@@ -45,14 +41,9 @@ export class HomeComponent implements OnInit {
             firstName: this.mainForm.get('firstName')?.value,
             lastName: this.mainForm.get('lastName')?.value,
             date: this.mainForm.get('date')?.value,
-            number: this.ToNumber(this.mainForm.get('number')?.value as string),
+            number: this.mainForm.get('number')?.value,
         };
         this.dataService.savePerson(person).subscribe();
-    }
-
-    private ToNumber(value: string): number {
-        const retNumber = Number(value.replace(',', '.'));
-        return isNaN(retNumber) ? 0 : retNumber;
     }
 
     GetPerson() {
@@ -66,7 +57,7 @@ export class HomeComponent implements OnInit {
             this.mainForm.get('firstName')?.setValue(person.value.firstName);
             this.mainForm.get('lastName')?.setValue(person.value.lastName);
             this.mainForm.get('date')?.setValue(person.value.date);
-            this.mainForm.get('number')?.setValue(this.decimalPipe.transform(person.value.number));
+            this.mainForm.get('number')?.setValue(person.value.number);
         });
     }
 
