@@ -9,4 +9,8 @@ public class UpdatePersonCommand : IRequest<UpdatePersonResponse>
     public int Id { get; init; }
 
     public string LastName { get; init; }
+
+    public DateTimeOffset Date { get; init; }
+
+    public double Number { get; init; }
 }

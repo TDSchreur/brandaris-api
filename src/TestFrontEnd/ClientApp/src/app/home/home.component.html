@@ -4,6 +4,7 @@
     <button (click)="GetPerson()">GetPerson</button>
     <button (click)="GetClaims()">GetClaims</button>
     <button (click)="GetClaimsRemote()">GetClaimsRemote</button>
+    <button (click)="LogFormValue()">LogFormValue</button>
 </p>
 
 <pre>{{ person }}</pre>
@@ -11,14 +12,31 @@
 <p>Org: {{date}}</p>
 <p>Date: {{date | date:'mediumDate'}}</p>
 <p>Full: {{date | date:'full'}}</p>
+<p>Number: {{number}}</p>
+<!-- <p>Decimal: {{number | number}}</p> -->
 
-<form [formGroup]="mainForm">
-    <mat-form-field class="mat-form-field-table" [style.width.px]="100">
-        <mat-label>startdatum</mat-label>
-        <input matInput id="dnbtest-input-startdatum" [matDatepicker]="picker" formControlName="date" />
+<form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+    <input type="hidden" formControlName="id" />
+    <mat-form-field>
+        <mat-label>Firstname</mat-label>
+        <input matInput type="text" formControlName="firstName" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Lastname</mat-label>
+        <input matInput type="text" formControlName="lastName" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Number</mat-label>
+        <input type="number" matInput formControlName="number" />
+        <mat-error *ngIf="hasError('number', 'pattern')">Name is required</mat-error>
+    </mat-form-field>
+    <button type="submit">Submit</button>
 </form>
 
 <pre>{{ claims }}</pre>

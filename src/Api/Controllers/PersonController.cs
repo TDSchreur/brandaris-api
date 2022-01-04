@@ -31,7 +31,7 @@ public class PersonController : Controller
     [ProducesResponseType(typeof(GetPersonsResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GetPersonsResponse>> GetPersons([FromQuery] GetPersonsQuery query) => (await _mediator.Send(query)).FormatResponse();
 
-    [HttpPatch("")]
+    [HttpPut("")]
     [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdatePersonResponse>> UpdatePerson([FromBody] UpdatePersonCommand query) => (await _mediator.Send(query)).FormatResponse();

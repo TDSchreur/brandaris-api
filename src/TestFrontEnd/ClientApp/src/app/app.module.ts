@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,10 +15,7 @@ import { ApiInterceptor } from './interceptor/api.interceptor';
 @NgModule({
     declarations: [AppComponent, MessageComponent, ForbiddenComponent, HomeComponent],
     imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, MaterialModule],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
-        { provide: LOCALE_ID, useValue: 'nl' },
-    ],
+    providers: [{ provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
