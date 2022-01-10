@@ -87,7 +87,6 @@ stages:
     dependsOn:
       - Api
 #      - Function
-    condition: false
     jobs:
       - deployment: Deploy
         pool: $(pool)
