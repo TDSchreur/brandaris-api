@@ -19,9 +19,6 @@
     <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PackageReference Include="Serilog" Version="2.10.0" />
   </ItemGroup>
 
