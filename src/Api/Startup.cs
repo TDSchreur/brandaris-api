@@ -1,6 +1,5 @@
 using Features.AddPerson;
 using FluentValidation.AspNetCore;
-using IPFiltering;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -30,8 +29,6 @@ public class Startup
                      .WriteAsync("An unexpected error on server happened, please try again later.");
             }));
         }
-
-        app.UseIpFilter();
 
         app.UseHttpsRedirection();
 
@@ -63,8 +60,6 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddIpFilter(() => Configuration.GetSection("IpSafeList").Get<IpSafeList>());
-
         services.AddAuthorization(opt =>
         {
             AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder("AAD")

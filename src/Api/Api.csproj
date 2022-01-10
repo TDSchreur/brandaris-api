@@ -22,13 +22,12 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PackageReference Include="Serilog" Version="2.11.0-dev-01371" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Features\Features.csproj" />
-    <ProjectReference Include="..\IPFiltering\IPFiltering.csproj" />
   </ItemGroup>
 
 </Project>
