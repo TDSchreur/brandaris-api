@@ -80,6 +80,9 @@ resource siteconfig 'Microsoft.Web/sites/config@2020-06-01' = {
   name: 'appsettings'
   properties: {
     'APPINSIGHTS_INSTRUMENTATIONKEY': insights_instrumentationkey
+    'Authentication:AppIdUri': 'api://brandaris-api'
+    'Authentication:ClientId': 'c0a8de33-97fe-45a0-8c63-fe54a39cd842'
+    'Authentication:TenantId': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
   }
 }
 
@@ -98,7 +101,7 @@ resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'web'
   properties: {
-    netFrameworkVersion: 'v6.0'    
+    netFrameworkVersion: 'v6.0'
     phpVersion: 'off'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false
