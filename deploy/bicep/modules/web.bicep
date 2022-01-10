@@ -57,9 +57,8 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
 
   properties: {
     enabled: true
-    siteConfig: {
-      netFrameworkVersion: 'v6.0'
-    }
+    httpsOnly: true
+    clientAffinityEnabled: false
     hostNameSslStates: [
       {
         name: '${api_name_unique}.azurewebsites.net'
@@ -99,7 +98,7 @@ resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'web'
   properties: {
-    netFrameworkVersion: 'v5.0'
+    netFrameworkVersion: 'v6.0'    
     phpVersion: 'off'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false
