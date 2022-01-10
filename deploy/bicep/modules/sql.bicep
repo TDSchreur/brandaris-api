@@ -12,6 +12,7 @@ resource server 'Microsoft.Sql/servers@2019-06-01-preview' = {
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
+    minimalTlsVersion: '1.2'
   }
 }
 

@@ -36,6 +36,12 @@ export class DataService {
             .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
     }
 
+    getConfigRemote() {
+        return this.http
+            .get<{ name: string; value: string }[]>('api/config')
+            .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
+    }
+
     private handleError(err: HttpErrorResponse) {
         let errorMessage = '';
         if (err.error instanceof ErrorEvent) {

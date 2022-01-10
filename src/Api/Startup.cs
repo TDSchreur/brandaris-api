@@ -71,7 +71,7 @@ public class Startup
             opt.AddPolicy("GetConfigPolicy", policy =>
             {
                 policy.Combine(defaultPolicy);
-                policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "get-config-role");
+                policy.RequireClaim("roles", "get-config");
             });
 
             opt.AddPolicy("GetPersonPolicy", policy =>
