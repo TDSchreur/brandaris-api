@@ -90,7 +90,7 @@ stages:
     jobs:
       - deployment: Deploy
         pool: $(pool)
-        environment: brandaris-biceps
+        environment: brandaris
         strategy:
           runOnce:
             deploy:
@@ -102,7 +102,7 @@ stages:
                     azureSubscription: $(azureServiceConnection)
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
-                    inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
+                    inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
 
                 - task: AzureRmWebAppDeployment@4
                   displayName: Deploy API
