@@ -1,3 +1,6 @@
+# editorconfig.org
+
+# top-most EditorConfig file
 root = true
 
 # Default settings:
@@ -8,35 +11,15 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
-dotnet_diagnostic.CA1031.severity = silent
-dotnet_diagnostic.CA2008.severity = silent
-
-[project.json]
-indent_size = 2
 
 # Generated code
-[*{_AssemblyInfo.cs,.notsupported.cs}]
+[*{_AssemblyInfo.cs,.notsupported.cs,AsmOffsets.cs}]
 generated_code = true
 
 # C# files
 [*.cs]
-dotnet_analyzer_diagnostic.category-Style.severity = warning
 
-dotnet_diagnostic.IDE0058.severity = silent
-dotnet_diagnostic.IDE0130.severity = silent
-
-dotnet_diagnostic.CA1014.severity = none
-dotnet_diagnostic.CA1040.severity = none
-dotnet_diagnostic.CA1062.severity = none
-dotnet_diagnostic.CA1707.severity = none
-dotnet_diagnostic.CA1716.severity = none
-dotnet_diagnostic.CA1724.severity = none
-dotnet_diagnostic.CA1819.severity = none
-dotnet_diagnostic.CA1848.severity = none
-dotnet_diagnostic.CA2007.severity = none
-dotnet_diagnostic.CA2227.severity = none
-dotnet_diagnostic.CA5394.severity = suggestion
-
+# Rules
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1116.severity = none
@@ -49,8 +32,7 @@ dotnet_diagnostic.SA1413.severity = none
 dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1649.severity = suggestion
 
-csharp_style_namespace_declarations = file_scoped
-dotnet_diagnostic.IDE0161.severity = error
+dotnet_diagnostic.SA1502.severity = silent
 
 # New line preferences
 csharp_new_line_before_open_brace = all
@@ -113,7 +95,7 @@ dotnet_naming_style.camel_case_underscore_style.required_prefix = _
 dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 
 # Code style defaults
-csharp_using_directive_placement = outside_namespace:error
+csharp_using_directive_placement = outside_namespace:suggestion
 dotnet_sort_system_directives_first = true
 csharp_prefer_braces = true:silent
 csharp_preserve_single_line_blocks = true:none
@@ -121,10 +103,7 @@ csharp_preserve_single_line_statements = false:none
 csharp_prefer_static_local_function = true:suggestion
 csharp_prefer_simple_using_statement = false:none
 csharp_style_prefer_switch_expression = true:suggestion
-
-# Code quality
 dotnet_style_readonly_field = true:suggestion
-dotnet_code_quality_unused_parameters = non_public:suggestion
 
 # Expression-level preferences
 dotnet_style_object_initializer = true:suggestion
@@ -187,22 +166,6 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
-
-# Analyzers
-dotnet_code_quality.CA1052.api_surface = private, internal
-dotnet_code_quality.CA1802.api_surface = private, internal
-dotnet_code_quality.CA1822.api_surface = private, internal
-dotnet_code_quality.CA2208.api_surface = public
-
-# License header
-dotnet_diagnostic.SA1600.severity = silent
-dotnet_diagnostic.SA1502.severity = silent
-dotnet_diagnostic.SA1601.severity = silent
-
-# C++ Files
-[*.{cpp,h,in}]
-curly_bracket_next_line = true
-indent_brace_style = Allman
 
 # Xml project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]

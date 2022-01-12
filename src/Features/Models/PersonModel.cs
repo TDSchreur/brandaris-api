@@ -1,4 +1,6 @@
-﻿namespace Features.Models;
+﻿using System;
+
+namespace Features.Models;
 
 public class PersonModel : IResponseModel
 {

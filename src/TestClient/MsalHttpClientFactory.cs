@@ -1,4 +1,6 @@
-﻿using Microsoft.Identity.Client;
+﻿using System;
+using System.Net.Http;
+using Microsoft.Identity.Client;
 
 namespace TestClient;
 

@@ -1,4 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
 using Features.AddPerson;
@@ -18,8 +21,7 @@ public class AddUpdatePersonTests
         const string duck = nameof(duck);
         AddPersonCommand request = new()
         {
-            FirstName = donald,
-            LastName = duck
+            FirstName = donald, LastName = duck
         };
 
         Mock<ICommand<Person>> qm = new(MockBehavior.Strict);
