@@ -1,6 +1,3 @@
 ﻿namespace Features.GetConfig;
 
-public class GetConfigResponse : ResponseBase<IEnumerable<KeyValuePair<string, string>>>
-{
-    public GetConfigResponse(IEnumerable<KeyValuePair<string, string>> value, bool success = true) : base(value, success) { }
-}
+public record GetConfigResponse(IEnumerable<KeyValuePair<string, string>> Value, bool Success = true) : ResponseBase<IEnumerable<KeyValuePair<string, string>>>(Value, Success);

@@ -6,7 +6,6 @@ public class ServiceWorker : IHostedService
 {
     private readonly IConfiguration _configuration;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly HttpClient _httpClient;
     private readonly ILogger<ServiceWorker> _logger;
     private readonly TokenHelper _tokenHelper;
     private CancellationTokenSource _cts = default!;
@@ -16,12 +15,10 @@ public class ServiceWorker : IHostedService
         IHostApplicationLifetime hostApplicationLifetime,
         TokenHelper tokenHelper,
         IConfiguration configuration,
-        IMsalHttpClientFactory msalHttpClientFactory,
         ILogger<ServiceWorker> logger)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
         _tokenHelper = tokenHelper;
-        _httpClient = msalHttpClientFactory.GetHttpClient();
         _configuration = configuration;
         _logger = logger;
     }
@@ -78,22 +75,6 @@ public class ServiceWorker : IHostedService
             string data = await response.Content.ReadAsStringAsync(stoppingToken);
             _logger.LogInformation("Content: {Content}", data);
         }
-
-        ////string scope = "https://nta7tp2n6crj4.azurewebsites.net/.default";
-        ////AuthenticationResult authenticationResult = await _tokenHelper.GetTokens(scope);
-
-        ////_logger.LogInformation("AccessToken: {AccessToken}", authenticationResult.AccessToken);
-
-        ////using (HttpRequestMessage request = new(HttpMethod.Get, "https://nta7tp2n6crj4.azurewebsites.net/api/GetData"))
-        ////{
-        ////    request.Headers.Add("Authorization", "Bearer " + authenticationResult.AccessToken);
-
-        ////    HttpResponseMessage response = await _httpClient.SendAsync(request, stoppingToken);
-        ////    _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode);
-
-        ////    string data = await response.Content.ReadAsStringAsync(stoppingToken);
-        ////    _logger.LogInformation("Content: {Content}", data);
-        ////}
 
         _hostApplicationLifetime.StopApplication();
     }

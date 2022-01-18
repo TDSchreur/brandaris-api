@@ -2,7 +2,7 @@
 
 namespace Features.UpdatePerson;
 
-public class UpdatePersonCommand : IRequest<UpdatePersonResponse>
+public record UpdatePersonCommand : IRequest<UpdatePersonResponse>
 {
     public string FirstName { get; init; }
 
@@ -11,6 +11,4 @@ public class UpdatePersonCommand : IRequest<UpdatePersonResponse>
     public string LastName { get; init; }
 
     public DateTimeOffset Date { get; init; }
-
-    public double Number { get; init; }
 }

@@ -2,7 +2,7 @@
 
 namespace Features.GetProduct;
 
-public class GetProductsQuery : IRequest<GetProductsResponse>
+public record GetProductsQuery : IRequest<GetProductsResponse>
 {
     public string Name { get; init; }
 

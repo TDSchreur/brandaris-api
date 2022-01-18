@@ -2,7 +2,7 @@
 
 namespace Features.UpdateProduct;
 
-public class UpdateProductCommand : IRequest<UpdateProductResponse>
+public record UpdateProductCommand : IRequest<UpdateProductResponse>
 {
     public int Id { get; init; }
 

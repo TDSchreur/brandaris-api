@@ -2,7 +2,4 @@
 
 namespace Features.GetPerson;
 
-public class GetPersonsResponse : ResponseBase<ICollection<PersonModel>>
-{
-    public GetPersonsResponse(ICollection<PersonModel> value, bool succes = true) : base(value, succes) { }
-}
+public record GetPersonsResponse(ICollection<PersonModel> Value, bool Succes = true) : ResponseBase<ICollection<PersonModel>>(Value, Succes);
