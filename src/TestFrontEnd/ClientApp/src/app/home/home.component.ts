@@ -64,4 +64,10 @@ export class HomeComponent implements OnInit {
             this.claims = JSON.stringify(data, null, 2);
         });
     }
+
+    GetConfigRemote() {
+        this.dataService.getConfigRemote().subscribe((data: { name: string; value: string }[]) => {
+            this.claims = JSON.stringify(data, null, 2);
+        });
+    }
 }

@@ -57,9 +57,8 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
 
   properties: {
     enabled: true
-    siteConfig: {
-      netFrameworkVersion: 'v6.0'
-    }
+    httpsOnly: true
+    clientAffinityEnabled: false
     hostNameSslStates: [
       {
         name: '${api_name_unique}.azurewebsites.net'
@@ -81,6 +80,9 @@ resource siteconfig 'Microsoft.Web/sites/config@2020-06-01' = {
   name: 'appsettings'
   properties: {
     'APPINSIGHTS_INSTRUMENTATIONKEY': insights_instrumentationkey
+    'Authentication:AppIdUri': 'api://brandaris-api'
+    'Authentication:ClientId': 'c0a8de33-97fe-45a0-8c63-fe54a39cd842'
+    'Authentication:TenantId': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
   }
 }
 
@@ -88,7 +90,7 @@ resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'connectionstrings'
   properties: {
-    default: {
+    Default: {
       type: 'SQLAzure'
       value: 'Data Source=tcp:${sqlserver_fullyQualifiedDomainName} ,1433;Initial Catalog=${sqlserver_database_name};User Id=${sqlserver_username};Password=${sqlserver_password}'
     }
@@ -99,7 +101,7 @@ resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'web'
   properties: {
-    netFrameworkVersion: 'v5.0'
+    netFrameworkVersion: 'v6.0'
     phpVersion: 'off'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false

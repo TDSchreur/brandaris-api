@@ -1,4 +1,7 @@
-﻿using Microsoft.Identity.Client;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 
 namespace TestClient;
 

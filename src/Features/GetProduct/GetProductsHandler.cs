@@ -1,4 +1,8 @@
-﻿using Data.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Data.Entities;
 using DataAccess;
 using Features.Models;
 using MediatR;
@@ -16,10 +20,9 @@ public class GetProductsHandler : IRequestHandler<GetProductsQuery, GetProductsR
         List<ProductModel> products = await _query.Where(x => !request.HasProductIds || request.ProductIds.Contains(x.Id))
                                                   .Where(x => !request.HasName || x.Name == request.Name)
                                                   .Select(x => new ProductModel
-                                                  {
-                                                      Id = x.Id,
-                                                      Name = x.Name
-                                                  })
+                                                               {
+                                                                   Id = x.Id, Name = x.Name
+                                                               })
                                                   .ToListAsync(cancellationToken);
 
         return new GetProductsResponse(products);

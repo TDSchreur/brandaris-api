@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using System;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;

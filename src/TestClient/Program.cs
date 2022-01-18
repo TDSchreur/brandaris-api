@@ -1,4 +1,10 @@
-﻿using Microsoft.Identity.Client;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 

@@ -1,4 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
 using Features.AddProduct;
@@ -39,8 +42,7 @@ public class AddUpdateProductTest
         const string meloen = nameof(meloen);
         UpdateProductCommand request = new()
         {
-            Id = 1,
-            Name = meloen
+            Id = 1, Name = meloen
         };
         string newName = string.Empty;
 

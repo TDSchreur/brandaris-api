@@ -1,4 +1,8 @@
-﻿using Data.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Data.Entities;
 using DataAccess;
 using Features.GetProduct;
 using MockQueryable.Moq;
@@ -14,30 +18,26 @@ public class GetProductTests
         {
             new Product
             {
-                Id = 1,
-                Name = "Appel"
+                Id = 1, Name = "Appel"
             },
             new Product
             {
-                Id = 2,
-                Name = "Banaan"
+                Id = 2, Name = "Banaan"
             },
             new Product
             {
-                Id = 3,
-                Name = "Peer"
+                Id = 3, Name = "Peer"
             },
             new Product
             {
-                Id = 4,
-                Name = "Sinasappel"
+                Id = 4, Name = "Sinasappel"
             }
         };
 
         Query = new Query<Product>(testdata.AsQueryable().BuildMock().Object);
     }
 
-    public Query<Product> Query { get; init; }
+    private Query<Product> Query { get; }
 
     [Theory]
     [InlineData("Banaan", new int[] { }, 1)]
@@ -51,8 +51,7 @@ public class GetProductTests
         // act
         GetProductsQuery request = new()
         {
-            Name = name,
-            ProductIds = productIds
+            Name = name, ProductIds = productIds
         };
         GetProductsResponse result = await sut.Handle(request, CancellationToken.None);
 

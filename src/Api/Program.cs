@@ -1,14 +1,20 @@
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using Data;
 using DataAccess;
 using Features;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
-#if DEBUG
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-
-#endif
 
 namespace Brandaris.Api;
 
@@ -16,35 +22,31 @@ public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
-#if DEBUG
         LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                            .Enrich.FromLogContext()
                                            .MinimumLevel.Debug()
-                                           ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                           ////.MinimumLevel.Override("System", LogEventLevel.Warning)
+                                           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                           .MinimumLevel.Override("System", LogEventLevel.Warning)
                                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                             theme: AnsiConsoleTheme.Literate);
 
         Log.Logger = loggerBuilder.CreateLogger();
 
         Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-#endif
+
         try
         {
             IHost host = CreateHostBuilder(args).Build();
 
             await host.RunAsync()
-                      .ContinueWith(_ => { })
                       .ConfigureAwait(false);
         }
         catch (Exception e)
         {
-#if DEBUG
             Log.Logger.Error(e, e.Message);
             Log.CloseAndFlush();
-#elif RELEASE
             Console.WriteLine(e.Message);
-#endif
+
             await Task.Delay(1000);
             return -1;
         }

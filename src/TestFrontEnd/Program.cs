@@ -1,6 +1,15 @@
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using TestFrontEnd.ServiceAgents;
 
@@ -12,9 +21,9 @@ public class Program
     {
         LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                            .Enrich.FromLogContext()
-                                           .MinimumLevel.Information()
-                                           ////.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                           ////.MinimumLevel.Override("System", LogEventLevel.Warning)
+                                           .MinimumLevel.Debug()
+                                           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                           .MinimumLevel.Override("System", LogEventLevel.Warning)
                                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                             theme: AnsiConsoleTheme.Literate);
 
@@ -74,7 +83,10 @@ public class Program
            .ConfigureServices((hostContext, services) =>
             {
                 services.AddOptions();
-                services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client => { client.BaseAddress = new Uri("https://localhost:5001"); });
+                services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
+                {
+                    client.BaseAddress = new Uri("https://brandaris-api-biceps.azurewebsites.net");
+                });
             })
            .ConfigureWebHost(builder =>
             {
