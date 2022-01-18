@@ -32,7 +32,9 @@ dotnet_diagnostic.SA1413.severity = none
 dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1649.severity = suggestion
 
-dotnet_diagnostic.SA1502.severity = silent
+dotnet_diagnostic.SA1502.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1601.severity = none
 
 # New line preferences
 csharp_new_line_before_open_brace = all
