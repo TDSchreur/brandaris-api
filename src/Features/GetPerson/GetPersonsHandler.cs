@@ -1,4 +1,7 @@
-﻿using Data.Entities;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Data.Entities;
 using DataAccess;
 using Features.Models;
 using MediatR;
@@ -16,11 +19,11 @@ public class GetPersonsHandler : IRequestHandler<GetPersonsQuery, GetPersonsResp
         List<PersonModel> persons = await _query.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
                                                 .Where(x => !request.HasLastName || x.LastName == request.LastName)
                                                 .Select(x => new PersonModel
-                                                {
-                                                    Id = x.Id,
-                                                    FirstName = x.FirstName,
-                                                    LastName = x.LastName
-                                                })
+                                                             {
+                                                                 Id = x.Id,
+                                                                 FirstName = x.FirstName,
+                                                                 LastName = x.LastName
+                                                             })
                                                 .ToListAsync(cancellationToken);
 
         return new GetPersonsResponse(persons);

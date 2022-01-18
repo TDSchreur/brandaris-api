@@ -1,4 +1,10 @@
-﻿using Microsoft.Identity.Client;
+﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 
 namespace TestClient;
 

@@ -1,4 +1,6 @@
-﻿namespace Features.GetConfig;
+﻿using System.Collections.Generic;
+
+namespace Features.GetConfig;
 
 public class GetConfigResponse : ResponseBase<IEnumerable<KeyValuePair<string, string>>>
 {

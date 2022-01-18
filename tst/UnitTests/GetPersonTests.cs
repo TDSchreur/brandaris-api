@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Data.Entities;
 using DataAccess;
 using Features.GetPerson;
@@ -93,8 +97,7 @@ public class GetPersonTests
         // act
         GetPersonsQuery request = new()
         {
-            FirstName = firstname,
-            LastName = lastName
+            FirstName = firstname, LastName = lastName
         };
         GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 

@@ -48,50 +48,50 @@ stages:
               ArtifactName: 'api'
               publishLocation: 'Container'
 
-  - stage: Function
-    dependsOn: [ ]
-    jobs:
-      - job: Build
-        pool: $(pool)
-        steps:
-          - task: DotNetCoreCLI@2
-            displayName: restore
-            inputs:
-              command: 'restore'
-              projects: $(functionproject)
 
-          - task: DotNetCoreCLI@2
-            displayName: build
-            inputs:
-              command: 'build'
-              projects: $(functionproject)
-              arguments: '--no-restore -c $(configuration)'
-
-          - task: DotNetCoreCLI@2
-            displayName: publish
-            inputs:
-              command: 'publish'
-              projects: $(functionproject)
-              zipAfterPublish: true
-              publishWebProjects: false
-              arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
-
-          - task: PublishBuildArtifacts@1
-            displayName: "publish artifact function"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'function'
-              publishLocation: 'Container'
+#  - stage: Function
+#    dependsOn: [ ]
+#    jobs:
+#      - job: Build
+#        pool: $(pool)
+#        steps:
+#          - task: DotNetCoreCLI@2
+#            displayName: restore
+#            inputs:
+#              command: 'restore'
+#              projects: $(functionproject)
+#
+#          - task: DotNetCoreCLI@2
+#            displayName: build
+#            inputs:
+#              command: 'build'
+#              projects: $(functionproject)
+#              arguments: '--no-restore -c $(configuration)'
+#
+#          - task: DotNetCoreCLI@2
+#            displayName: publish
+#            inputs:
+#              command: 'publish'
+#              projects: $(functionproject)
+#              zipAfterPublish: true
+#              publishWebProjects: false
+#              arguments: '--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)'
+#
+#          - task: PublishBuildArtifacts@1
+#            displayName: "publish artifact function"
+#            inputs:
+#              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#              ArtifactName: 'function'
+#              publishLocation: 'Container'
 
   - stage: Deploy
     dependsOn:
       - Api
-      - Function
-    condition: false
+#      - Function
     jobs:
       - deployment: Deploy
         pool: $(pool)
-        environment: brandaris-biceps
+        environment: brandaris
         strategy:
           runOnce:
             deploy:
@@ -103,7 +103,7 @@ stages:
                     azureSubscription: $(azureServiceConnection)
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
-                    inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris-biceps -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
+                    inlineScript: 'az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)'
 
                 - task: AzureRmWebAppDeployment@4
                   displayName: Deploy API
@@ -114,11 +114,11 @@ stages:
                     WebAppName: 'brandaris-api-biceps'
                     packageForLinux: '$(Pipeline.Workspace)/api/Api.zip'
 
-                - task: AzureFunctionApp@1
-                  displayName: Deploy Functions
-                  inputs:
-                    azureSubscription: $(azureServiceConnection)
-                    appType: 'functionApp'
-                    appName: 'nta7tp2n6crj4'
-                    package: '$(Pipeline.Workspace)/function/SecureFunction.zip'
-                    deploymentMethod: 'auto'
+#                - task: AzureFunctionApp@1
+#                  displayName: Deploy Functions
+#                  inputs:
+#                    azureSubscription: $(azureServiceConnection)
+#                    appType: 'functionApp'
+#                    appName: 'nta7tp2n6crj4'
+#                    package: '$(Pipeline.Workspace)/function/SecureFunction.zip'
+#                    deploymentMethod: 'auto'

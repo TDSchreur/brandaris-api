@@ -32,9 +32,6 @@ export class HomeComponent implements OnInit {
         return this.mainForm.controls[controlName]?.hasError(errorName);
     };
 
-    LogFormValue() {
-        console.log(this.mainForm.getRawValue());
-    }
     onSubmit() {
         const person = <IPerson>{
             id: this.mainForm.get('id')?.value,
@@ -69,6 +66,12 @@ export class HomeComponent implements OnInit {
 
     GetClaimsRemote() {
         this.dataService.getClaimsRemote().subscribe((data: { name: string; value: string }[]) => {
+            this.claims = JSON.stringify(data, null, 2);
+        });
+    }
+
+    GetConfigRemote() {
+        this.dataService.getConfigRemote().subscribe((data: { name: string; value: string }[]) => {
             this.claims = JSON.stringify(data, null, 2);
         });
     }

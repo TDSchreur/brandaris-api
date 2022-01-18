@@ -19,24 +19,6 @@
         },
         "sql_administratorLogin": {
             "value": "dennis"
-        },
-        "storage_account_name": {
-            "value": "functions"
-        },
-        "functionapp_name": {
-            "value": "secure_functions"
-        },
-        "function_serviceplan_name": {
-            "value": "functions_serviceplan"
-        },
-        "functionapp_openid_issuer": {
-            "value": "https://sts.windows.net/ae86fed2-d115-4a00-b6ed-68ff87b986f7/"
-        },
-        "functionapp_allowed_audiences": {
-            "value": ["https://nta7tp2n6crj4.azurewebsites.net"]
-        },
-        "functionapp_clientid": {
-            "value": "a869e24d-3449-4123-a17c-a519075f102d"
         }
     }
 }
