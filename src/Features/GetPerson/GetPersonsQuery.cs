@@ -2,7 +2,7 @@
 
 namespace Features.GetPerson;
 
-public class GetPersonsQuery : IRequest<GetPersonsResponse>
+public record GetPersonsQuery : IRequest<GetPersonsResponse>
 {
     public string FirstName { get; init; }
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { NotificationService } from '../services/notification.service';
 
 @Injectable()
@@ -11,13 +11,6 @@ export class ApiInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(request).pipe(
-            map((event: HttpEvent<any>) => {
-                // if (event instanceof HttpResponse) {
-                //     if (event.status === 302) {
-                //     }
-                // }
-                return event;
-            }),
             catchError((err: HttpErrorResponse) => {
                 if (err.status === 401) {
                     window.location.href = '/account/login';

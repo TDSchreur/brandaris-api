@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DataService } from '../data.service';
 import { IBaseResponse, IPerson } from '../models/iperson';
 
@@ -14,7 +14,6 @@ export class HomeComponent implements OnInit {
     public person = '';
     public personId = 1;
     public date: Date | undefined;
-    public number: number | undefined;
     public mainForm!: FormGroup;
 
     constructor(protected dataService: DataService, private fb: FormBuilder) {}
@@ -24,7 +23,6 @@ export class HomeComponent implements OnInit {
             firstName: [''],
             lastName: [''],
             date: [''],
-            number: ['', [Validators.pattern('^[-]?[0-9]{1,3}[,]?[0-9]{0,2}')]],
         });
     }
 
@@ -38,7 +36,6 @@ export class HomeComponent implements OnInit {
             firstName: this.mainForm.get('firstName')?.value,
             lastName: this.mainForm.get('lastName')?.value,
             date: this.mainForm.get('date')?.value,
-            number: this.mainForm.get('number')?.value,
         };
         this.dataService.savePerson(person).subscribe();
     }
@@ -46,9 +43,7 @@ export class HomeComponent implements OnInit {
     GetPerson() {
         this.dataService.getPerson(this.personId).subscribe((person: IBaseResponse<IPerson>) => {
             this.person = JSON.stringify(person, null, 2);
-
             this.date = person.value.date;
-            this.number = person.value.number;
 
             this.mainForm.get('id')?.setValue(person.value.id);
             this.mainForm.get('firstName')?.setValue(person.value.firstName);

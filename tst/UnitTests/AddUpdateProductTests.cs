@@ -18,10 +18,7 @@ public class AddUpdateProductTest
     {
         // arrange
         const string meloen = nameof(meloen);
-        AddProductCommand request = new()
-        {
-            Name = meloen
-        };
+        AddProductCommand request = new(meloen);
 
         Mock<ICommand<Product>> qm = new(MockBehavior.Strict);
         qm.Setup(x => x.Add(It.IsAny<Product>()))

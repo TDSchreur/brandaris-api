@@ -2,7 +2,4 @@
 
 namespace Features.AddPerson;
 
-public class AddPersonResponse : ResponseBase<PersonModel>
-{
-    public AddPersonResponse(PersonModel value, bool success = true) : base(value, success) { }
-}
+public record AddPersonResponse(PersonModel Value, bool Success = true) : ResponseBase<PersonModel>(Value, Success);

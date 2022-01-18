@@ -2,7 +2,4 @@
 
 namespace Features.UpdateProduct;
 
-public class UpdateProductResponse : ResponseBase<ProductModel>
-{
-    public UpdateProductResponse(ProductModel value, bool success = true) : base(value, success) { }
-}
+public record UpdateProductResponse(ProductModel Value, bool Success = true) : ResponseBase<ProductModel>(Value, Success);

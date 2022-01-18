@@ -54,10 +54,7 @@ public class GetPersonTests
         GetPersonHandler sut = new(Query);
 
         // act
-        GetPersonQuery request = new()
-        {
-            Id = int.MaxValue
-        };
+        GetPersonQuery request = new(int.MaxValue);
         GetPersonResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert
@@ -73,10 +70,7 @@ public class GetPersonTests
         GetPersonHandler sut = new(Query);
 
         // act
-        GetPersonQuery request = new()
-        {
-            Id = id
-        };
+        GetPersonQuery request = new(id);
         GetPersonResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert

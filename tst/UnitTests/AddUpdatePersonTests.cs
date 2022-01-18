@@ -19,10 +19,8 @@ public class AddUpdatePersonTests
         // arrange
         const string donald = nameof(donald);
         const string duck = nameof(duck);
-        AddPersonCommand request = new()
-        {
-            FirstName = donald, LastName = duck
-        };
+
+        AddPersonCommand request = new(donald, duck);
 
         Mock<ICommand<Person>> qm = new(MockBehavior.Strict);
         qm.Setup(x => x.Add(It.IsAny<Person>()))

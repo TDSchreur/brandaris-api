@@ -2,4 +2,4 @@
 
 namespace Features.GetConfig;
 
-public class GetConfigQuery : IRequest<GetConfigResponse> { }
+public record GetConfigQuery : IRequest<GetConfigResponse>;

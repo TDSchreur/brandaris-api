@@ -12,8 +12,6 @@
 <p>Org: {{date}}</p>
 <p>Date: {{date | date:'mediumDate'}}</p>
 <p>Full: {{date | date:'full'}}</p>
-<p>Number: {{number}}</p>
-<!-- <p>Decimal: {{number | number}}</p> -->
 
 <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
     <input type="hidden" formControlName="id" />
@@ -30,11 +28,6 @@
         <input matInput [matDatepicker]="picker" formControlName="date" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Number</mat-label>
-        <input type="number" matInput formControlName="number" />
-        <mat-error *ngIf="hasError('number', 'pattern')">Name is required</mat-error>
     </mat-form-field>
     <button type="submit">Submit</button>
 </form>

@@ -2,7 +2,4 @@
 
 namespace Features.UpdatePerson;
 
-public class UpdatePersonResponse : ResponseBase<PersonModel>
-{
-    public UpdatePersonResponse(PersonModel value, bool success = true) : base(value, success) { }
-}
+public record UpdatePersonResponse(PersonModel Value, bool Success = true) : ResponseBase<PersonModel>(Value, Success);

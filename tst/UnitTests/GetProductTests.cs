@@ -68,10 +68,7 @@ public class GetProductTests
         GetProductHandler sut = new(Query);
 
         // act
-        GetProductQuery request = new()
-        {
-            Id = id
-        };
+        GetProductQuery request = new(id);
         GetProductResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert
@@ -85,10 +82,7 @@ public class GetProductTests
         GetProductHandler sut = new(Query);
 
         // act
-        GetProductQuery request = new()
-        {
-            Id = int.MaxValue
-        };
+        GetProductQuery request = new(int.MaxValue);
         GetProductResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert

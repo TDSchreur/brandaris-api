@@ -2,7 +2,4 @@
 
 namespace Features.GetProduct;
 
-public class GetProductResponse : ResponseBase<ProductModel>
-{
-    public GetProductResponse(ProductModel value, bool success = true) : base(value, success) { }
-}
+public record GetProductResponse(ProductModel Value, bool Success = true) : ResponseBase<ProductModel>(Value, Success);

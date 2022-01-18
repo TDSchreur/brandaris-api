@@ -2,7 +2,4 @@
 
 namespace Features.AddProduct;
 
-public class AddProductCommand : IRequest<AddProductResponse>
-{
-    public string Name { get; init; }
-}
+public record AddProductCommand(string Name) : IRequest<AddProductResponse>;

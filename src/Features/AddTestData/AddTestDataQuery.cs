@@ -2,4 +2,4 @@
 
 namespace Features.AddTestData;
 
-public class AddTestDataQuery : IRequest<bool> { }
+public record AddTestDataQuery : IRequest<bool>;
