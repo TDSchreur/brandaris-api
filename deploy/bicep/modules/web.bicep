@@ -97,6 +97,25 @@ resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
   }
 }
 
+resource diagnosticSettings 'Microsoft.Web/sites/config@2021-02-01' = {
+  parent: api
+  name: 'logs'
+  properties: {
+    applicationLogs: {
+      fileSystem: {
+        level: 'Information'
+      }
+    }
+    httpLogs: {
+      fileSystem: {
+        enabled: true
+        retentionInDays: 15
+        retentionInMb: 35
+      }
+    }
+  }
+}
+
 resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: api
   name: 'web'
