@@ -11,12 +11,7 @@ param serviceplan_tier string
 
 param api_name string
 
-// param storage_account_name string
-// param functionapp_name string
-// param function_serviceplan_name string
-// param functionapp_openid_issuer string
-// param functionapp_allowed_audiences array
-// param functionapp_clientid string
+param parties string
 
 var location = resourceGroup().location
 var insights_name = 'insights-${api_name}'
@@ -52,19 +47,6 @@ module web './modules/web.bicep' = {
     sqlserver_username: sql_administratorLogin
     sqlserver_password: sql_administratorLoginPassword
     location: location
+    parties: json(parties)
   }
 }
-
-// module function './modules/functions.bicep' = {
-//   name: 'function-deployment'
-//   params: {
-//     insights_instrumentationkey: insights.outputs.instrumentationKey
-//     location: location
-//     storage_account_name: storage_account_name
-//     functionapp_name: functionapp_name
-//     serviceplan_name: function_serviceplan_name
-//     openId_issuer: functionapp_openid_issuer
-//     allowed_audiences: functionapp_allowed_audiences
-//     clientid: functionapp_clientid
-//   }
-// }

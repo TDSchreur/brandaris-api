@@ -10,6 +10,12 @@ param serviceplan_sku string
 
 param serviceplan_tier string
 
+param parties array
+var partySettings = [for (settings, index) in parties: {
+  'name': 'BrandarisConfig:parties:${index}'
+  'value': settings
+}]
+
 @minValue(1)
 @maxValue(5)
 param serviceplan_capacity int
@@ -72,17 +78,32 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
       }
     ]
     serverFarmId: serviceplan.id
-  }
-}
+    siteConfig: {
+      netFrameworkVersion: 'v6.0'
+      minTlsVersion: '1.2'
+      alwaysOn: true
+      appSettings: union([
+        {
+          'name': 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          'value': insights_instrumentationkey
+        }
 
-resource siteconfig 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: api
-  name: 'appsettings'
-  properties: {
-    'APPINSIGHTS_INSTRUMENTATIONKEY': insights_instrumentationkey
-    'Authentication:AppIdUri': 'api://brandaris-api'
-    'Authentication:ClientId': 'c0a8de33-97fe-45a0-8c63-fe54a39cd842'
-    'Authentication:TenantId': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
+        {
+          'name': 'Authentication:AppIdUri'
+          'value': 'api://brandaris-api'
+        }
+
+        {
+          'name': 'Authentication:ClientId'
+          'value': 'c0a8de33-97fe-45a0-8c63-fe54a39cd842'
+        }
+
+        {
+          'name': 'Authentication:TenantId'
+          'value': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
+        }
+      ], partySettings)
+    }
   }
 }
 
@@ -93,6 +114,18 @@ resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
     Default: {
       type: 'SQLAzure'
       value: 'Data Source=tcp:${sqlserver_fullyQualifiedDomainName} ,1433;Initial Catalog=${sqlserver_database_name};User Id=${sqlserver_username};Password=${sqlserver_password}'
+    }
+  }
+}
+
+resource diagnosticSettings 'Microsoft.Web/sites/config@2021-02-01' = {
+  parent: api
+  name: 'logs'
+  properties: {
+    applicationLogs: {
+      fileSystem: {
+        level: 'Information'
+      }
     }
   }
 }

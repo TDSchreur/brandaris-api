@@ -1,5 +1,5 @@
 module.exports = {
-    displayName: 'dnb-monetair-ape',
+    displayName: 'dnb-monetair-Brandaris',
     preset: 'jest-preset-angular',
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     globals: {
@@ -21,7 +21,7 @@ module.exports = {
         [
             'jest-junit',
             {
-                suiteName: 'APE-FE Unittests',
+                suiteName: 'Brandaris-FE Unittests',
                 outputName: 'test-report.xml',
                 outputDirectory: 'coverage',
                 classNameTemplate: '{classname} / {title}',

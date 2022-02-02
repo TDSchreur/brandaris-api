@@ -19,6 +19,9 @@
         },
         "sql_administratorLogin": {
             "value": "dennis"
+        },
+        "parties": {
+            "value": "[ \"abc\", \"def\", \"ghi\", \"jkl\" ]"
         }
     }
 }
