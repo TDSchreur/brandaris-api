@@ -1,5 +1,5 @@
-﻿using Features.Models;
+﻿using Brandaris.Features.Models;
 
-namespace Features.AddPerson;
+namespace Brandaris.Features.AddPerson;
 
 public record AddPersonResponse(PersonModel Value, bool Success = true) : ResponseBase<PersonModel>(Value, Success);

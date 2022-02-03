@@ -1,8 +1,8 @@
-﻿using Data.Entities;
-using DataAccess;
+﻿using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
 using FluentValidation;
 
-namespace Features.UpdateProduct;
+namespace Brandaris.Features.UpdateProduct;
 
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {

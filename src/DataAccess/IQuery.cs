@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public interface IQuery<TEntity>
     where TEntity : IEntity

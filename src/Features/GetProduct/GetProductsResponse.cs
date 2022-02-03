@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Features.Models;
+using Brandaris.Features.Models;
 
-namespace Features.GetProduct;
+namespace Brandaris.Features.GetProduct;
 
 public record GetProductsResponse(ICollection<ProductModel> Value, bool Success = true) : ResponseBase<ICollection<ProductModel>>(Value, Success);

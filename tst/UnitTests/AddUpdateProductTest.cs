@@ -2,10 +2,10 @@
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.AddProduct;
-using Features.UpdateProduct;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.AddProduct;
+using Brandaris.Features.UpdateProduct;
 using Moq;
 using Xunit;
 

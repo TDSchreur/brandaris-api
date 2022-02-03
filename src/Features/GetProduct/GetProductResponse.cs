@@ -1,5 +1,5 @@
-﻿using Features.Models;
+﻿using Brandaris.Features.Models;
 
-namespace Features.GetProduct;
+namespace Brandaris.Features.GetProduct;
 
 public record GetProductResponse(ProductModel Value, bool Success = true) : ResponseBase<ProductModel>(Value, Success);

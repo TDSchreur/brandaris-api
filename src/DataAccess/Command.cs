@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public class Command<TEntity> : ICommand<TEntity>
     where TEntity : class, IEntity

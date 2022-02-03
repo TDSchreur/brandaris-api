@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
-import { MaterialModule } from '../material.module';
+import { MaterialModule } from '../modules/material.module';
 
 import { MessageComponent } from './message.component';
 

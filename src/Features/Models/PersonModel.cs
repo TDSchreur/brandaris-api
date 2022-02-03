@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Features.Models;
+namespace Brandaris.Features.Models;
 
 public class PersonModel : IResponseModel
 {

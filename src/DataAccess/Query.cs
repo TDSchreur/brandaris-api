@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public class Query<TEntity> : IQuery<TEntity>
     where TEntity : class, IEntity

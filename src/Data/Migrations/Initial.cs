@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Data.Migrations;
+namespace Brandaris.Data.Migrations;
 
 public partial class Initial : Migration
 {

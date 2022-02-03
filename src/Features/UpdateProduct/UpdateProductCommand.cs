@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Features.UpdateProduct;
+namespace Brandaris.Features.UpdateProduct;
 
 public record UpdateProductCommand : IRequest<UpdateProductResponse>
 {

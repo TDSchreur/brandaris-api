@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { HomeComponent } from './home/home.component';
+import { ForbiddenComponent } from '../forbidden/forbidden.component';
+import { HomeComponent } from '../home/home.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },

@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.Models;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.Models;
 using MediatR;
 
-namespace Features.AddProduct;
+namespace Brandaris.Features.AddProduct;
 
 public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductResponse>
 {

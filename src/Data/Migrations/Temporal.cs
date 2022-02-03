@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Data.Migrations;
+namespace Brandaris.Data.Migrations;
 
 public partial class Temporal : Migration
 {

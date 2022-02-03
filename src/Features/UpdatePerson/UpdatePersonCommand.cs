@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace Features.UpdatePerson;
+namespace Brandaris.Features.UpdatePerson;
 
 public record UpdatePersonCommand : IRequest<UpdatePersonResponse>
 {

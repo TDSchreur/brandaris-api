@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using DataAccess;
 
-namespace Data.Entities;
+namespace Brandaris.Data.Entities;
 
-public class Order : IEntity
+public class Order : EntityBase
 {
     public ICollection<OrderLine> Orderlines { get; set; } = new HashSet<OrderLine>();
 
     public Person Person { get; set; }
 
     public int PersonId { get; set; }
-
-    public int Id { get; set; }
 }

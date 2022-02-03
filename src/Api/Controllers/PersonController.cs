@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Features.AddPerson;
-using Features.GetPerson;
-using Features.UpdatePerson;
+using Brandaris.Features.AddPerson;
+using Brandaris.Features.GetPerson;
+using Brandaris.Features.UpdatePerson;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

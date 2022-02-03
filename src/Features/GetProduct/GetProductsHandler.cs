@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.Models;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.Models;
 using MediatR;
 
-namespace Features.GetProduct;
+namespace Brandaris.Features.GetProduct;
 
 public class GetProductsHandler : IRequestHandler<GetProductsQuery, GetProductsResponse>
 {

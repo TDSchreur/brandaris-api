@@ -1,8 +1,8 @@
-﻿using Features.GetPerson;
+﻿using Brandaris.Features.GetPerson;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Features;
+namespace Brandaris.Features;
 
 public static class ServiceExtensions
 {

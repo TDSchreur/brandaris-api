@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.Models;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.Models;
 using MediatR;
 
-namespace Features.GetPerson;
+namespace Brandaris.Features.GetPerson;
 
 public class GetPersonHandler : IRequestHandler<GetPersonQuery, GetPersonResponse>
 {

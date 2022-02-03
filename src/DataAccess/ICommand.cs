@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public interface ICommand<TEntity>
     where TEntity : IEntity

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Features.Models;
+using Brandaris.Features.Models;
 
-namespace Features.GetPerson;
+namespace Brandaris.Features.GetPerson;
 
 public record GetPersonsResponse(ICollection<PersonModel> Value, bool Succes = true) : ResponseBase<ICollection<PersonModel>>(Value, Succes);

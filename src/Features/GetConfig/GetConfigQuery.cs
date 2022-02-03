@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace Features.GetConfig;
+namespace Brandaris.Features.GetConfig;
 
 public record GetConfigQuery : IRequest<GetConfigResponse>;

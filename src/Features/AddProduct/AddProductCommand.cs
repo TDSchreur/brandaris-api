@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace Features.AddProduct;
+namespace Brandaris.Features.AddProduct;
 
 public record AddProductCommand(string Name) : IRequest<AddProductResponse>;

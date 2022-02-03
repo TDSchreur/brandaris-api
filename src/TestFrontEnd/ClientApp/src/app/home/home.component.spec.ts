@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../data.service';
-import { MaterialModule } from '../material.module';
+import { MaterialModule } from '../modules/material.module';
 
 import { HomeComponent } from './home.component';
 

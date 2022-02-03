@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace Features.GetProduct;
+namespace Brandaris.Features.GetProduct;
 
 public record GetProductsQuery : IRequest<GetProductsResponse>
 {

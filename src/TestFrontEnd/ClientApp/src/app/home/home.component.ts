@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DataService } from '../data.service';
 import { IBaseResponse, IPerson } from '../models/iperson';
 
@@ -28,6 +29,10 @@ export class HomeComponent implements OnInit {
 
     hasError = (controlName: string, errorName: string) => {
         return this.mainForm.controls[controlName]?.hasError(errorName);
+    };
+
+    public executeSelectedChange = (event: MatTabChangeEvent) => {
+        console.log(event);
     };
 
     onSubmit() {

@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data;
-using Data.Entities;
-using DataAccess;
+using Brandaris.Data;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Features.AddTestData;
+namespace Brandaris.Features.AddTestData;
 
 public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
 {
