@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Brandaris.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Brandaris.DataAccess;
@@ -9,16 +10,18 @@ namespace Brandaris.DataAccess;
 public class Command<TEntity> : ICommand<TEntity>
     where TEntity : class, IEntity
 {
-    private readonly DbContext _dataContext;
+    private readonly DataContext _dataContext;
     private readonly DbSet<TEntity> _entities;
 
-    public Command(DbContext dataContext)
+    public Command(DataContext dataContext)
     {
         _dataContext = dataContext;
         _entities = dataContext.Set<TEntity>();
     }
 
     public void Add(params TEntity[] entity) => _entities.AddRange(entity);
+
+    public void Remove(TEntity entity) => _entities.Remove(entity);
 
     public Task<int> SaveChangesAsync(CancellationToken token = default) => _dataContext.SaveChangesAsync(token);
 

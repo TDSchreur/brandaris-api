@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -12,11 +11,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
     declarations: [],
     imports: [
-        CommonModule,
         MatTabsModule,
         MatSidenavModule,
         MatToolbarModule,
@@ -29,6 +29,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatNativeDateModule,
         MatDividerModule,
         MatSnackBarModule,
+        MatSlideToggleModule,
+        MatCardModule,
     ],
     exports: [
         MatTabsModule,
@@ -43,6 +45,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatNativeDateModule,
         MatDividerModule,
         MatSnackBarModule,
+        MatSlideToggleModule,
+        MatCardModule,
     ],
 })
 export class MaterialModule {}

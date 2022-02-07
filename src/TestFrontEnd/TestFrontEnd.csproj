@@ -14,47 +14,47 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.22.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
-    <PackageReference Include="Yarp.ReverseProxy" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.1"/>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0"/>
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.22.3"/>
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9"/>
+    <PackageReference Include="Serilog" Version="2.10.0"/>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0"/>
+    <PackageReference Include="Yarp.ReverseProxy" Version="1.0.0"/>
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Compile Remove="$(SpaRoot)**" />
-    <Content Remove="$(SpaRoot)**" />
-    <EmbeddedResource Remove="$(SpaRoot)**" />
-    <None Remove="$(SpaRoot)**" />
+    <Compile Remove="$(SpaRoot)**"/>
+    <Content Remove="$(SpaRoot)**"/>
+    <EmbeddedResource Remove="$(SpaRoot)**"/>
+    <None Remove="$(SpaRoot)**"/>
     <!--<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />-->
   </ItemGroup>
 
-<!--  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">-->
-<!--    &lt;!&ndash; Ensure Node.js is installed &ndash;&gt;-->
-<!--    <Exec Command="node &#45;&#45;version" ContinueOnError="true">-->
-<!--      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />-->
-<!--    </Exec>-->
-<!--    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />-->
-<!--    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />-->
-<!--    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />-->
-<!--  </Target>-->
+  <!--  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">-->
+  <!--    &lt;!&ndash; Ensure Node.js is installed &ndash;&gt;-->
+  <!--    <Exec Command="node &#45;&#45;version" ContinueOnError="true">-->
+  <!--      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />-->
+  <!--    </Exec>-->
+  <!--    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />-->
+  <!--    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />-->
+  <!--    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />-->
+  <!--  </Target>-->
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install"/>
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod"/>
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' "/>
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**"/>
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'"/>
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

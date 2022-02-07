@@ -16,11 +16,7 @@ public class GetProductHandler : IRequestHandler<GetProductQuery, GetProductResp
     public async Task<GetProductResponse> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
         ProductModel product = await _query.Where(x => request.Id == x.Id)
-                                           .Select(x => new ProductModel
-                                           {
-                                               Id = x.Id,
-                                               Name = x.Name
-                                           })
+                                           .Select(x => new ProductModel(x.Id, x.Name))
                                            .FirstOrDefaultAsync(cancellationToken);
 
         return new GetProductResponse(product);

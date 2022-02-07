@@ -4,11 +4,13 @@ namespace Brandaris.Features.GetPerson;
 
 public record GetPersonsQuery : IRequest<GetPersonsResponse>
 {
-    public string FirstName { get; init; }
+    public bool Approved { get; init; }
 
-    public string LastName { get; init; }
+    public string FirstName { get; init; }
 
     internal bool HasFirstName => !string.IsNullOrWhiteSpace(FirstName);
 
     internal bool HasLastName => !string.IsNullOrWhiteSpace(LastName);
+
+    public string LastName { get; init; }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Brandaris.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Brandaris.DataAccess;
@@ -13,7 +14,7 @@ public class Query<TEntity> : IQuery<TEntity>
 {
     private IQueryable<TEntity> _query;
 
-    public Query(DbContext context) => _query = context.Set<TEntity>().AsNoTracking();
+    public Query(DataContext context) => _query = context.Set<TEntity>().AsNoTracking();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Query{TEntity}" /> class.
@@ -23,6 +24,15 @@ public class Query<TEntity> : IQuery<TEntity>
     public Query(IQueryable<TEntity> query) => _query = query;
 
     public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => _query.AnyAsync(predicate, cancellationToken);
+
+    public IQuery<TEntity> FilterApproved()
+    {
+        _query = _query.Where(x => EF.Property<string>(x, "pre-check") == Constants.Approved);
+
+        return this;
+    }
+
+    public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => _query.FirstOrDefaultAsync(predicate);
 
     public IQueryable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector) => _query.Select(selector);
 

@@ -23,10 +23,6 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
 
         await _command.SaveChangesAsync(cancellationToken);
 
-        return new AddProductResponse(new ProductModel
-        {
-            Id = product.Id,
-            Name = product.Name
-        });
+        return new AddProductResponse(new ProductModel(product.Id, product.Name));
     }
 }

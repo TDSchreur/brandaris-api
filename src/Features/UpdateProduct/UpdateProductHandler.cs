@@ -17,19 +17,13 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Update
     {
         Product product = new()
         {
-            Id = request.Id,
-            Name = request.Name
+            Id = request.Id, Name = request.Name
         };
-        _command.Update(
-                        product,
+        _command.Update(product,
                         x => x.Name);
 
         await _command.SaveChangesAsync(cancellationToken);
 
-        return new UpdateProductResponse(new ProductModel
-        {
-            Id = product.Id,
-            Name = product.Name
-        });
+        return new UpdateProductResponse(new ProductModel(product.Id, product.Name));
     }
 }

@@ -26,7 +26,7 @@ public partial class Initial : Migration
                                      table => new
                                      {
                                          Id = table.Column<int>("int", nullable: false)
-                                                            .Annotation("SqlServer:Identity", "1, 1"),
+                                                   .Annotation("SqlServer:Identity", "1, 1"),
                                          FirstName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true),
                                          LastName = table.Column<string>("nvarchar(20)", maxLength: 20, nullable: true)
                                      },
@@ -37,7 +37,7 @@ public partial class Initial : Migration
                                      table => new
                                      {
                                          Id = table.Column<int>("int", nullable: false)
-                                                            .Annotation("SqlServer:Identity", "1, 1"),
+                                                   .Annotation("SqlServer:Identity", "1, 1"),
                                          Name = table.Column<string>("nvarchar(50)", maxLength: 50, nullable: true)
                                      },
                                      constraints: table => { table.PrimaryKey("PK_Product", x => x.Id); });
@@ -47,7 +47,7 @@ public partial class Initial : Migration
                                      table => new
                                      {
                                          Id = table.Column<int>("int", nullable: false)
-                                                            .Annotation("SqlServer:Identity", "1, 1"),
+                                                   .Annotation("SqlServer:Identity", "1, 1"),
                                          PersonId = table.Column<int>("int", nullable: false)
                                      },
                                      constraints: table =>
@@ -66,7 +66,7 @@ public partial class Initial : Migration
                                      table => new
                                      {
                                          Id = table.Column<int>("int", nullable: false)
-                                                            .Annotation("SqlServer:Identity", "1, 1"),
+                                                   .Annotation("SqlServer:Identity", "1, 1"),
                                          OrderId = table.Column<int>("int", nullable: false),
                                          ProductId = table.Column<int>("int", nullable: false)
                                      },

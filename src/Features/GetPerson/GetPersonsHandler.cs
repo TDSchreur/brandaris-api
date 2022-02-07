@@ -10,22 +10,36 @@ namespace Brandaris.Features.GetPerson;
 
 public class GetPersonsHandler : IRequestHandler<GetPersonsQuery, GetPersonsResponse>
 {
-    private readonly IQuery<Person> _query;
+    private readonly IQuery<PersonPreCheck> _personPreCheckQuery;
+    private readonly IQuery<Person> _personQuery;
 
-    public GetPersonsHandler(IQuery<Person> query) => _query = query;
+    public GetPersonsHandler(IQuery<Person> personQuery,
+                             IQuery<PersonPreCheck> personPreCheckQuery)
+    {
+        _personQuery = personQuery;
+        _personPreCheckQuery = personPreCheckQuery;
+    }
 
     public async Task<GetPersonsResponse> Handle(GetPersonsQuery request, CancellationToken cancellationToken)
     {
-        List<PersonModel> persons = await _query.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
-                                                .Where(x => !request.HasLastName || x.LastName == request.LastName)
-                                                .Select(x => new PersonModel
-                                                             {
-                                                                 Id = x.Id,
-                                                                 FirstName = x.FirstName,
-                                                                 LastName = x.LastName
-                                                             })
-                                                .ToListAsync(cancellationToken);
+        if (request.Approved)
+        {
+            List<PersonModel> persons = await _personQuery.FilterApproved()
+                                                          .Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
+                                                          .Where(x => !request.HasLastName || x.LastName == request.LastName)
+                                                          .Select(x => new PersonModel(x.Id, x.FirstName, x.LastName, null))
+                                                          .ToListAsync(cancellationToken);
 
-        return new GetPersonsResponse(persons);
+            return new GetPersonsResponse(persons);
+        }
+        else
+        {
+            List<PersonModel> persons = await _personPreCheckQuery.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
+                                                                  .Where(x => !request.HasLastName || x.LastName == request.LastName)
+                                                                  .Select(x => new PersonModel(x.Id, x.FirstName, x.LastName, x.ParentId))
+                                                                  .ToListAsync(cancellationToken);
+
+            return new GetPersonsResponse(persons);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MaterialModule } from '../modules/material.module';
+import { MaterialModule } from '../material.module';
 
 import { ApiInterceptor } from './api.interceptor';
 

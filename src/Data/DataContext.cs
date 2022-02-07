@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Brandaris.Common;
 using Brandaris.Data.Entities;
-using Brandaris.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -17,12 +16,11 @@ public class DataContext : DbContext
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-    public DataContext(DbContextOptions<DataContext> options, IIdentityHelper identityHelper) : base(options)
-    {
-        _identityHelper = identityHelper;
-    }
+    public DataContext(DbContextOptions<DataContext> options, IIdentityHelper identityHelper) : base(options) => _identityHelper = identityHelper;
 
     public DbSet<Order> Orders { get; set; }
+
+    public DbSet<PersonPreCheck> PersonPreChecks { get; set; }
 
     public DbSet<Person> Persons { get; set; }
 
@@ -33,7 +31,7 @@ public class DataContext : DbContext
         IEnumerable<EntityEntry<IAuditable>> changes = ChangeTracker.Entries<IAuditable>()
                                                                     .Where(e => e.State is EntityState.Added or EntityState.Modified);
 
-        string name = _identityHelper.GetName();
+        string name = _identityHelper.GetName() ?? "SeedTool";
         Guid oid = _identityHelper.GetOid();
 
         foreach (EntityEntry<IAuditable> entry in changes)
@@ -58,10 +56,7 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        if (modelBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(modelBuilder));
-        }
+        ArgumentNullException.ThrowIfNull(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
     }

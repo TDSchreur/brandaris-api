@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DataService } from '../data.service';
-import { MaterialModule } from '../modules/material.module';
-import { PersonComponent } from './person.component';
+import { DataService } from '../../shared/services/data.service';
+import { MaterialModule } from '../../shared/material.module';
+import { PersonComponent } from './person-edit.component';
 
 describe('PersonComponent', () => {
     let component: PersonComponent;

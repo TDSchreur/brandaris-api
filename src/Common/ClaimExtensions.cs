@@ -7,6 +7,10 @@ namespace Brandaris.Common;
 
 public static class ClaimExtensions
 {
+    public static string GetDisplayName(this IEnumerable<Claim> claims) => claims.GetClaimValue("app_displayname");
+
+    public static string GetName(this IEnumerable<Claim> claims) => claims.GetClaimValue("name");
+
     public static Guid GetOid(this IEnumerable<Claim> claims)
     {
         // The immutable identifier for an object in the Microsoft identity system, in this case, a user account.
@@ -15,16 +19,12 @@ public static class ClaimExtensions
         // Because the oid allows multiple apps to correlate users, the profile scope is required to receive this claim. Note that if a single user exists in multiple tenants,
         // the user will contain a different object ID in each tenant - they're considered different accounts, even though the user logs into each account with the same credentials.
         // The oid claim is a GUID and cannot be reused.
-        var applicationIdClaim = claims.GetClaimValue("oid");
+        string applicationIdClaim = claims.GetClaimValue("oid");
 
         return Guid.TryParse(applicationIdClaim, out Guid applicationId)
             ? applicationId
             : Guid.Empty;
     }
-
-    public static string GetName(this IEnumerable<Claim> claims) => claims.GetClaimValue("name");
-
-    public static string GetDisplayName(this IEnumerable<Claim> claims) => claims.GetClaimValue("app_displayname");
 
     private static string GetClaimValue(this IEnumerable<Claim> claims, string claimType) => claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
 }

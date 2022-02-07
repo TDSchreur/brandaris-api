@@ -3,334 +3,333 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Brandaris.Data.Migrations
+namespace Brandaris.Data.Migrations;
+
+public partial class Auditable : Migration
 {
-    public partial class Auditable : Migration
+    protected override void Down(MigrationBuilder migrationBuilder)
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "Product",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "CreatedBy",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatedById",
-                table: "Product",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+        migrationBuilder.DropColumn(
+                                    "CreatedById",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "CreatedDate",
-                table: "Product",
-                type: "datetimeoffset",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        migrationBuilder.DropColumn(
+                                    "CreatedDate",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UpdatedBy",
-                table: "Product",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedBy",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UpdatedById",
-                table: "Product",
-                type: "uniqueidentifier",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedById",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "UpdatedDate",
-                table: "Product",
-                type: "datetimeoffset",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedDate",
+                                    "Product")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "Person",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "CreatedBy",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatedById",
-                table: "Person",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+        migrationBuilder.DropColumn(
+                                    "CreatedById",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "CreatedDate",
-                table: "Person",
-                type: "datetimeoffset",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        migrationBuilder.DropColumn(
+                                    "CreatedDate",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UpdatedBy",
-                table: "Person",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedBy",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UpdatedById",
-                table: "Person",
-                type: "uniqueidentifier",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedById",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "UpdatedDate",
-                table: "Person",
-                type: "datetimeoffset",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedDate",
+                                    "Person")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "OrderLine",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "CreatedBy",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatedById",
-                table: "OrderLine",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+        migrationBuilder.DropColumn(
+                                    "CreatedById",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "CreatedDate",
-                table: "OrderLine",
-                type: "datetimeoffset",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        migrationBuilder.DropColumn(
+                                    "CreatedDate",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UpdatedBy",
-                table: "OrderLine",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedBy",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UpdatedById",
-                table: "OrderLine",
-                type: "uniqueidentifier",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedById",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "UpdatedDate",
-                table: "OrderLine",
-                type: "datetimeoffset",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedDate",
+                                    "OrderLine")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "Order",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "CreatedBy",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatedById",
-                table: "Order",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+        migrationBuilder.DropColumn(
+                                    "CreatedById",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "CreatedDate",
-                table: "Order",
-                type: "datetimeoffset",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+        migrationBuilder.DropColumn(
+                                    "CreatedDate",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UpdatedBy",
-                table: "Order",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedBy",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UpdatedById",
-                table: "Order",
-                type: "uniqueidentifier",
-                nullable: true);
+        migrationBuilder.DropColumn(
+                                    "UpdatedById",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
 
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "UpdatedDate",
-                table: "Order",
-                type: "datetimeoffset",
-                nullable: true);
-        }
+        migrationBuilder.DropColumn(
+                                    "UpdatedDate",
+                                    "Order")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+    }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AddColumn<string>(
+                                           "CreatedBy",
+                                           "Product",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedById",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "CreatedById",
+                                         "Product",
+                                         "uniqueidentifier",
+                                         nullable: false,
+                                         defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.DropColumn(
-                name: "CreatedDate",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "CreatedDate",
+                                                   "Product",
+                                                   "datetimeoffset",
+                                                   nullable: false,
+                                                   defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedBy",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "UpdatedBy",
+                                           "Product",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedById",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "UpdatedById",
+                                         "Product",
+                                         "uniqueidentifier",
+                                         nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedDate",
-                table: "Product")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "ProductHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "UpdatedDate",
+                                                   "Product",
+                                                   "datetimeoffset",
+                                                   nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "CreatedBy",
+                                           "Person",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedById",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "CreatedById",
+                                         "Person",
+                                         "uniqueidentifier",
+                                         nullable: false,
+                                         defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.DropColumn(
-                name: "CreatedDate",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "CreatedDate",
+                                                   "Person",
+                                                   "datetimeoffset",
+                                                   nullable: false,
+                                                   defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedBy",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "UpdatedBy",
+                                           "Person",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedById",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "UpdatedById",
+                                         "Person",
+                                         "uniqueidentifier",
+                                         nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedDate",
-                table: "Person")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "PersonHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "UpdatedDate",
+                                                   "Person",
+                                                   "datetimeoffset",
+                                                   nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "CreatedBy",
+                                           "OrderLine",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedById",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "CreatedById",
+                                         "OrderLine",
+                                         "uniqueidentifier",
+                                         nullable: false,
+                                         defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.DropColumn(
-                name: "CreatedDate",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "CreatedDate",
+                                                   "OrderLine",
+                                                   "datetimeoffset",
+                                                   nullable: false,
+                                                   defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedBy",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "UpdatedBy",
+                                           "OrderLine",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedById",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "UpdatedById",
+                                         "OrderLine",
+                                         "uniqueidentifier",
+                                         nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedDate",
-                table: "OrderLine")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderLineHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "UpdatedDate",
+                                                   "OrderLine",
+                                                   "datetimeoffset",
+                                                   nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "CreatedBy",
+                                           "Order",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "CreatedById",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "CreatedById",
+                                         "Order",
+                                         "uniqueidentifier",
+                                         nullable: false,
+                                         defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.DropColumn(
-                name: "CreatedDate",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "CreatedDate",
+                                                   "Order",
+                                                   "datetimeoffset",
+                                                   nullable: false,
+                                                   defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedBy",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<string>(
+                                           "UpdatedBy",
+                                           "Order",
+                                           "nvarchar(max)",
+                                           nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedById",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
+        migrationBuilder.AddColumn<Guid>(
+                                         "UpdatedById",
+                                         "Order",
+                                         "uniqueidentifier",
+                                         nullable: true);
 
-            migrationBuilder.DropColumn(
-                name: "UpdatedDate",
-                table: "Order")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "OrderHistory")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", null);
-        }
+        migrationBuilder.AddColumn<DateTimeOffset>(
+                                                   "UpdatedDate",
+                                                   "Order",
+                                                   "datetimeoffset",
+                                                   nullable: true);
     }
 }

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { DataService } from '../data.service';
+import { DataService } from '../shared/services/data.service';
 
 import { ClaimsComponent } from './claims.component';
 

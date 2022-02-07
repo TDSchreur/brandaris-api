@@ -1,4 +1,4 @@
-﻿namespace Brandaris.DataAccess;
+﻿namespace Brandaris.Data;
 
 public interface IEntity
 {

@@ -1,11 +1,14 @@
 ﻿using System;
-using Brandaris.DataAccess;
 
 namespace Brandaris.Data.Entities;
 
 public abstract class EntityBase : IEntity, IAuditable
 {
-    public int Id { get; set; }
+    public string ApprovedBy { get; set; }
+
+    public Guid? ApprovedById { get; set; }
+
+    public DateTimeOffset? ApprovedDate { get; set; }
 
     public string CreatedBy { get; set; }
 
@@ -18,4 +21,6 @@ public abstract class EntityBase : IEntity, IAuditable
     public Guid? UpdatedById { get; set; }
 
     public DateTimeOffset? UpdatedDate { get; set; }
+
+    public int Id { get; set; }
 }

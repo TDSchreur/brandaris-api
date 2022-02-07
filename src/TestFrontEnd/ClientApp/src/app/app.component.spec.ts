@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { MaterialModule } from './modules/material.module';
+import { MaterialModule } from './shared/material.module';
 
 describe('AppComponent', () => {
     beforeEach(async () => {
