@@ -1,13 +1,16 @@
 .content {
-    height: calc(100vh - 98px);
+    min-height: calc(100vh - 98px);
     border-radius: 10px;
     margin: 16px;
     margin-left: 32px;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: left;
 
-    font-size: 2rem;
-    color: lightgray;
+    font-size: 1rem;
+    color: darkgray;
+
+    padding-top: 32px;
+    padding: 32px;
 }

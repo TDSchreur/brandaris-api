@@ -1,0 +1,27 @@
+<div class="person-content">
+    <div class="header">
+        <mat-form-field>
+            <mat-label>Person ID</mat-label>
+            <input matInput type="number" id="personId" [defaultValue]="1" [(ngModel)]="personId" />
+        </mat-form-field>
+        <button mat-stroked-button (click)="GetPerson()">GetPerson</button>
+    </div>
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id" />
+        <mat-form-field>
+            <mat-label>Firstname</mat-label>
+            <input matInput type="text" formControlName="firstName" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Lastname</mat-label>
+            <input matInput type="text" formControlName="lastName" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-stroked-button type="submit">Save</button>
+    </form>
+</div>

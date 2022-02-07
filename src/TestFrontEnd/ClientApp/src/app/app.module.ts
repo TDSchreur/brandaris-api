@@ -12,9 +12,23 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { HomeComponent } from './home/home.component';
 import { ApiInterceptor } from './interceptor/api.interceptor';
 import { HeaderComponent } from './header/header.component';
+import { ClaimsComponent } from './claims/claims.component';
+import { ClaimsRemoteComponent } from './claims-remote/claims-remote.component';
+import { ConfigRemoteComponent } from './config-remote/config-remote.component';
+import { PersonComponent } from './person/person.component';
 
 @NgModule({
-    declarations: [AppComponent, MessageComponent, ForbiddenComponent, HomeComponent, HeaderComponent],
+    declarations: [
+        AppComponent,
+        MessageComponent,
+        ForbiddenComponent,
+        HomeComponent,
+        HeaderComponent,
+        ClaimsComponent,
+        ClaimsRemoteComponent,
+        ConfigRemoteComponent,
+        PersonComponent,
+    ],
     imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, MaterialModule],
     providers: [{ provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }],
     bootstrap: [AppComponent],
