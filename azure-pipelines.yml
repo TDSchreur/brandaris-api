@@ -77,7 +77,7 @@ stages:
               arguments: "--no-build -c $(configuration) -o $(Build.ArtifactStagingDirectory)"
 
           - task: PublishBuildArtifacts@1
-            displayName: "publish artifact function"
+            displayName: "publish artifact frontend"
             inputs:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
               ArtifactName: "frontend"
