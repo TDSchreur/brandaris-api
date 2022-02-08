@@ -6,7 +6,7 @@
             "value": "brandaris-api"
         },
         "frontend_name": {
-            "value": "brandaris-fronend"
+            "value": "brandaris-frontend"
         },
         "serviceplan_name": {
             "value": "brandaris-api-serviceplan"
