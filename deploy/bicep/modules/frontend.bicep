@@ -46,7 +46,7 @@ resource api 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           'name': 'AzureAd:ClientId'
-          'value': 'dennistdschreur.onmicrosoft.com'
+          'value': 'cb79e4b9-ff8b-4659-ae61-0a94e2f1e631'
         }
         {
           'name': 'AzureAd:TenantId'
