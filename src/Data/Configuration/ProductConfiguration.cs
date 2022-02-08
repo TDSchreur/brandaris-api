@@ -11,8 +11,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.HasKey(x => x.Id);
-
         builder.ToTable(nameof(Product), x => x.IsTemporal());
 
         builder.Property(x => x.Name)

@@ -6,7 +6,7 @@ using Brandaris.DataAccess;
 using Brandaris.Features.Models;
 using MediatR;
 
-namespace Brandaris.Features.GetPerson;
+namespace Brandaris.Features.GetPersons;
 
 public class GetPersonsHandler : IRequestHandler<GetPersonsQuery, GetPersonsResponse>
 {

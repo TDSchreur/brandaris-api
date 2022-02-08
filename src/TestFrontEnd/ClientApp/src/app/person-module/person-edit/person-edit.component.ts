@@ -39,6 +39,8 @@ export class PersonEditComponent implements OnInit {
             firstName: this.mainForm.get('firstName')?.value,
             lastName: this.mainForm.get('lastName')?.value,
         };
-        this.dataService.savePerson(person).subscribe();
+        this.dataService.savePerson(person).subscribe(() => {
+            this.mainForm.reset();
+        });
     }
 }

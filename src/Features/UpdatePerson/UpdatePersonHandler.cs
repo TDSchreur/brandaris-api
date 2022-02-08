@@ -30,11 +30,18 @@ public class UpdatePersonHandler : IRequestHandler<UpdatePersonCommand, UpdatePe
             {
                 Id = request.Id,
                 FirstName = request.FirstName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                UpdatedBy = request.UpdatedBy,
+                UpdatedById = request.UpdatedById.GetValueOrDefault(),
+                UpdatedDate = request.UpdatedDate.GetValueOrDefault()
             };
-            _personCommand.Update(person,
-                                  x => x.FirstName,
-                                  x => x.LastName);
+
+            _personCommand.Attach(person);
+            _personCommand.Update(person, x => x.FirstName);
+            _personCommand.Update(person, x => x.LastName);
+            _personCommand.Update(person, x => x.UpdatedBy);
+            _personCommand.Update(person, x => x.UpdatedById);
+            _personCommand.Update(person, x => x.UpdatedDate);
 
             await _personCommand.SaveChangesAsync(cancellationToken);
             id = person.Id;
@@ -47,9 +54,10 @@ public class UpdatePersonHandler : IRequestHandler<UpdatePersonCommand, UpdatePe
                 FirstName = request.FirstName,
                 LastName = request.LastName
             };
-            _personPreCheckCommand.Update(person,
-                                          x => x.FirstName,
-                                          x => x.LastName);
+            _personPreCheckCommand.Attach(person);
+            _personPreCheckCommand.Update(person, x => x.FirstName);
+            _personPreCheckCommand.Update(person, x => x.LastName);
+
             id = person.Id;
             parentId = request.Id;
             await _personPreCheckCommand.SaveChangesAsync(cancellationToken);

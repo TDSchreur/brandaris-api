@@ -11,8 +11,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.HasKey(x => x.Id);
-
         builder.ToTable(nameof(Order), x => x.IsTemporal());
 
         builder.HasOne(x => x.Person)

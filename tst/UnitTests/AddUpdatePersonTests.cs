@@ -49,20 +49,12 @@ public class AddUpdatePersonTests
         const string stark = nameof(stark);
         UpdatePersonCommand request = new(1, tony, stark, true);
 
-        string newFirstName = string.Empty;
-        string newLastName = string.Empty;
-
         Mock<ICommand<Person>> personCommand = new(MockBehavior.Strict);
         Mock<ICommand<PersonPreCheck>> personPreCheckCommand = new(MockBehavior.Strict);
 
+        personCommand.Setup(x => x.Attach(It.IsAny<Person>()));
         personCommand.Setup(x => x.Update(It.IsAny<Person>(),
-                                          It.IsAny<Expression<Func<Person, string>>>(),
-                                          It.IsAny<Expression<Func<Person, string>>>()))
-                     .Callback((Person p, Expression<Func<Person, string>>[] _) =>
-                      {
-                          newFirstName = p.FirstName;
-                          newLastName = p.LastName;
-                      });
+                                          It.IsAny<Expression<Func<Person, It.IsAnyType>>>()));
 
         personCommand.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
                      .ReturnsAsync(1);
@@ -74,8 +66,6 @@ public class AddUpdatePersonTests
 
         // assert
         Assert.Equal(tony, result.Value.FirstName);
-        Assert.Equal(tony, newFirstName);
         Assert.Equal(stark, result.Value.LastName);
-        Assert.Equal(stark, newLastName);
     }
 }

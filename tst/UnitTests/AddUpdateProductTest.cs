@@ -44,12 +44,13 @@ public class AddUpdateProductTest
         {
             Id = 1, Name = meloen
         };
-        string newName = string.Empty;
 
         Mock<ICommand<Product>> qm = new(MockBehavior.Strict);
+
+        qm.Setup(x => x.Attach(It.IsAny<Product>()));
         qm.Setup(x => x.Update(It.IsAny<Product>(),
-                               It.IsAny<Expression<Func<Product, string>>>()))
-          .Callback((Product p, Expression<Func<Product, string>>[] _) => newName = p.Name);
+                               It.IsAny<Expression<Func<Product, It.IsAnyType>>>()));
+
         qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
           .ReturnsAsync(1);
 
@@ -60,6 +61,5 @@ public class AddUpdateProductTest
 
         // assert
         Assert.Equal(meloen, result.Value.Name);
-        Assert.Equal(meloen, newName);
     }
 }

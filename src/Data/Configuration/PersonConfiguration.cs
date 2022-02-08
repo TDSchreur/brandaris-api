@@ -11,11 +11,9 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.HasKey(x => x.Id);
-
         builder.ToTable(nameof(Person), x => x.IsTemporal());
 
-        builder.HasDiscriminator<string>("pre-check")
+        builder.HasDiscriminator<string>("Status")
                .HasValue<Person>(Constants.Approved)
                .HasValue<PersonPreCheck>(Constants.NotApproved);
 

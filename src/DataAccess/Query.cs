@@ -27,7 +27,7 @@ public class Query<TEntity> : IQuery<TEntity>
 
     public IQuery<TEntity> FilterApproved()
     {
-        _query = _query.Where(x => EF.Property<string>(x, "pre-check") == Constants.Approved);
+        _query = _query.Where(x => EF.Property<string>(x, "Status") == Constants.Approved);
 
         return this;
     }

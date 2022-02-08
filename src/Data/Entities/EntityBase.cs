@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brandaris.Data.Entities;
 
@@ -22,5 +24,7 @@ public abstract class EntityBase : IEntity, IAuditable
 
     public DateTimeOffset? UpdatedDate { get; set; }
 
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
     public int Id { get; set; }
 }

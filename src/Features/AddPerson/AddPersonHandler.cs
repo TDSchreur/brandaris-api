@@ -27,7 +27,11 @@ public class AddPersonHandler : IRequestHandler<AddPersonCommand, AddPersonRespo
         {
             Person person = new()
             {
-                FirstName = request.FirstName, LastName = request.LastName
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                CreatedBy = request.CreatedBy,
+                CreatedById = request.CreatedById.GetValueOrDefault(),
+                CreatedDate = request.CreatedDate.GetValueOrDefault()
             };
             _personCommand.Add(person);
             await _personCommand.SaveChangesAsync(cancellationToken);

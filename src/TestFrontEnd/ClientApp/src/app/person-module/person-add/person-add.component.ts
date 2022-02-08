@@ -26,8 +26,8 @@ export class PersonAddComponent implements OnInit {
             firstName: this.mainForm.get('firstName')?.value,
             lastName: this.mainForm.get('lastName')?.value,
         };
-        this.dataService.addPerson(person).subscribe();
-
-        this.mainForm.reset();
+        this.dataService.addPerson(person).subscribe(() => {
+            this.mainForm.reset();
+        });
     }
 }

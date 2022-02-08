@@ -11,9 +11,11 @@ public interface ICommand<TEntity>
 {
     void Add(params TEntity[] entity);
 
+    void Attach(TEntity entity);
+
     void Remove(TEntity entity);
 
     Task<int> SaveChangesAsync(CancellationToken token = default);
 
-    void Update<TProperty>(TEntity entity, params Expression<Func<TEntity, TProperty>>[] propertyExpressions);
+    void Update<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression);
 }

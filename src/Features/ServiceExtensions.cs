@@ -8,7 +8,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddFeatures(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(GetPersonsHandler).Assembly);
+        services.AddMediatR(typeof(GetPersonHandler).Assembly);
 
         return services;
     }

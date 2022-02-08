@@ -19,8 +19,9 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Update
         {
             Id = request.Id, Name = request.Name
         };
-        _command.Update(product,
-                        x => x.Name);
+
+        _command.Attach(product);
+        _command.Update(product, x => x.Name);
 
         await _command.SaveChangesAsync(cancellationToken);
 

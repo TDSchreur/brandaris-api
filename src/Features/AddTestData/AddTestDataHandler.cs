@@ -32,8 +32,8 @@ public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
     {
         await _dataContext.Database.MigrateAsync(cancellationToken);
         await ClearData(cancellationToken);
-        await AddPersons(cancellationToken);
-        await AddProducts(cancellationToken);
+        //// await AddPersons(cancellationToken);
+        //// await AddProducts(cancellationToken);
 
         return true;
     }

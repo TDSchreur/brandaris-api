@@ -28,25 +28,55 @@ public class DataContext : DbContext
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
-        IEnumerable<EntityEntry<IAuditable>> changes = ChangeTracker.Entries<IAuditable>()
-                                                                    .Where(e => e.State is EntityState.Added or EntityState.Modified);
+        /*
+         * Opties:
+         * Nieuw persoon aangemaakt     => PersonPreCheck   (Added)
+         * Nieuw persoon goedgekeurd    => Person           (Added)
+         * Bestaand persoon geupdate    => PersonPreCheck   (Modified)
+         * Bestaand persoon goedgekeurd => Person           (Modified)
+         */
 
         string name = _identityHelper.GetName() ?? "SeedTool";
         Guid oid = _identityHelper.GetOid();
 
+        IEnumerable<EntityEntry<IAuditable>> changes = ChangeTracker.Entries<IAuditable>()
+                                                                    .Where(e => e.State is EntityState.Added or EntityState.Modified);
+
         foreach (EntityEntry<IAuditable> entry in changes)
         {
+            bool isPreCheck = entry.Entity is IPreCheck;
+
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = name;
-                    entry.Entity.CreatedById = oid;
-                    entry.Entity.CreatedDate = DateTimeOffset.UtcNow;
+                    if (isPreCheck)
+                    {
+                        entry.Entity.CreatedBy = name;
+                        entry.Entity.CreatedById = oid;
+                        entry.Entity.CreatedDate = DateTimeOffset.UtcNow;
+                    }
+                    else
+                    {
+                        entry.Entity.ApprovedBy = name;
+                        entry.Entity.ApprovedById = oid;
+                        entry.Entity.ApprovedDate = DateTimeOffset.UtcNow;
+                    }
+
                     break;
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = name;
-                    entry.Entity.UpdatedById = oid;
-                    entry.Entity.UpdatedDate = DateTimeOffset.UtcNow;
+                    if (isPreCheck)
+                    {
+                        entry.Entity.UpdatedBy = name;
+                        entry.Entity.UpdatedById = oid;
+                        entry.Entity.UpdatedDate = DateTimeOffset.UtcNow;
+                    }
+                    else
+                    {
+                        entry.Entity.ApprovedBy = name;
+                        entry.Entity.ApprovedById = oid;
+                        entry.Entity.ApprovedDate = DateTimeOffset.UtcNow;
+                    }
+
                     break;
             }
         }

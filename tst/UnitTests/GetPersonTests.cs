@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Brandaris.Data.Entities;
 using Brandaris.DataAccess;
 using Brandaris.Features.GetPerson;
+using Brandaris.Features.GetPersons;
 using MockQueryable.Moq;
 using Xunit;
 
@@ -42,7 +43,7 @@ public class GetPersonTests
             }
         };
 
-        PersonQuery = new Query<Person>(Enumerable.Empty<Person>().AsQueryable().BuildMock().Object);
+        PersonQuery = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
         PersonPreCheckQuery = new Query<PersonPreCheck>(testdata.AsQueryable().BuildMock().Object);
     }
 
@@ -94,7 +95,9 @@ public class GetPersonTests
         // act
         GetPersonsQuery request = new()
         {
-            FirstName = firstname, LastName = lastName, Approved = false
+            FirstName = firstname,
+            LastName = lastName,
+            Approved = false
         };
         GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 

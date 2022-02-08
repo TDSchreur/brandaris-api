@@ -11,8 +11,6 @@ public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.HasKey(x => x.Id);
-
         builder.ToTable(nameof(OrderLine), x => x.IsTemporal());
 
         builder.HasOne(x => x.Product)

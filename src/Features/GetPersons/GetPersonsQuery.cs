@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Brandaris.Features.GetPerson;
+namespace Brandaris.Features.GetPersons;
 
 public record GetPersonsQuery : IRequest<GetPersonsResponse>
 {

@@ -20,6 +20,7 @@ export class PersonListComponent implements OnInit {
     }
 
     reloadPersons(): void {
+        this.persons = [];
         this.dataService.getPersons(this.approved).subscribe((data: IBaseResponse<IPerson[]>) => {
             this.persons = data.value;
         });

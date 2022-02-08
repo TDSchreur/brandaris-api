@@ -2,6 +2,7 @@
 using Brandaris.Features.AddPerson;
 using Brandaris.Features.ApprovePerson;
 using Brandaris.Features.GetPerson;
+using Brandaris.Features.GetPersons;
 using Brandaris.Features.UpdatePerson;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
