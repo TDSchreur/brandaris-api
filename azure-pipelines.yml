@@ -86,7 +86,7 @@ stages:
   - stage: Deploy
     dependsOn:
       - Api
-      - FrontEnd
+      - Function
     jobs:
       - deployment: Deploy
         pool: $(pool)
