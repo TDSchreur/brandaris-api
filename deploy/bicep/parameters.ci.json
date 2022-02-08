@@ -5,6 +5,9 @@
         "api_name": {
             "value": "brandaris-api"
         },
+        "frontend_name": {
+            "value": "brandaris-fronend"
+        },
         "serviceplan_name": {
             "value": "brandaris-api-serviceplan"
         },
@@ -19,9 +22,6 @@
         },
         "sql_administratorLogin": {
             "value": "dennis"
-        },
-        "parties": {
-            "value": "[ \"abc\", \"def\", \"ghi\", \"jkl\" ]"
         }
     }
 }

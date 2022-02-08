@@ -1,119 +1,62 @@
-param serviceplan_name string
 param location string = resourceGroup().location
 
-@allowed([
-  'B1'
-  'D1'
-  'S1'
-])
-param serviceplan_sku string
-
-param serviceplan_tier string
-
-param parties array
-var partySettings = [for (settings, index) in parties: {
-  'name': 'BrandarisConfig:parties:${index}'
-  'value': settings
-}]
-
-@minValue(1)
-@maxValue(5)
-param serviceplan_capacity int
-
-param api_name string
+param name string
 
 param insights_instrumentationkey string
+param serviceplanId string
 
-param sqlserver_fullyQualifiedDomainName string
-param sqlserver_database_name string
-param sqlserver_username string
-param sqlserver_password string
+@secure()
+param clientsecret string
 
-var api_name_unique = '${api_name}-biceps'
+var name_unique = '${name}-biceps'
 
-resource serviceplan 'Microsoft.Web/serverfarms@2020-12-01' = {
-  name: serviceplan_name
+resource api 'Microsoft.Web/sites@2021-02-01' = {
+  name: name_unique
   location: location
-  sku: {
-    name: serviceplan_sku
-    tier: serviceplan_tier
-    capacity: serviceplan_capacity
-  }
   kind: 'web'
-  properties: {
-    reserved: false
-  }
-}
-
-resource symbolicname 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name: 'api_identity'
-  location: location
-}
-
-resource api 'Microsoft.Web/sites@2018-11-01' = {
-  name: api_name_unique
-  location: location
-  kind: 'api'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${symbolicname.id}': {}
-    }
-  }
-
   properties: {
     enabled: true
     httpsOnly: true
     clientAffinityEnabled: false
     hostNameSslStates: [
       {
-        name: '${api_name_unique}.azurewebsites.net'
+        name: '${name_unique}.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: '${api_name_unique}.scm.azurewebsites.net'
+        name: '${name_unique}.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }
     ]
-    serverFarmId: serviceplan.id
+    serverFarmId: serviceplanId
     siteConfig: {
       netFrameworkVersion: 'v6.0'
       minTlsVersion: '1.2'
       alwaysOn: true
-      appSettings: union([
+      appSettings: [
         {
           'name': 'APPINSIGHTS_INSTRUMENTATIONKEY'
           'value': insights_instrumentationkey
         }
-
         {
-          'name': 'Authentication:AppIdUri'
-          'value': 'api://brandaris-api'
+          'name': 'AzureAd:Domain'
+          'value': 'dennistdschreur.onmicrosoft.com'
         }
-
         {
-          'name': 'Authentication:ClientId'
-          'value': 'c0a8de33-97fe-45a0-8c63-fe54a39cd842'
+          'name': 'AzureAd:ClientId'
+          'value': 'dennistdschreur.onmicrosoft.com'
         }
-
         {
-          'name': 'Authentication:TenantId'
+          'name': 'AzureAd:TenantId'
           'value': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
         }
-      ], partySettings)
-    }
-  }
-}
-
-resource connectionStrings 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: api
-  name: 'connectionstrings'
-  properties: {
-    Default: {
-      type: 'SQLAzure'
-      value: 'Data Source=tcp:${sqlserver_fullyQualifiedDomainName} ,1433;Initial Catalog=${sqlserver_database_name};User Id=${sqlserver_username};Password=${sqlserver_password}'
+        {
+          'name': 'AzureAd:ClientSecret'
+          'value': clientsecret
+        }
+      ]
     }
   }
 }
@@ -141,7 +84,7 @@ resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
     httpLoggingEnabled: false
     logsDirectorySizeLimit: 35
     detailedErrorLoggingEnabled: false
-    publishingUsername: api_name
+    publishingUsername: name
     use32BitWorkerProcess: false
     webSocketsEnabled: false
     alwaysOn: true
