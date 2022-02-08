@@ -1,20 +1,15 @@
 ﻿using System;
-using Data.Entities;
+using Brandaris.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Data.Configuration;
+namespace Brandaris.Data.Configuration;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        if (builder is null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        builder.HasKey(x => x.Id);
+        ArgumentNullException.ThrowIfNull(builder);
 
         builder.ToTable(nameof(Product), x => x.IsTemporal());
 

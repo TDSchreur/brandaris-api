@@ -1,8 +1,6 @@
-﻿using DataAccess;
+﻿namespace Brandaris.Data.Entities;
 
-namespace Data.Entities;
-
-public class OrderLine : IEntity
+public class OrderLine : EntityBase
 {
     public Order Order { get; set; }
 
@@ -11,6 +9,4 @@ public class OrderLine : IEntity
     public Product Product { get; set; }
 
     public int ProductId { get; set; }
-
-    public int Id { get; set; }
 }

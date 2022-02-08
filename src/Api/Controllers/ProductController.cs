@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Features.AddProduct;
-using Features.GetProduct;
-using Features.UpdateProduct;
+using Brandaris.Features.AddProduct;
+using Brandaris.Features.GetProduct;
+using Brandaris.Features.UpdateProduct;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

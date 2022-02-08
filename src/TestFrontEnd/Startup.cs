@@ -86,7 +86,10 @@ public class Startup
             {
                 proxyPipeline.Use(async (context, next) =>
                 {
-                    string[] scope = { "api://brandaris-api/manage-data" };
+                    string[] scope =
+                    {
+                        "api://brandaris-api/manage-data"
+                    };
                     ITokenAcquisition tokenAcquisition = context.RequestServices.GetRequiredService<ITokenAcquisition>();
 
                     try

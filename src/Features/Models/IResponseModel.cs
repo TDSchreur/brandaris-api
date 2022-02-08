@@ -1,4 +1,4 @@
-﻿namespace Features.Models;
+﻿namespace Brandaris.Features.Models;
 
 public interface IResponseModel
 {

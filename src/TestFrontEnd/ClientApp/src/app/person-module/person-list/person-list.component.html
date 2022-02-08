@@ -1,0 +1,8 @@
+<mat-slide-toggle [(ngModel)]="approved" (change)="reloadPersons()">Approved</mat-slide-toggle>
+
+<mat-card *ngFor="let person of persons">
+    <mat-card-title>{{person.firstName}} {{person.lastName}}</mat-card-title>
+    <mat-card-subtitle>Id: {{person.id}}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="!approved">Parent Id: {{person.parentId}}</mat-card-subtitle>
+    <mat-card-content *ngIf="!approved"><button mat-raised-button (click)="approvePerson(person.id)">Approve</button></mat-card-content>
+</mat-card>

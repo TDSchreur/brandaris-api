@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public static class QueryExtensions
 {

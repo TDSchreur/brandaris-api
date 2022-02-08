@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace Features.AddTestData;
+namespace Brandaris.Features.AddTestData;
 
 public record AddTestDataQuery : IRequest<bool>;

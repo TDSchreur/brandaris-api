@@ -1,5 +1,5 @@
 using System;
-using Features.AddPerson;
+using Brandaris.Features.AddPerson;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -89,27 +89,26 @@ public class Startup
             });
         });
 
-        services
-           .AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-           .AddJwtBearer("AAD", options =>
-            {
-                options.MapInboundClaims = false;
-                options.RequireHttpsMetadata = true;
-                options.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
-                options.TokenValidationParameters.ValidateTokenReplay = true;
-                options.TokenValidationParameters.ValidIssuer = $@"https://sts.windows.net/{Configuration["Authentication:TenantId"]}/";
-                options.TokenValidationParameters.ValidateAudience = true;
-                options.TokenValidationParameters.ValidateLifetime = true;
-                options.TokenValidationParameters.ValidateIssuerSigningKey = true;
-                options.TokenValidationParameters.ValidAudiences = new[]
-                                                                   {
-                                                                       Configuration["Authentication:AppIdUri"], Configuration["Authentication:ClientId"]
-                                                                   };
-            });
+        services.AddAuthentication(opt =>
+                 {
+                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                 })
+                .AddJwtBearer("AAD", options =>
+                 {
+                     options.MapInboundClaims = false;
+                     options.RequireHttpsMetadata = true;
+                     options.Authority = $"https://login.microsoftonline.com/{Configuration["Authentication:TenantId"]}";
+                     options.TokenValidationParameters.ValidateTokenReplay = true;
+                     options.TokenValidationParameters.ValidIssuer = $@"https://sts.windows.net/{Configuration["Authentication:TenantId"]}/";
+                     options.TokenValidationParameters.ValidateAudience = true;
+                     options.TokenValidationParameters.ValidateLifetime = true;
+                     options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                     options.TokenValidationParameters.ValidAudiences = new[]
+                     {
+                         Configuration["Authentication:AppIdUri"], Configuration["Authentication:ClientId"]
+                     };
+                 });
 
         services.AddOpenApiDocument(opt => { opt.Title = "Brandaris"; });
 

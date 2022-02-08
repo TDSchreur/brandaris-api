@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.Models;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.Models;
 using MediatR;
 
-namespace Features.AddProduct;
+namespace Brandaris.Features.AddProduct;
 
 public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductResponse>
 {
@@ -23,10 +23,6 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
 
         await _command.SaveChangesAsync(cancellationToken);
 
-        return new AddProductResponse(new ProductModel
-        {
-            Id = product.Id,
-            Name = product.Name
-        });
+        return new AddProductResponse(new ProductModel(product.Id, product.Name));
     }
 }

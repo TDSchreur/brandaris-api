@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { HomeComponent } from './home/home.component';
+import { ClaimsRemoteComponent } from './claims-remote/claims-remote.component';
+import { ClaimsComponent } from './claims/claims.component';
+import { ConfigRemoteComponent } from './config-remote/config-remote.component';
 
 const routes: Routes = [
-    { path: 'home', component: HomeComponent },
-    { path: 'forbidden', component: ForbiddenComponent },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: '**', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'claims', component: ClaimsComponent },
+    { path: 'claims-remote', component: ClaimsRemoteComponent },
+    { path: 'config-remote', component: ConfigRemoteComponent },
+    { path: '', redirectTo: 'person', pathMatch: 'full' },
+    { path: '**', redirectTo: 'person', pathMatch: 'full' },
 ];
 
 @NgModule({

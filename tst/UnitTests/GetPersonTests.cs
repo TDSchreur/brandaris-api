@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.GetPerson;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.GetPerson;
+using Brandaris.Features.GetPersons;
 using MockQueryable.Moq;
 using Xunit;
 
@@ -14,27 +15,27 @@ public class GetPersonTests
 {
     public GetPersonTests()
     {
-        List<Person> testdata = new()
+        List<PersonPreCheck> testdata = new()
         {
-            new Person
+            new PersonPreCheck
             {
                 Id = 1,
                 FirstName = "Dennis",
                 LastName = "Schreur"
             },
-            new Person
+            new PersonPreCheck
             {
                 Id = 2,
                 FirstName = "Tess",
                 LastName = "Schreur"
             },
-            new Person
+            new PersonPreCheck
             {
                 Id = 3,
                 FirstName = "Daan",
                 LastName = "Schreur"
             },
-            new Person
+            new PersonPreCheck
             {
                 Id = 4,
                 FirstName = "Peter",
@@ -42,16 +43,19 @@ public class GetPersonTests
             }
         };
 
-        Query = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
+        PersonQuery = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
+        PersonPreCheckQuery = new Query<PersonPreCheck>(testdata.AsQueryable().BuildMock().Object);
     }
 
-    public Query<Person> Query { get; }
+    private Query<PersonPreCheck> PersonPreCheckQuery { get; }
+
+    private Query<Person> PersonQuery { get; }
 
     [Fact]
     public async Task GetPerson_ShouldReturnNull()
     {
         // arrange
-        GetPersonHandler sut = new(Query);
+        GetPersonHandler sut = new(PersonQuery);
 
         // act
         GetPersonQuery request = new(int.MaxValue);
@@ -67,7 +71,7 @@ public class GetPersonTests
     public async Task GetPersonAsync(int id, string firstName, string lastName)
     {
         // arrange
-        GetPersonHandler sut = new(Query);
+        GetPersonHandler sut = new(PersonQuery);
 
         // act
         GetPersonQuery request = new(id);
@@ -86,12 +90,14 @@ public class GetPersonTests
     public async Task GetPersons(string firstname, string lastName, int expectedResults)
     {
         // arrange
-        GetPersonsHandler sut = new(Query);
+        GetPersonsHandler sut = new(PersonQuery, PersonPreCheckQuery);
 
         // act
         GetPersonsQuery request = new()
         {
-            FirstName = firstname, LastName = lastName
+            FirstName = firstname,
+            LastName = lastName,
+            Approved = false
         };
         GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 

@@ -1,20 +1,15 @@
 ﻿using System;
-using Data.Entities;
+using Brandaris.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Data.Configuration;
+namespace Brandaris.Data.Configuration;
 
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
-        if (builder is null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        builder.HasKey(x => x.Id);
+        ArgumentNullException.ThrowIfNull(builder);
 
         builder.ToTable(nameof(Order), x => x.IsTemporal());
 

@@ -24,11 +24,18 @@ public class AccountController : ControllerBase
             returnUrl = "/";
         }
 
-        return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+        return Challenge(new AuthenticationProperties
+                         {
+                             RedirectUri = returnUrl
+                         },
+                         OpenIdConnectDefaults.AuthenticationScheme);
     }
 
     [HttpGet("Logout")]
-    public new SignOutResult SignOut() => SignOut(new AuthenticationProperties { RedirectUri = "/" },
+    public new SignOutResult SignOut() => SignOut(new AuthenticationProperties
+                                                  {
+                                                      RedirectUri = "/"
+                                                  },
                                                   CookieAuthenticationDefaults.AuthenticationScheme,
                                                   OpenIdConnectDefaults.AuthenticationScheme);
 

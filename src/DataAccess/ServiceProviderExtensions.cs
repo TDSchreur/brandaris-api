@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DataAccess;
+namespace Brandaris.DataAccess;
 
 public static class ServiceProviderExtensions
 {
@@ -11,7 +11,11 @@ public static class ServiceProviderExtensions
     {
         string connectionstring = getConnectionString.Invoke();
 
-        services.AddDbContextPool<TContext>(o => o.UseSqlServer(connectionstring));
+        services.AddDbContext<TContext>(o =>
+        {
+            o.UseSqlServer(connectionstring);
+            o.EnableSensitiveDataLogging(true);
+        });
         services.AddTransient<DbContext, TContext>();
         services.AddTransient(typeof(IQuery<>), typeof(Query<>));
         services.AddTransient(typeof(ICommand<>), typeof(Command<>));

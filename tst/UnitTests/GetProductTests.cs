@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.GetProduct;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.GetProduct;
 using MockQueryable.Moq;
 using Xunit;
 

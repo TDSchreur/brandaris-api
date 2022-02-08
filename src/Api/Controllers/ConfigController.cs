@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Features.GetConfig;
+using Brandaris.Features.GetConfig;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +29,7 @@ public class ConfigController : ControllerBase
     {
         using IDisposable scope = _logger.BeginScope(new Dictionary<string, object>
         {
-            ["User"] = "T.D.Schreur",
-            ["BIC"] = "ABC123"
+            ["User"] = "T.D.Schreur", ["BIC"] = "ABC123"
         });
 
         return await _mediator.Send(new GetConfigQuery());

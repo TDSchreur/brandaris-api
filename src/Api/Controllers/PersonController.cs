@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Features.AddPerson;
-using Features.GetPerson;
-using Features.UpdatePerson;
+using Brandaris.Features.AddPerson;
+using Brandaris.Features.ApprovePerson;
+using Brandaris.Features.GetPerson;
+using Brandaris.Features.GetPersons;
+using Brandaris.Features.UpdatePerson;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +24,11 @@ public class PersonController : Controller
     [ProducesResponseType(typeof(AddPersonResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AddPersonResponse>> AddPerson([FromBody] AddPersonCommand command) => (await _mediator.Send(command)).FormatResponse();
+
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApprovePersonsResponse>> ApprovePerson([FromRoute] ApprovePersonCommand command) => (await _mediator.Send(command)).FormatResponse();
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(GetPersonResponse), StatusCodes.Status200OK)]

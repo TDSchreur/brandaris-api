@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data.Entities;
-using DataAccess;
-using Features.Models;
+using Brandaris.Data.Entities;
+using Brandaris.DataAccess;
+using Brandaris.Features.Models;
 using MediatR;
 
-namespace Features.GetPerson;
+namespace Brandaris.Features.GetPerson;
 
 public class GetPersonHandler : IRequestHandler<GetPersonQuery, GetPersonResponse>
 {
@@ -16,12 +16,7 @@ public class GetPersonHandler : IRequestHandler<GetPersonQuery, GetPersonRespons
     public async Task<GetPersonResponse> Handle(GetPersonQuery request, CancellationToken cancellationToken)
     {
         PersonModel person = await _query.Where(x => x.Id == request.Id)
-                                         .Select(x => new PersonModel
-                                         {
-                                             Id = x.Id,
-                                             FirstName = x.FirstName,
-                                             LastName = x.LastName
-                                         })
+                                         .Select(x => new PersonModel(x.Id, x.FirstName, x.LastName, null))
                                          .FirstOrDefaultAsync(cancellationToken);
 
         return new GetPersonResponse(person, person != null);

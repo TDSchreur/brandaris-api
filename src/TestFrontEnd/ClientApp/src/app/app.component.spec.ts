@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+import { MaterialModule } from './shared/material.module';
 
 describe('AppComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [AppComponent],
-            imports: [BrowserModule, HttpClientModule, FormsModule, RouterTestingModule.withRoutes([])],
+            declarations: [AppComponent, HeaderComponent],
+            imports: [BrowserModule, HttpClientModule, FormsModule, MaterialModule, RouterTestingModule.withRoutes([])],
             providers: [],
         }).compileComponents();
     });

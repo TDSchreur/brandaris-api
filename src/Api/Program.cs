@@ -2,9 +2,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Data;
-using DataAccess;
-using Features;
+using Brandaris.Common;
+using Brandaris.Data;
+using Brandaris.DataAccess;
+using Brandaris.Features;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Brandaris.Api;
@@ -25,8 +25,8 @@ public static class Program
         LoggerConfiguration loggerBuilder = new LoggerConfiguration()
                                            .Enrich.FromLogContext()
                                            .MinimumLevel.Debug()
-                                           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                           .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                            //// .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                            //// .MinimumLevel.Override("System", LogEventLevel.Warning)
                                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                             theme: AnsiConsoleTheme.Literate);
 
@@ -102,6 +102,7 @@ public static class Program
                 services.AddOptions();
                 services.AddDataAccess<DataContext>(() => hostContext.Configuration.GetConnectionString("Default"));
                 services.AddFeatures();
+                services.AddCommon();
                 services.AddHostedService<MigratorHostedService>();
             })
            .ConfigureWebHost(builder =>

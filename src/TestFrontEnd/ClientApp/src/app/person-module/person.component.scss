@@ -1,0 +1,36 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, [col-start] 1fr);
+    grid-template-rows: auto;
+    row-gap: 20px;
+    margin-top: 15px;
+
+    .person-list {
+        grid-column: col-start 1;
+        grid-row: 1 / span 2;
+        margin-right: 15px;
+        margin-bottom: 15px;
+    }
+    .person-add {
+        grid-column: col-start 2;
+        grid-row: 1;
+        margin-right: 15px;
+        margin-bottom: 15px;
+    }
+    .person-edit {
+        grid-column: col-start 2;
+        grid-row: 2;
+        margin-right: 15px;
+        margin-bottom: 15px;
+    }
+
+    ::ng-deep mat-form-field {
+        width: 95%;
+    }
+
+    .mat-form-field-table {
+        width: auto;
+        display: inline-block;
+        margin-right: 10px;
+    }
+}

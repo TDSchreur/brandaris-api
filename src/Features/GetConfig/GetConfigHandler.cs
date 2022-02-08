@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Features.GetConfig;
+namespace Brandaris.Features.GetConfig;
 
 public class GetConfigHandler : IRequestHandler<GetConfigQuery, GetConfigResponse>
 {
