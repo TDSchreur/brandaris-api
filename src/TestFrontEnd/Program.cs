@@ -23,6 +23,7 @@ public class Program
                                            .Enrich.FromLogContext()
                                            .MinimumLevel.Debug()
                                            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                           .MinimumLevel.Override("Microsoft.Identity.Web.TokenAcquisition", LogEventLevel.Fatal)
                                            .MinimumLevel.Override("System", LogEventLevel.Warning)
                                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                                             theme: AnsiConsoleTheme.Literate);
