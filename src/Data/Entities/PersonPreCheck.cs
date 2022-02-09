@@ -1,6 +1,6 @@
 ﻿namespace Brandaris.Data.Entities;
 
-public class PersonPreCheck : Person, IPreCheck
+public class PersonPreCheck : PersonBase, IPreCheck
 {
     public int? ParentId { get; set; }
 }

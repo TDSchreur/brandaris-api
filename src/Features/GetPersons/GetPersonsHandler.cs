@@ -24,8 +24,7 @@ public class GetPersonsHandler : IRequestHandler<GetPersonsQuery, GetPersonsResp
     {
         if (request.Approved)
         {
-            List<PersonModel> persons = await _personQuery.FilterApproved()
-                                                          .Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
+            List<PersonModel> persons = await _personQuery.Where(x => !request.HasFirstName || x.FirstName == request.FirstName)
                                                           .Where(x => !request.HasLastName || x.LastName == request.LastName)
                                                           .Select(x => new PersonModel(x.Id, x.FirstName, x.LastName, null))
                                                           .ToListAsync(cancellationToken);

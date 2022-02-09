@@ -11,12 +11,12 @@ namespace Brandaris.Features.ApprovePerson;
 
 public class ApprovePersonHandler : IRequestHandler<ApprovePersonCommand, ApprovePersonsResponse>
 {
-    private readonly ICommand<Person> _command;
+    private readonly ICommand<PersonPreCheck> _command;
     private readonly IMediator _mediator;
     private readonly IQuery<PersonPreCheck> _query;
 
     public ApprovePersonHandler(IQuery<PersonPreCheck> query,
-                                ICommand<Person> command,
+                                ICommand<PersonPreCheck> command,
                                 IMediator mediator)
     {
         _query = query;

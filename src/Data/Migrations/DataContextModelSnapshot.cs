@@ -61,6 +61,9 @@ namespace Brandaris.Data.Migrations
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PersonPreCheckId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -73,6 +76,8 @@ namespace Brandaris.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("PersonPreCheckId");
 
                     b.ToTable("Order", (string)null);
 
@@ -203,10 +208,6 @@ namespace Brandaris.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -220,7 +221,77 @@ namespace Brandaris.Data.Migrations
 
                     b.ToTable("Person", (string)null);
 
-                    b.HasDiscriminator<string>("Status").HasValue("Approved");
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                        {
+                            ttb
+                                .HasPeriodStart("PeriodStart")
+                                .HasColumnName("PeriodStart");
+                            ttb
+                                .HasPeriodEnd("PeriodEnd")
+                                .HasColumnName("PeriodEnd");
+                        }
+                    ));
+                });
+
+            modelBuilder.Entity("Brandaris.Data.Entities.PersonPreCheck", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ApprovedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ApprovedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PersonPreCheck", (string)null);
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                         {
@@ -299,16 +370,6 @@ namespace Brandaris.Data.Migrations
                     ));
                 });
 
-            modelBuilder.Entity("Brandaris.Data.Entities.PersonPreCheck", b =>
-                {
-                    b.HasBaseType("Brandaris.Data.Entities.Person");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("NotApproved");
-                });
-
             modelBuilder.Entity("Brandaris.Data.Entities.Order", b =>
                 {
                     b.HasOne("Brandaris.Data.Entities.Person", "Person")
@@ -316,6 +377,10 @@ namespace Brandaris.Data.Migrations
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Brandaris.Data.Entities.PersonPreCheck", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("PersonPreCheckId");
 
                     b.Navigation("Person");
                 });
@@ -345,6 +410,11 @@ namespace Brandaris.Data.Migrations
                 });
 
             modelBuilder.Entity("Brandaris.Data.Entities.Person", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Brandaris.Data.Entities.PersonPreCheck", b =>
                 {
                     b.Navigation("Orders");
                 });
