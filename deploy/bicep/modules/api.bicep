@@ -1,49 +1,17 @@
-param serviceplan_name string
 param location string = resourceGroup().location
 
-@allowed([
-  'B1'
-  'D1'
-  'S1'
-])
-param serviceplan_sku string
-
-param serviceplan_tier string
-
-param parties array
-var partySettings = [for (settings, index) in parties: {
-  'name': 'BrandarisConfig:parties:${index}'
-  'value': settings
-}]
-
-@minValue(1)
-@maxValue(5)
-param serviceplan_capacity int
-
-param api_name string
+param name string
 
 param insights_instrumentationkey string
+
+param serviceplanId string
 
 param sqlserver_fullyQualifiedDomainName string
 param sqlserver_database_name string
 param sqlserver_username string
 param sqlserver_password string
 
-var api_name_unique = '${api_name}-biceps'
-
-resource serviceplan 'Microsoft.Web/serverfarms@2020-12-01' = {
-  name: serviceplan_name
-  location: location
-  sku: {
-    name: serviceplan_sku
-    tier: serviceplan_tier
-    capacity: serviceplan_capacity
-  }
-  kind: 'web'
-  properties: {
-    reserved: false
-  }
-}
+var name_unique = '${name}-biceps'
 
 resource symbolicname 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: 'api_identity'
@@ -51,7 +19,7 @@ resource symbolicname 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-
 }
 
 resource api 'Microsoft.Web/sites@2018-11-01' = {
-  name: api_name_unique
+  name: name_unique
   location: location
   kind: 'api'
   identity: {
@@ -67,22 +35,22 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
     clientAffinityEnabled: false
     hostNameSslStates: [
       {
-        name: '${api_name_unique}.azurewebsites.net'
+        name: '${name_unique}.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: '${api_name_unique}.scm.azurewebsites.net'
+        name: '${name_unique}.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }
     ]
-    serverFarmId: serviceplan.id
+    serverFarmId: serviceplanId
     siteConfig: {
       netFrameworkVersion: 'v6.0'
       minTlsVersion: '1.2'
       alwaysOn: true
-      appSettings: union([
+      appSettings: [
         {
           'name': 'APPINSIGHTS_INSTRUMENTATIONKEY'
           'value': insights_instrumentationkey
@@ -102,7 +70,7 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
           'name': 'Authentication:TenantId'
           'value': 'ae86fed2-d115-4a00-b6ed-68ff87b986f7'
         }
-      ], partySettings)
+      ]
     }
   }
 }
@@ -141,7 +109,7 @@ resource webConfig 'Microsoft.Web/sites/config@2020-06-01' = {
     httpLoggingEnabled: false
     logsDirectorySizeLimit: 35
     detailedErrorLoggingEnabled: false
-    publishingUsername: api_name
+    publishingUsername: name
     use32BitWorkerProcess: false
     webSocketsEnabled: false
     alwaysOn: true

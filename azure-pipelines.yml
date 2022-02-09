@@ -101,7 +101,7 @@ stages:
                     azureSubscription: $(azureServiceConnection)
                     scriptType: "pscore"
                     scriptLocation: "inlineScript"
-                    inlineScript: "az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(SQL_ADMINISTRATORLOGINPASSWORD)"
+                    inlineScript: "az deployment group create -f $(Build.SourcesDirectory)/deploy/bicep/main.bicep -g brandaris -p $(Build.SourcesDirectory)/deploy/bicep/parameters.ci.json sql_administratorLoginPassword=$(sql_administratorLoginPassword) fe_clientsecret=$(fe_clientsecret)"
 
                 - task: AzureRmWebAppDeployment@4
                   displayName: Deploy API
@@ -111,11 +111,12 @@ stages:
                     appType: "apiApp"
                     WebAppName: "brandaris-api-biceps"
                     packageForLinux: "$(Pipeline.Workspace)/api/Api.zip"
-#                - task: AzureFunctionApp@1
-#                  displayName: Deploy Functions
-#                  inputs:
-#                    azureSubscription: $(azureServiceConnection)
-#                    appType: 'functionApp'
-#                    appName: 'nta7tp2n6crj4'
-#                    package: '$(Pipeline.Workspace)/function/SecureFunction.zip'
-#                    deploymentMethod: 'auto'
+
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy FrontEnd
+                  inputs:
+                    ConnectionType: "AzureRM"
+                    azureSubscription: $(azureServiceConnection)
+                    appType: "webApp"
+                    WebAppName: "brandaris-frontend-biceps"
+                    packageForLinux: "$(Pipeline.Workspace)/frontend/TestFrontEnd.zip"
