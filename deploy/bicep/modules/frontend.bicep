@@ -8,10 +8,8 @@ param serviceplanId string
 @secure()
 param clientsecret string
 
-var name_unique = '${name}-biceps'
-
 resource api 'Microsoft.Web/sites@2021-02-01' = {
-  name: name_unique
+  name: name
   location: location
   kind: 'web'
   properties: {
@@ -20,12 +18,12 @@ resource api 'Microsoft.Web/sites@2021-02-01' = {
     clientAffinityEnabled: false
     hostNameSslStates: [
       {
-        name: '${name_unique}.azurewebsites.net'
+        name: '${name}.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: '${name_unique}.scm.azurewebsites.net'
+        name: '${name}.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }

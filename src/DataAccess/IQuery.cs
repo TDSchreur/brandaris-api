@@ -13,8 +13,6 @@ public interface IQuery<TEntity>
 {
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
-    IQuery<TEntity> FilterApproved();
-
     Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
     IQueryable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector);

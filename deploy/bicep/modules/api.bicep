@@ -11,15 +11,13 @@ param sqlserver_database_name string
 param sqlserver_username string
 param sqlserver_password string
 
-var name_unique = '${name}-biceps'
-
 resource symbolicname 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: 'api_identity'
   location: location
 }
 
 resource api 'Microsoft.Web/sites@2018-11-01' = {
-  name: name_unique
+  name: name
   location: location
   kind: 'api'
   identity: {
@@ -35,12 +33,12 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
     clientAffinityEnabled: false
     hostNameSslStates: [
       {
-        name: '${name_unique}.azurewebsites.net'
+        name: '${name}.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: '${name_unique}.scm.azurewebsites.net'
+        name: '${name}.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }

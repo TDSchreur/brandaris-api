@@ -86,7 +86,7 @@ public class Program
                 services.AddOptions();
                 services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
                 {
-                    client.BaseAddress = new Uri("https://brandaris-api-biceps.azurewebsites.net");
+                    client.BaseAddress = new Uri("https://brandaris-api.azurewebsites.net");
                 });
             })
            .ConfigureWebHost(builder =>

@@ -25,13 +25,6 @@ public class Query<TEntity> : IQuery<TEntity>
 
     public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => _query.AnyAsync(predicate, cancellationToken);
 
-    public IQuery<TEntity> FilterApproved()
-    {
-        _query = _query.Where(x => EF.Property<string>(x, "Status") == Constants.Approved);
-
-        return this;
-    }
-
     public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => _query.FirstOrDefaultAsync(predicate);
 
     public IQueryable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector) => _query.Select(selector);

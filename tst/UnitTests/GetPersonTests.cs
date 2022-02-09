@@ -15,7 +15,35 @@ public class GetPersonTests
 {
     public GetPersonTests()
     {
-        List<PersonPreCheck> testdata = new()
+        List<Person> testdataPerson = new()
+        {
+            new Person
+            {
+                Id = 1,
+                FirstName = "Dennis",
+                LastName = "Schreur"
+            },
+            new Person
+            {
+                Id = 2,
+                FirstName = "Tess",
+                LastName = "Schreur"
+            },
+            new Person
+            {
+                Id = 3,
+                FirstName = "Daan",
+                LastName = "Schreur"
+            },
+            new Person
+            {
+                Id = 4,
+                FirstName = "Peter",
+                LastName = "Pan"
+            }
+        };
+
+        List<PersonPreCheck> testdataPreCheck = new()
         {
             new PersonPreCheck
             {
@@ -43,8 +71,8 @@ public class GetPersonTests
             }
         };
 
-        PersonQuery = new Query<Person>(testdata.AsQueryable().BuildMock().Object);
-        PersonPreCheckQuery = new Query<PersonPreCheck>(testdata.AsQueryable().BuildMock().Object);
+        PersonQuery = new Query<Person>(testdataPerson.AsQueryable().BuildMock().Object);
+        PersonPreCheckQuery = new Query<PersonPreCheck>(testdataPreCheck.AsQueryable().BuildMock().Object);
     }
 
     private Query<PersonPreCheck> PersonPreCheckQuery { get; }
