@@ -15,7 +15,7 @@ param project_name string
 var api_name = '${project_name}-api'
 var frontend_name = '${project_name}-frontend'
 var insights_name = '${project_name}-insights'
-param serviceplan_name = '${project_name}-plan'
+var serviceplan_name = '${project_name}-plan'
 var location = resourceGroup().location
 
 module sql './modules/sql.bicep' = {
