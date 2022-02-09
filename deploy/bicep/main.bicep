@@ -8,15 +8,15 @@ param fe_clientsecret string
 @minValue(1)
 @maxValue(5)
 param serviceplan_capacity int
-param serviceplan_name string
 param serviceplan_sku string
 param serviceplan_tier string
+param project_name string
 
-param api_name string
-param frontend_name string
-
+var api_name = '${project_name}-api'
+var frontend_name = '${project_name}-frontend'
+var insights_name = '${project_name}-insights'
+param serviceplan_name = '${project_name}-plan'
 var location = resourceGroup().location
-var insights_name = 'insights-${api_name}'
 
 module sql './modules/sql.bicep' = {
   name: 'sql-deployment'

@@ -2,14 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "api_name": {
-            "value": "brandaris-api"
-        },
-        "frontend_name": {
-            "value": "brandaris-frontend"
-        },
-        "serviceplan_name": {
-            "value": "brandaris-api-serviceplan"
+        "project_name": {
+            "value": "brandaris"
         },
         "serviceplan_capacity": {
             "value": 1
