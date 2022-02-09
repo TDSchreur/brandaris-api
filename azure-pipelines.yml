@@ -109,7 +109,7 @@ stages:
                     ConnectionType: "AzureRM"
                     azureSubscription: $(azureServiceConnection)
                     appType: "apiApp"
-                    WebAppName: "brandaris-api-biceps"
+                    WebAppName: "brandaris-api"
                     packageForLinux: "$(Pipeline.Workspace)/api/Api.zip"
 
                 - task: AzureRmWebAppDeployment@4
@@ -118,5 +118,5 @@ stages:
                     ConnectionType: "AzureRM"
                     azureSubscription: $(azureServiceConnection)
                     appType: "webApp"
-                    WebAppName: "brandaris-frontend-biceps"
+                    WebAppName: "brandaris-frontend"
                     packageForLinux: "$(Pipeline.Workspace)/frontend/TestFrontEnd.zip"
