@@ -14,9 +14,5 @@ export class ConfigRemoteComponent implements OnInit {
         this.dataService.getConfigRemote().subscribe((data: { name: string; value: string }[]) => {
             this.config = JSON.stringify(data, null, 2);
         });
-
-        // this.dataService.getConfigRemote().subscribe((data: { key: string; value: string }[]) => {
-        //     this.config = JSON.stringify(data, null, 2);
-        // });
     }
 }

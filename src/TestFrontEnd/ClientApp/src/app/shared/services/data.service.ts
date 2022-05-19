@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPerson } from '../models/iperson';
 import { IBaseResponse } from '../models/IBaseResponse';
+import { Observable } from 'rxjs';
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -43,5 +44,10 @@ export class DataService {
 
     getConfigRemote() {
         return this.http.get<{ name: string; value: string }[]>('api/config');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    generateException(): Observable<any> {
+        return this.http.get('api/Exception');
     }
 }
