@@ -116,7 +116,11 @@ public class Startup
         services.AddOpenApiDocument(opt => { opt.Title = "Brandaris"; });
 
         services.AddControllers()
-                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient));
+                .AddFluentValidation(x =>
+                {
+                    x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient);
+                    x.DisableDataAnnotationsValidation = true;
+                });
 
         services.AddHealthChecks();
 

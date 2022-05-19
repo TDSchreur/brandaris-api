@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/services/data.service';
 import { MaterialModule } from '../../shared/material.module';
-import { PersonComponent } from './person-edit.component';
+import { PersonComponent } from '../person.component';
 
 describe('PersonComponent', () => {
     let component: PersonComponent;
@@ -24,7 +24,6 @@ describe('PersonComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(PersonComponent);
         component = fixture.componentInstance;
-        component.ngOnInit();
         fixture.detectChanges();
     });
 
