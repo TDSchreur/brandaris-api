@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Brandaris.Api;
 
@@ -23,14 +22,10 @@ public static class Program
     public static async Task<int> Main(string[] args)
     {
         LoggerConfiguration loggerBuilder = new LoggerConfiguration()
-                                           .Enrich.FromLogContext()
-                                           .MinimumLevel.Debug()
-                                            //// .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                                            //// .MinimumLevel.Override("System", LogEventLevel.Warning)
-                                           .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                                                            theme: AnsiConsoleTheme.Literate);
+                                           .WriteTo.Console();
 
-        Log.Logger = loggerBuilder.CreateLogger();
+        Log.Logger = loggerBuilder.CreateBootstrapLogger();
+        Log.Information("Starting up");
 
         Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 
@@ -43,12 +38,14 @@ public static class Program
         }
         catch (Exception e)
         {
-            Log.Logger.Error(e, e.Message);
-            Log.CloseAndFlush();
-            Console.WriteLine(e.Message);
-
-            await Task.Delay(1000);
+            Log.Fatal(e, "Unhandled exception");
             return -1;
+        }
+        finally
+        {
+            Log.Information("Shut down complete");
+            Log.CloseAndFlush();
+            await Task.Delay(1000);
         }
 
         return 0;
@@ -57,6 +54,14 @@ public static class Program
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         new HostBuilder()
            .UseContentRoot(Directory.GetCurrentDirectory())
+           .UseSerilog((ctx, lc) =>
+            {
+                if (ctx.HostingEnvironment.IsDevelopment())
+                {
+                    lc.WriteTo.Console()
+                      .ReadFrom.Configuration(ctx.Configuration);
+                }
+            })
            .ConfigureAppConfiguration((context, builder) =>
             {
                 IHostEnvironment env = context.HostingEnvironment;
@@ -75,21 +80,11 @@ public static class Program
             })
            .ConfigureLogging((_, builder) =>
             {
-                builder.ClearProviders();
-
-#if DEBUG
-                builder.AddSerilog(Log.Logger);
-#endif
-
                 builder.AddApplicationInsights(options =>
                 {
                     options.IncludeScopes = true;
                     options.FlushOnDispose = true;
                 });
-
-                builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Debug);
-                builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
-                builder.AddFilter<ApplicationInsightsLoggerProvider>("System", LogLevel.Warning);
             })
            .UseDefaultServiceProvider((context, options) =>
             {
@@ -105,6 +100,7 @@ public static class Program
                 services.AddCommon();
                 services.AddHostedService<MigratorHostedService>();
             })
+
            .ConfigureWebHost(builder =>
             {
                 builder.ConfigureAppConfiguration((ctx, cb) =>

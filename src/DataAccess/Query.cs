@@ -23,6 +23,8 @@ public class Query<TEntity> : IQuery<TEntity>
     /// <param name="query">The mock query.</param>
     public Query(IQueryable<TEntity> query) => _query = query;
 
+    public bool Any(Expression<Func<TEntity, bool>> predicate) => _query.Any(predicate);
+
     public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => _query.AnyAsync(predicate, cancellationToken);
 
     public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => _query.FirstOrDefaultAsync(predicate);

@@ -54,6 +54,14 @@ public class Program
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         new HostBuilder()
            .UseContentRoot(Directory.GetCurrentDirectory())
+           .UseSerilog((ctx, lc) =>
+           {
+               if (ctx.HostingEnvironment.IsDevelopment())
+               {
+                   lc.WriteTo.Console()
+                     .ReadFrom.Configuration(ctx.Configuration);
+               }
+           })
            .ConfigureAppConfiguration((context, builder) =>
             {
                 IHostEnvironment env = context.HostingEnvironment;
@@ -72,8 +80,11 @@ public class Program
             })
            .ConfigureLogging((_, builder) =>
             {
-                builder.ClearProviders();
-                builder.AddSerilog(Log.Logger);
+                builder.AddApplicationInsights(options =>
+                {
+                    options.IncludeScopes = true;
+                    options.FlushOnDispose = true;
+                });
             })
            .UseDefaultServiceProvider((context, options) =>
             {
