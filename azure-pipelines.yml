@@ -7,6 +7,8 @@ pr:
 variables:
   api-project: "src/Api/Api.csproj"
   fe-project: "src/TestFrontEnd/TestFrontEnd.csproj"
+  test-project: "tst/UnitTests/UnitTests.csproj"
+  e2e-project: "tst/IntegrationTests/IntegrationTests.csproj"
   configuration: "release"
   pool: Default
   azureSubscriptionId: "f395fc6c-f196-4abe-a248-e9b7d37c9f66"
@@ -23,14 +25,23 @@ stages:
             displayName: restore
             inputs:
               command: "restore"
-              projects: $(api-project)
+              projects: "**/*.csproj"
 
           - task: DotNetCoreCLI@2
             displayName: build
             inputs:
               command: "build"
-              projects: $(api-project)
+              projects: "**/*.csproj"
               arguments: "--no-restore -c $(configuration)"
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test"
+            inputs:
+              publishTestResults: true
+              command: "test"
+              projects: $(test-project)
+              arguments: "--configuration $(buildConfiguration) --no-build"
+              testRunTitle: "C# Unit Tests"
 
           - task: DotNetCoreCLI@2
             displayName: publish
@@ -120,3 +131,32 @@ stages:
                     appType: "webApp"
                     WebAppName: "brandaris-frontend"
                     packageForLinux: "$(Pipeline.Workspace)/frontend/TestFrontEnd.zip"
+
+  - stage: E2ETest
+    dependsOn:
+      - Deploy
+    jobs:
+      - job: E2ETest
+        pool: $(pool)
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: restore
+            inputs:
+              command: "restore"
+              projects: "**/*.csproj"
+
+          - task: DotNetCoreCLI@2
+            displayName: build
+            inputs:
+              command: "build"
+              projects: "**/*.csproj"
+              arguments: "--no-restore -c $(configuration)"
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test"
+            inputs:
+              publishTestResults: true
+              command: "test"
+              projects: $(e2e-project)
+              arguments: "--configuration $(buildConfiguration) --no-build"
+              testRunTitle: "C# E2E Tests"
