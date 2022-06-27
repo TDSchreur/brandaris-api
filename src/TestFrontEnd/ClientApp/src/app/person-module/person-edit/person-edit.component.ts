@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DataService } from '../../shared/services/data.service';
 import { IPerson } from '../../shared/models/iperson';
 import { IBaseResponse } from '../../shared/models/IBaseResponse';
@@ -13,9 +13,9 @@ import { IBaseResponse } from '../../shared/models/IBaseResponse';
 export class PersonEditComponent implements OnInit {
     public person = '';
     public personId = 1;
-    public mainForm!: FormGroup;
+    public mainForm!: UntypedFormGroup;
 
-    constructor(protected dataService: DataService, private fb: FormBuilder) {}
+    constructor(protected dataService: DataService, private fb: UntypedFormBuilder) {}
 
     ngOnInit(): void {
         this.mainForm = this.fb.group({
