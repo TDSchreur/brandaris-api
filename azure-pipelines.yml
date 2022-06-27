@@ -40,7 +40,7 @@ stages:
               publishTestResults: true
               command: "test"
               projects: $(test-project)
-              arguments: "--configuration $(buildConfiguration) --no-build"
+              arguments: "--configuration $(configuration) --no-build"
               testRunTitle: "C# Unit Tests"
 
           - task: DotNetCoreCLI@2
@@ -158,5 +158,5 @@ stages:
               publishTestResults: true
               command: "test"
               projects: $(e2e-project)
-              arguments: "--configuration $(buildConfiguration) --no-build"
+              arguments: "--configuration $(configuration) --no-build"
               testRunTitle: "C# E2E Tests"
