@@ -158,5 +158,5 @@ stages:
               publishTestResults: true
               command: "test"
               projects: $(e2e-project)
-              arguments: "--configuration $(configuration) --no-build"
+              arguments: "--configuration $(configuration) --no-build  --settings tst/IntegrationTests/azure.runsettings"
               testRunTitle: "C# E2E Tests"
