@@ -24,10 +24,9 @@ public class Hooks
                     .Build();
         }
 
-        Driver driver = new();
-
         container.RegisterInstanceAs(config);
-        container.RegisterFactoryAs(objectContainer => driver.WebDriver);
-        container.RegisterFactoryAs(objectContainer => driver.DefaultWait);
+        container.RegisterFactoryAs(objectContainer => new Driver());
+        container.RegisterFactoryAs(objectContainer => ((Driver)objectContainer.Resolve(typeof(Driver))).WebDriver);
+        container.RegisterFactoryAs(objectContainer => ((Driver)objectContainer.Resolve(typeof(Driver))).DefaultWait);
     }
 }

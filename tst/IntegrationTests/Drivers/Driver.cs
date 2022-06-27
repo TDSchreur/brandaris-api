@@ -5,13 +5,12 @@ using OpenQA.Selenium.Support.UI;
 
 namespace IntegrationTests.Drivers;
 
-public class Driver
+public class Driver : IDisposable
 {
     public Driver()
     {
-        EdgeOptions options = new EdgeOptions();
+        EdgeOptions options = new();
         options.AddArgument("--inprivate");
-        //// options.AddArgument("--kiosk");
 
         WebDriver = new EdgeDriver(options);
         DefaultWait = new DefaultWait<IWebDriver>(WebDriver)
@@ -24,4 +23,11 @@ public class Driver
     public IWebDriver WebDriver { get; init; }
 
     public IWait<IWebDriver> DefaultWait { get; init; }
+
+    public void Dispose()
+    {
+        WebDriver?.Close();
+        WebDriver?.Quit();
+        WebDriver?.Dispose();
+    }
 }
