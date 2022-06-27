@@ -139,6 +139,27 @@ stages:
       - job: E2ETest
         pool: $(pool)
         steps:
+          - task: PowerShell@2
+            displayName: Get Edge webdriver
+            inputs:
+              targetType: "inline"
+              script: |
+                $WebdriverURL = "https://msedgedriver.azureedge.net/103.0.1264.37/edgedriver_win64.zip";
+                $WebdriverLocation = "$(Get-Location)\edgedriver"
+
+                if (!(Test-Path -Path $WebdriverLocation)) {
+                    New-Item $WebdriverLocation -ItemType Directory
+                }
+                Remove-Item $WebdriverLocation\* -Recurse -Force
+
+                Invoke-WebRequest $WebdriverURL -OutFile "$WebdriverLocation\egdedriver.zip"
+                Expand-Archive "$WebdriverLocation\egdedriver.zip" -DestinationPath $WebdriverLocation
+
+                $Env:PATH = "$WebdriverLocation;$Env:PATH"
+              failOnStderr: true
+              showWarnings: true
+              pwsh: true
+
           - task: DotNetCoreCLI@2
             displayName: restore
             inputs:
