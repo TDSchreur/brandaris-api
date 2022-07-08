@@ -15,8 +15,7 @@ export class HeaderComponent {
     };
 
     generateException() {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        this.dataService.generateException().subscribe((response: any) => {
+        this.dataService.generateException().subscribe((response: unknown) => {
             console.log(response);
         });
     }
