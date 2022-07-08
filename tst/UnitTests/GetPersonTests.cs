@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,6 +7,7 @@ using Brandaris.Data.Entities;
 using Brandaris.DataAccess;
 using Brandaris.Features.GetPerson;
 using Brandaris.Features.GetPersons;
+using Microsoft.Extensions.Logging.Abstractions;
 using MockQueryable.Moq;
 using Xunit;
 
@@ -83,7 +85,7 @@ public class GetPersonTests
     public async Task GetPerson_ShouldReturnNull()
     {
         // arrange
-        GetPersonHandler sut = new(PersonQuery);
+        GetPersonHandler sut = new(PersonQuery, NullLogger<GetPersonHandler>.Instance);
 
         // act
         GetPersonQuery request = new(int.MaxValue);
@@ -99,7 +101,7 @@ public class GetPersonTests
     public async Task GetPersonAsync(int id, string firstName, string lastName)
     {
         // arrange
-        GetPersonHandler sut = new(PersonQuery);
+        GetPersonHandler sut = new(PersonQuery, NullLogger<GetPersonHandler>.Instance);
 
         // act
         GetPersonQuery request = new(id);

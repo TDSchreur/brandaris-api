@@ -30,13 +30,6 @@ module.exports = {
                 usePathForSuiteName: 'true',
             },
         ],
-        [
-            'jest-sonar',
-            {
-                outputName: 'test-report-sonar.xml',
-                reportedFilePath: 'absolute',
-            },
-        ],
     ],
     collectCoverage: true,
     collectCoverageFrom: ['**/*.ts', '!**/node_modules/**', '!**/dist/**', '!**/coverage/**'],
