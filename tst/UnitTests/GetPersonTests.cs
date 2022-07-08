@@ -71,8 +71,8 @@ public class GetPersonTests
             }
         };
 
-        PersonQuery = new Query<Person>(testdataPerson.AsQueryable().BuildMock().Object);
-        PersonPreCheckQuery = new Query<PersonPreCheck>(testdataPreCheck.AsQueryable().BuildMock().Object);
+        PersonQuery = new Query<Person>(testdataPerson.AsQueryable().BuildMock());
+        PersonPreCheckQuery = new Query<PersonPreCheck>(testdataPreCheck.AsQueryable().BuildMock());
     }
 
     private Query<PersonPreCheck> PersonPreCheckQuery { get; }

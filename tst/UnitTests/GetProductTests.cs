@@ -34,7 +34,7 @@ public class GetProductTests
             }
         };
 
-        Query = new Query<Product>(testdata.AsQueryable().BuildMock().Object);
+        Query = new Query<Product>(testdata.AsQueryable().BuildMock());
     }
 
     private Query<Product> Query { get; }
