@@ -11,13 +11,17 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Update
 {
     private readonly ICommand<Product> _command;
 
-    public UpdateProductHandler(ICommand<Product> command) => _command = command;
+    public UpdateProductHandler(ICommand<Product> command)
+    {
+        _command = command;
+    }
 
     public async Task<UpdateProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         Product product = new()
         {
-            Id = request.Id, Name = request.Name
+            Id = request.Id,
+            Name = request.Name
         };
 
         _command.Attach(product);

@@ -12,7 +12,10 @@ public class MigratorHostedService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public MigratorHostedService(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+    public MigratorHostedService(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -21,5 +24,8 @@ public class MigratorHostedService : IHostedService
         await mediator.Send(new AddTestDataQuery(), cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 }

@@ -32,12 +32,13 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("Logout")]
-    public new SignOutResult SignOut() => SignOut(new AuthenticationProperties
-                                                  {
-                                                      RedirectUri = "/"
-                                                  },
-                                                  CookieAuthenticationDefaults.AuthenticationScheme,
-                                                  OpenIdConnectDefaults.AuthenticationScheme);
+    public new SignOutResult SignOut()
+    {
+        return SignOut(new AuthenticationProperties
+        {
+            RedirectUri = "/"
+        }, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+    }
 
     [HttpGet("claims")]
     public ActionResult<IEnumerable<KeyValuePair<string, string>>> GetClaims()

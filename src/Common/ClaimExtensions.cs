@@ -7,9 +7,15 @@ namespace Brandaris.Common;
 
 public static class ClaimExtensions
 {
-    public static string GetDisplayName(this IEnumerable<Claim> claims) => claims.GetClaimValue("app_displayname");
+    public static string GetDisplayName(this IEnumerable<Claim> claims)
+    {
+        return claims.GetClaimValue("app_displayname");
+    }
 
-    public static string GetName(this IEnumerable<Claim> claims) => claims.GetClaimValue("name");
+    public static string GetName(this IEnumerable<Claim> claims)
+    {
+        return claims.GetClaimValue("name");
+    }
 
     public static Guid GetOid(this IEnumerable<Claim> claims)
     {
@@ -26,5 +32,8 @@ public static class ClaimExtensions
             : Guid.Empty;
     }
 
-    private static string GetClaimValue(this IEnumerable<Claim> claims, string claimType) => claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+    private static string GetClaimValue(this IEnumerable<Claim> claims, string claimType)
+    {
+        return claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+    }
 }

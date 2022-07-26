@@ -8,7 +8,13 @@ namespace Brandaris.DataAccess;
 
 public static class QueryExtensions
 {
-    public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default) => EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(source, cancellationToken);
+    public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+    {
+        return EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(source, cancellationToken);
+    }
 
-    public static Task<List<TSource>> ToListAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default) => EntityFrameworkQueryableExtensions.ToListAsync(source, cancellationToken);
+    public static Task<List<TSource>> ToListAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+    {
+        return EntityFrameworkQueryableExtensions.ToListAsync(source, cancellationToken);
+    }
 }

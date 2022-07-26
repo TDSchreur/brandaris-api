@@ -51,67 +51,69 @@ public class Program
         return 0;
     }
 
-    private static IHostBuilder CreateHostBuilder(string[] args) =>
-        new HostBuilder()
-           .UseContentRoot(Directory.GetCurrentDirectory())
-           .UseSerilog((ctx, lc) =>
-           {
-               if (ctx.HostingEnvironment.IsDevelopment())
+    private static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return new HostBuilder()
+              .UseContentRoot(Directory.GetCurrentDirectory())
+              .UseSerilog((ctx, lc) =>
                {
-                   lc.WriteTo.Console()
-                     .ReadFrom.Configuration(ctx.Configuration);
-               }
-           })
-           .ConfigureAppConfiguration((context, builder) =>
-            {
-                IHostEnvironment env = context.HostingEnvironment;
+                   if (ctx.HostingEnvironment.IsDevelopment())
+                   {
+                       lc.WriteTo.Console()
+                         .ReadFrom.Configuration(ctx.Configuration);
+                   }
+               })
+              .ConfigureAppConfiguration((context, builder) =>
+               {
+                   IHostEnvironment env = context.HostingEnvironment;
 
-                builder.AddJsonFile("appsettings.json", false, false)
-                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
-                       .AddEnvironmentVariables()
-                       .AddCommandLine(args);
+                   builder.AddJsonFile("appsettings.json", false, false)
+                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                          .AddEnvironmentVariables()
+                          .AddCommandLine(args);
 
-                if (env.IsDevelopment())
-                {
-                    builder.AddUserSecrets<Startup>();
-                }
+                   if (env.IsDevelopment())
+                   {
+                       builder.AddUserSecrets<Startup>();
+                   }
 
-                context.Configuration = builder.Build();
-            })
-           .ConfigureLogging((_, builder) =>
-            {
-                builder.AddApplicationInsights(options =>
-                {
-                    options.IncludeScopes = true;
-                    options.FlushOnDispose = true;
-                });
-            })
-           .UseDefaultServiceProvider((context, options) =>
-            {
-                bool isDevelopment = context.HostingEnvironment.IsDevelopment();
-                options.ValidateScopes = isDevelopment;
-                options.ValidateOnBuild = isDevelopment;
-            })
-           .ConfigureServices((hostContext, services) =>
-            {
-                services.AddOptions();
-                services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
-                {
-                    client.BaseAddress = new Uri("https://brandaris-api.azurewebsites.net");
-                });
-            })
-           .ConfigureWebHost(builder =>
-            {
-                builder.ConfigureAppConfiguration((ctx, cb) =>
-                {
-                    if (ctx.HostingEnvironment.IsDevelopment())
-                    {
-                        StaticWebAssetsLoader.UseStaticWebAssets(ctx.HostingEnvironment, ctx.Configuration);
-                    }
-                });
-                builder.UseContentRoot(Directory.GetCurrentDirectory());
-                builder.UseKestrel((context, options) => { options.Configure(context.Configuration.GetSection("Kestrel")); });
-                builder.UseIIS();
-                builder.UseStartup<Startup>();
-            });
+                   context.Configuration = builder.Build();
+               })
+              .ConfigureLogging((_, builder) =>
+               {
+                   builder.AddApplicationInsights(options =>
+                   {
+                       options.IncludeScopes = true;
+                       options.FlushOnDispose = true;
+                   });
+               })
+              .UseDefaultServiceProvider((context, options) =>
+               {
+                   bool isDevelopment = context.HostingEnvironment.IsDevelopment();
+                   options.ValidateScopes = isDevelopment;
+                   options.ValidateOnBuild = isDevelopment;
+               })
+              .ConfigureServices((hostContext, services) =>
+               {
+                   services.AddOptions();
+                   services.AddHttpClient<IBrandarisApiServiceAgent, BrandarisApiServiceAgent>(client =>
+                   {
+                       client.BaseAddress = new Uri("https://brandaris-api.azurewebsites.net");
+                   });
+               })
+              .ConfigureWebHost(builder =>
+               {
+                   builder.ConfigureAppConfiguration((ctx, cb) =>
+                   {
+                       if (ctx.HostingEnvironment.IsDevelopment())
+                       {
+                           StaticWebAssetsLoader.UseStaticWebAssets(ctx.HostingEnvironment, ctx.Configuration);
+                       }
+                   });
+                   builder.UseContentRoot(Directory.GetCurrentDirectory());
+                   builder.UseKestrel((context, options) => { options.Configure(context.Configuration.GetSection("Kestrel")); });
+                   builder.UseIIS();
+                   builder.UseStartup<Startup>();
+               });
+    }
 }

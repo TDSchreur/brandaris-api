@@ -40,9 +40,14 @@ public class GetProductTests
     private Query<Product> Query { get; }
 
     [Theory]
-    [InlineData("Banaan", new int[] { }, 1)]
-    [InlineData("Peer", new int[] { }, 1)]
-    [InlineData("", new[] { 1, 4 }, 2)]
+    [InlineData("Banaan", new int[]
+                    { }, 1)]
+    [InlineData("Peer", new int[]
+                    { }, 1)]
+    [InlineData("", new[]
+    {
+        1, 4
+    }, 2)]
     public async Task GetPersons(string name, int[] productIds, int expectedResults)
     {
         // arrange

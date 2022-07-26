@@ -29,7 +29,8 @@ public class ConfigController : ControllerBase
     {
         using IDisposable scope = _logger.BeginScope(new Dictionary<string, object>
         {
-            ["User"] = "T.D.Schreur", ["BIC"] = "ABC123"
+            ["User"] = "T.D.Schreur",
+            ["BIC"] = "ABC123"
         });
 
         return await _mediator.Send(new GetConfigQuery());

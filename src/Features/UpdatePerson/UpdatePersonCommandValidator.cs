@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Brandaris.Features.UpdatePerson;
 
-public class UpdateProductCommandValidator : AbstractValidator<UpdatePersonCommand>
+public class UpdatePersonCommandValidator : AbstractValidator<UpdatePersonCommand>
 {
-    public UpdateProductCommandValidator(IQuery<Person> query)
+    public UpdatePersonCommandValidator(IQuery<Person> query)
     {
         RuleFor(x => x.FirstName).NotEmpty().MaximumLength(20);
         RuleFor(x => x.LastName).NotEmpty().MaximumLength(20);

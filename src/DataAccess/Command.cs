@@ -19,13 +19,28 @@ public class Command<TEntity> : ICommand<TEntity>
         _entities = dataContext.Set<TEntity>();
     }
 
-    public void Add(params TEntity[] entity) => _entities.AddRange(entity);
+    public void Add(params TEntity[] entity)
+    {
+        _entities.AddRange(entity);
+    }
 
-    public void Attach(TEntity entity) => _entities.Attach(entity);
+    public void Attach(TEntity entity)
+    {
+        _entities.Attach(entity);
+    }
 
-    public void Remove(TEntity entity) => _entities.Remove(entity);
+    public void Remove(TEntity entity)
+    {
+        _entities.Remove(entity);
+    }
 
-    public Task<int> SaveChangesAsync(CancellationToken token = default) => _dataContext.SaveChangesAsync(token);
+    public Task<int> SaveChangesAsync(CancellationToken token = default)
+    {
+        return _dataContext.SaveChangesAsync(token);
+    }
 
-    public void Update<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression) => _dataContext.Entry(entity).Property(propertyExpression).IsModified = true;
+    public void Update<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
+    {
+        _dataContext.Entry(entity).Property(propertyExpression).IsModified = true;
+    }
 }

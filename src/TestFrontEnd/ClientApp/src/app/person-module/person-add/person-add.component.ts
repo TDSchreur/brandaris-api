@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IPerson } from '../../shared/models/iperson';
 import { DataService } from '../../shared/services/data.service';
 
@@ -9,25 +8,25 @@ import { DataService } from '../../shared/services/data.service';
     templateUrl: './person-add.component.html',
     styleUrls: ['./person-add.component.scss'],
 })
-export class PersonAddComponent implements OnInit {
-    public mainForm!: UntypedFormGroup;
+export class PersonAddComponent {
+    public mainForm: FormGroup<PersonForm>;
 
-    constructor(protected dataService: DataService, private fb: UntypedFormBuilder) {}
-
-    ngOnInit(): void {
-        this.mainForm = this.fb.group({
-            firstName: ['', [Validators.required]],
-            lastName: ['', [Validators.required]],
+    constructor(protected dataService: DataService) {
+        this.mainForm = new FormGroup<PersonForm>({
+            firstName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+            lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         });
     }
 
     onSubmit() {
-        const person = <IPerson>{
-            firstName: this.mainForm.get('firstName')?.value,
-            lastName: this.mainForm.get('lastName')?.value,
-        };
+        const person = this.mainForm.getRawValue() as IPerson;
+
         this.dataService.addPerson(person).subscribe(() => {
             this.mainForm.reset();
         });
     }
+}
+interface PersonForm {
+    firstName: FormControl<string>;
+    lastName: FormControl<string>;
 }

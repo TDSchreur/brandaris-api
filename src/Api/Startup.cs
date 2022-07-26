@@ -1,6 +1,4 @@
 using System;
-using Brandaris.Features.AddPerson;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +14,10 @@ namespace Brandaris.Api;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration) => Configuration = configuration;
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 
     public IConfiguration Configuration { get; }
 
@@ -47,6 +48,8 @@ public class Startup
         app.UseAuthentication();
 
         app.UseAuthorization();
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseOpenApi();
 
@@ -115,12 +118,9 @@ public class Startup
 
         services.AddOpenApiDocument(opt => { opt.Title = "Brandaris"; });
 
-        services.AddControllers()
-                .AddFluentValidation(x =>
-                {
-                    x.RegisterValidatorsFromAssemblyContaining<AddPersonCommandValidator>(null, ServiceLifetime.Transient);
-                    x.DisableDataAnnotationsValidation = true;
-                });
+        services.AddTransient<ExceptionHandlingMiddleware>();
+
+        services.AddControllers();
 
         services.AddHealthChecks();
 

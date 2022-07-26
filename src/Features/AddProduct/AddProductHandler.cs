@@ -11,7 +11,10 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
 {
     private readonly ICommand<Product> _command;
 
-    public AddProductHandler(ICommand<Product> command) => _command = command;
+    public AddProductHandler(ICommand<Product> command)
+    {
+        _command = command;
+    }
 
     public async Task<AddProductResponse> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {

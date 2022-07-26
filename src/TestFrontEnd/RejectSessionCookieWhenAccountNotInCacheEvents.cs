@@ -31,5 +31,8 @@ internal class RejectSessionCookieWhenAccountNotInCacheEvents : CookieAuthentica
     /// </summary>
     /// <param name="ex">Exception thrown by <see cref="ITokenAcquisition" />.GetTokenForXX methods.</param>
     /// <returns>A boolean telling if the exception was about not having an account in the cache.</returns>
-    private static bool AccountDoesNotExitInTokenCache(Exception ex) => ex.InnerException is MsalUiRequiredException { ErrorCode: "user_null" };
+    private static bool AccountDoesNotExitInTokenCache(Exception ex)
+    {
+        return ex.InnerException is MsalUiRequiredException { ErrorCode: "user_null" };
+    }
 }

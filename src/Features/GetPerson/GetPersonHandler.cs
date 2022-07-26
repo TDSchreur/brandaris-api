@@ -10,8 +10,8 @@ namespace Brandaris.Features.GetPerson;
 
 public class GetPersonHandler : IRequestHandler<GetPersonQuery, GetPersonResponse>
 {
-    private readonly IQuery<Person> _query;
     private readonly ILogger<GetPersonHandler> _logger;
+    private readonly IQuery<Person> _query;
 
     public GetPersonHandler(IQuery<Person> query, ILogger<GetPersonHandler> logger)
     {

@@ -43,34 +43,36 @@ public static class Program
         return 0;
     }
 
-    private static IHostBuilder CreateHostBuilder() =>
-        new HostBuilder()
-           .ConfigureAppConfiguration((context, builder) =>
-            {
-                IHostEnvironment env = context.HostingEnvironment;
+    private static IHostBuilder CreateHostBuilder()
+    {
+        return new HostBuilder()
+              .ConfigureAppConfiguration((context, builder) =>
+               {
+                   IHostEnvironment env = context.HostingEnvironment;
 
-                builder.AddJsonFile("appsettings.json", false, false)
-                       .AddUserSecrets<ServiceWorker>()
-                       .AddEnvironmentVariables();
+                   builder.AddJsonFile("appsettings.json", false, false)
+                          .AddUserSecrets<ServiceWorker>()
+                          .AddEnvironmentVariables();
 
-                context.Configuration = builder.Build();
-            })
-           .ConfigureLogging((_, builder) =>
-            {
-                builder.ClearProviders();
-                builder.AddSerilog(Log.Logger);
-            })
-           .UseDefaultServiceProvider((context, options) =>
-            {
-                bool isDevelopment = context.HostingEnvironment.IsDevelopment();
-                options.ValidateScopes = isDevelopment;
-                options.ValidateOnBuild = isDevelopment;
-            })
-           .ConfigureServices((hostContext, services) =>
-            {
-                services.AddOptions();
-                services.AddHostedService<ServiceWorker>();
-                services.AddSingleton<TokenHelper>();
-                services.AddSingleton<IMsalHttpClientFactory, MsalHttpClientFactory>();
-            });
+                   context.Configuration = builder.Build();
+               })
+              .ConfigureLogging((_, builder) =>
+               {
+                   builder.ClearProviders();
+                   builder.AddSerilog(Log.Logger);
+               })
+              .UseDefaultServiceProvider((context, options) =>
+               {
+                   bool isDevelopment = context.HostingEnvironment.IsDevelopment();
+                   options.ValidateScopes = isDevelopment;
+                   options.ValidateOnBuild = isDevelopment;
+               })
+              .ConfigureServices((hostContext, services) =>
+               {
+                   services.AddOptions();
+                   services.AddHostedService<ServiceWorker>();
+                   services.AddSingleton<TokenHelper>();
+                   services.AddSingleton<IMsalHttpClientFactory, MsalHttpClientFactory>();
+               });
+    }
 }

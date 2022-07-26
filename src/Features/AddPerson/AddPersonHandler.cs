@@ -41,7 +41,8 @@ public class AddPersonHandler : IRequestHandler<AddPersonCommand, AddPersonRespo
         {
             PersonPreCheck person = new()
             {
-                FirstName = request.FirstName, LastName = request.LastName
+                FirstName = request.FirstName,
+                LastName = request.LastName
             };
             _personPreCheckCommand.Add(person);
             await _personPreCheckCommand.SaveChangesAsync(cancellationToken);

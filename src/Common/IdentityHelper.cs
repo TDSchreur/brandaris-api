@@ -9,7 +9,10 @@ public class IdentityHelper : IIdentityHelper
 {
     private readonly IEnumerable<Claim> _claims;
 
-    public IdentityHelper(IHttpContextAccessor httpContextAccessor) => _claims = httpContextAccessor.HttpContext?.User.Claims ?? Array.Empty<Claim>();
+    public IdentityHelper(IHttpContextAccessor httpContextAccessor)
+    {
+        _claims = httpContextAccessor.HttpContext?.User.Claims ?? Array.Empty<Claim>();
+    }
 
     public string GetName()
     {
@@ -20,5 +23,8 @@ public class IdentityHelper : IIdentityHelper
             : name;
     }
 
-    public Guid GetOid() => _claims.GetOid();
+    public Guid GetOid()
+    {
+        return _claims.GetOid();
+    }
 }

@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Identity.Web;
-using TestFrontEnd.Models;
 
 namespace TestFrontEnd.ServiceAgents;
 

@@ -14,7 +14,7 @@ variables:
 
 stages:
   - stage: Api
-    dependsOn: []
+    dependsOn: [ ]
     jobs:
       - job: Build
         pool: $(pool)
@@ -49,7 +49,7 @@ stages:
               publishLocation: "Container"
 
   - stage: FrontEnd
-    dependsOn: []
+    dependsOn: [ ]
     jobs:
       - job: Build
         pool: $(pool)

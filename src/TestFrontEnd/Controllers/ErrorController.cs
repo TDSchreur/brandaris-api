@@ -6,5 +6,8 @@ namespace TestFrontEnd.Controllers;
 public class ErrorController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<ProblemDetails> Error() => Problem();
+    public ActionResult<ProblemDetails> Error()
+    {
+        return Problem();
+    }
 }

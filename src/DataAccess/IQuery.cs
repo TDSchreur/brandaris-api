@@ -11,9 +11,9 @@ namespace Brandaris.DataAccess;
 public interface IQuery<TEntity>
     where TEntity : IEntity
 {
-    Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-
     bool Any(Expression<Func<TEntity, bool>> predicate);
+
+    Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 

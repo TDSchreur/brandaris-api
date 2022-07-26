@@ -1,8 +1,11 @@
 <Project>
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>10.0</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <ImplicitUsings>false</ImplicitUsings>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 </Project>

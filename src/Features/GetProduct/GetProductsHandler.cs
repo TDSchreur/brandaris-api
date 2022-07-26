@@ -13,7 +13,10 @@ public class GetProductsHandler : IRequestHandler<GetProductsQuery, GetProductsR
 {
     private readonly IQuery<Product> _query;
 
-    public GetProductsHandler(IQuery<Product> query) => _query = query;
+    public GetProductsHandler(IQuery<Product> query)
+    {
+        _query = query;
+    }
 
     public async Task<GetProductsResponse> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {

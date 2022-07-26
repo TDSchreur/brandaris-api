@@ -16,7 +16,10 @@ public class DataContext : DbContext
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-    public DataContext(DbContextOptions<DataContext> options, IIdentityHelper identityHelper) : base(options) => _identityHelper = identityHelper;
+    public DataContext(DbContextOptions<DataContext> options, IIdentityHelper identityHelper) : base(options)
+    {
+        _identityHelper = identityHelper;
+    }
 
     public DbSet<Order> Orders { get; set; }
 
