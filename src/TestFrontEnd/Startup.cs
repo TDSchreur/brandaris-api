@@ -57,10 +57,7 @@ public class Startup
                     {
                         await context.ChallengeAsync(
                                                      CookieAuthenticationDefaults.AuthenticationScheme,
-                                                     new AuthenticationProperties
-                                                     {
-                                                         RedirectUri = "/"
-                                                     });
+                                                     new AuthenticationProperties { RedirectUri = "/" });
 
                         return;
                     }
@@ -78,21 +75,16 @@ public class Startup
         {
             endpoints.MapHealthChecks("/health/readiness");
 
-            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-            {
-                Predicate = _ => false
-            });
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = _ => false });
 
-            endpoints.MapControllers().RequireAuthorization();
+            endpoints.MapControllers()
+                     .RequireAuthorization();
 
             endpoints.MapReverseProxy(proxyPipeline =>
             {
                 proxyPipeline.Use(async (context, next) =>
                 {
-                    string[] scope =
-                    {
-                        "api://brandaris-api/manage-data"
-                    };
+                    string[] scope = { "api://brandaris-api/manage-data" };
                     ITokenAcquisition tokenAcquisition = context.RequestServices.GetRequiredService<ITokenAcquisition>();
 
                     try
@@ -100,7 +92,8 @@ public class Startup
                         string accessToken = await tokenAcquisition.GetAccessTokenForUserAsync(scope);
                         context.Request.Headers.Add("Authorization", $"Bearer {accessToken}");
 
-                        await next().ConfigureAwait(false);
+                        await next()
+                           .ConfigureAwait(false);
                     }
                     catch (MicrosoftIdentityWebChallengeUserException)
                     {
@@ -134,10 +127,7 @@ public class Startup
         services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
                                                         options => options.Events = new RejectSessionCookieWhenAccountNotInCacheEvents());
 
-        string[] scope =
-        {
-            "api://brandaris-api/manage-data"
-        };
+        string[] scope = { "api://brandaris-api/manage-data" };
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -149,7 +139,7 @@ public class Startup
         services.AddAuthorization(options =>
         {
             AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder(CookieAuthenticationDefaults.AuthenticationScheme).RequireAuthenticatedUser()
-                                                                                                                                 .Build();
+               .Build();
 
             options.DefaultPolicy = defaultPolicy;
 
@@ -163,7 +153,8 @@ public class Startup
         // In production, the Angular files will be served from this directory
         services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
-        services.AddReverseProxy().LoadFromConfig(Configuration.GetSection("ReverseProxy"));
+        services.AddReverseProxy()
+                .LoadFromConfig(Configuration.GetSection("ReverseProxy"));
 
         services.AddCors();
     }

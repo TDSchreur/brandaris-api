@@ -29,10 +29,7 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
                                                        .ToDictionary(x => x.Key, x => x.Select(y => y.ErrorMessage)
                                                                                        .ToArray());
 
-        HttpValidationProblemDetails response = new(errors)
-        {
-            Status = statusCode,
-        };
+        HttpValidationProblemDetails response = new(errors) { Status = statusCode };
 
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = statusCode;

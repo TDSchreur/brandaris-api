@@ -34,6 +34,8 @@ public static class ClaimExtensions
 
     private static string GetClaimValue(this IEnumerable<Claim> claims, string claimType)
     {
-        return claims.FirstOrDefault(c => c.Type == claimType)?.Value ?? string.Empty;
+        return claims.FirstOrDefault(c => c.Type == claimType)
+                    ?.Value ??
+               string.Empty;
     }
 }

@@ -16,48 +16,29 @@ public class GetProductTests
     {
         List<Product> testdata = new()
         {
-            new Product
-            {
-                Id = 1, Name = "Appel"
-            },
-            new Product
-            {
-                Id = 2, Name = "Banaan"
-            },
-            new Product
-            {
-                Id = 3, Name = "Peer"
-            },
-            new Product
-            {
-                Id = 4, Name = "Sinasappel"
-            }
+            new Product { Id = 1, Name = "Appel" },
+            new Product { Id = 2, Name = "Banaan" },
+            new Product { Id = 3, Name = "Peer" },
+            new Product { Id = 4, Name = "Sinasappel" }
         };
 
-        Query = new Query<Product>(testdata.AsQueryable().BuildMock());
+        Query = new Query<Product>(testdata.AsQueryable()
+                                           .BuildMock());
     }
 
     private Query<Product> Query { get; }
 
     [Theory]
-    [InlineData("Banaan", new int[]
-                    { }, 1)]
-    [InlineData("Peer", new int[]
-                    { }, 1)]
-    [InlineData("", new[]
-    {
-        1, 4
-    }, 2)]
+    [InlineData("Banaan", new int[] { }, 1)]
+    [InlineData("Peer", new int[] { }, 1)]
+    [InlineData("", new[] { 1, 4 }, 2)]
     public async Task GetPersons(string name, int[] productIds, int expectedResults)
     {
         // arrange
         GetProductsHandler sut = new(Query);
 
         // act
-        GetProductsQuery request = new()
-        {
-            Name = name, ProductIds = productIds
-        };
+        GetProductsQuery request = new() { Name = name, ProductIds = productIds };
         GetProductsResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert

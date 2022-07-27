@@ -18,62 +18,24 @@ public class GetPersonTests
     {
         List<Person> testdataPerson = new()
         {
-            new Person
-            {
-                Id = 1,
-                FirstName = "Dennis",
-                LastName = "Schreur"
-            },
-            new Person
-            {
-                Id = 2,
-                FirstName = "Tess",
-                LastName = "Schreur"
-            },
-            new Person
-            {
-                Id = 3,
-                FirstName = "Daan",
-                LastName = "Schreur"
-            },
-            new Person
-            {
-                Id = 4,
-                FirstName = "Peter",
-                LastName = "Pan"
-            }
+            new Person { Id = 1, FirstName = "Dennis", LastName = "Schreur" },
+            new Person { Id = 2, FirstName = "Tess", LastName = "Schreur" },
+            new Person { Id = 3, FirstName = "Daan", LastName = "Schreur" },
+            new Person { Id = 4, FirstName = "Peter", LastName = "Pan" }
         };
 
         List<PersonPreCheck> testdataPreCheck = new()
         {
-            new PersonPreCheck
-            {
-                Id = 1,
-                FirstName = "Dennis",
-                LastName = "Schreur"
-            },
-            new PersonPreCheck
-            {
-                Id = 2,
-                FirstName = "Tess",
-                LastName = "Schreur"
-            },
-            new PersonPreCheck
-            {
-                Id = 3,
-                FirstName = "Daan",
-                LastName = "Schreur"
-            },
-            new PersonPreCheck
-            {
-                Id = 4,
-                FirstName = "Peter",
-                LastName = "Pan"
-            }
+            new PersonPreCheck { Id = 1, FirstName = "Dennis", LastName = "Schreur" },
+            new PersonPreCheck { Id = 2, FirstName = "Tess", LastName = "Schreur" },
+            new PersonPreCheck { Id = 3, FirstName = "Daan", LastName = "Schreur" },
+            new PersonPreCheck { Id = 4, FirstName = "Peter", LastName = "Pan" }
         };
 
-        PersonQuery = new Query<Person>(testdataPerson.AsQueryable().BuildMock());
-        PersonPreCheckQuery = new Query<PersonPreCheck>(testdataPreCheck.AsQueryable().BuildMock());
+        PersonQuery = new Query<Person>(testdataPerson.AsQueryable()
+                                                      .BuildMock());
+        PersonPreCheckQuery = new Query<PersonPreCheck>(testdataPreCheck.AsQueryable()
+                                                                        .BuildMock());
     }
 
     private Query<PersonPreCheck> PersonPreCheckQuery { get; }
@@ -122,12 +84,7 @@ public class GetPersonTests
         GetPersonsHandler sut = new(PersonQuery, PersonPreCheckQuery);
 
         // act
-        GetPersonsQuery request = new()
-        {
-            FirstName = firstname,
-            LastName = lastName,
-            Approved = false
-        };
+        GetPersonsQuery request = new() { FirstName = firstname, LastName = lastName, Approved = false };
         GetPersonsResponse result = await sut.Handle(request, CancellationToken.None);
 
         // assert

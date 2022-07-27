@@ -18,10 +18,7 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
 
     public async Task<AddProductResponse> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
-        Product product = new()
-        {
-            Name = request.Name
-        };
+        Product product = new() { Name = request.Name };
         _command.Add(product);
 
         await _command.SaveChangesAsync(cancellationToken);

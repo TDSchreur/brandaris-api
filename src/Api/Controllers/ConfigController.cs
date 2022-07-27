@@ -27,11 +27,7 @@ public class ConfigController : ControllerBase
     [HttpGet("")]
     public async Task<ActionResult<GetConfigResponse>> Get()
     {
-        using IDisposable scope = _logger.BeginScope(new Dictionary<string, object>
-        {
-            ["User"] = "T.D.Schreur",
-            ["BIC"] = "ABC123"
-        });
+        using IDisposable scope = _logger.BeginScope(new Dictionary<string, object> { ["User"] = "T.D.Schreur", ["BIC"] = "ABC123" });
 
         return await _mediator.Send(new GetConfigQuery());
     }

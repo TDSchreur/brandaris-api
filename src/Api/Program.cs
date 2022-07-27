@@ -30,7 +30,8 @@ public static class Program
 
         try
         {
-            IHost host = CreateHostBuilder(args).Build();
+            IHost host = CreateHostBuilder(args)
+               .Build();
 
             await host.RunAsync()
                       .ConfigureAwait(false);

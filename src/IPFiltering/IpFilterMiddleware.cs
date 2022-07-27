@@ -17,12 +17,22 @@ public class IpFilterMiddleware
 
     public IpFilterMiddleware(RequestDelegate next, ILogger<IpFilterMiddleware> logger, IpSafeList safeList)
     {
-        _ipAddresses = !string.IsNullOrWhiteSpace(safeList.IpAddresses) && safeList.IpAddresses.Split(';').Length > 0
-            ? safeList.IpAddresses.Split(';').Select(IPAddress.Parse).ToList()
+        _ipAddresses = !string.IsNullOrWhiteSpace(safeList.IpAddresses) &&
+                       safeList.IpAddresses.Split(';')
+                               .Length >
+                       0
+            ? safeList.IpAddresses.Split(';')
+                      .Select(IPAddress.Parse)
+                      .ToList()
             : Enumerable.Empty<IPAddress>();
 
-        _ipNetworks = !string.IsNullOrWhiteSpace(safeList.IpNetworks) && safeList.IpNetworks.Split(';').Length > 0
-            ? safeList.IpNetworks.Split(';').Select(IPNetwork.Parse).ToList()
+        _ipNetworks = !string.IsNullOrWhiteSpace(safeList.IpNetworks) &&
+                      safeList.IpNetworks.Split(';')
+                              .Length >
+                      0
+            ? safeList.IpNetworks.Split(';')
+                      .Select(IPNetwork.Parse)
+                      .ToList()
             : Enumerable.Empty<IPNetwork>();
 
         _next = next;

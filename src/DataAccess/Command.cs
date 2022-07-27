@@ -41,6 +41,8 @@ public class Command<TEntity> : ICommand<TEntity>
 
     public void Update<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
     {
-        _dataContext.Entry(entity).Property(propertyExpression).IsModified = true;
+        _dataContext.Entry(entity)
+                    .Property(propertyExpression)
+                    .IsModified = true;
     }
 }

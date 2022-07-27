@@ -48,12 +48,7 @@ public class UpdatePersonHandler : IRequestHandler<UpdatePersonCommand, UpdatePe
         }
         else
         {
-            PersonPreCheck person = new()
-            {
-                ParentId = request.Id,
-                FirstName = request.FirstName,
-                LastName = request.LastName
-            };
+            PersonPreCheck person = new() { ParentId = request.Id, FirstName = request.FirstName, LastName = request.LastName };
             _personPreCheckCommand.Attach(person);
             _personPreCheckCommand.Update(person, x => x.FirstName);
             _personPreCheckCommand.Update(person, x => x.LastName);

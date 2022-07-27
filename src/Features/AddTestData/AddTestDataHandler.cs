@@ -30,8 +30,9 @@ public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
 
     public async Task<bool> Handle(AddTestDataQuery request, CancellationToken cancellationToken)
     {
-        await _dataContext.Database.MigrateAsync(cancellationToken);
         await ClearData(cancellationToken);
+        await _dataContext.Database.MigrateAsync(cancellationToken);
+
         //// await AddPersons(cancellationToken);
         //// await AddProducts(cancellationToken);
 
@@ -42,18 +43,7 @@ public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
     {
         Person[] persons =
         {
-            new()
-            {
-                FirstName = "Dennis", LastName = "Schreur"
-            },
-            new()
-            {
-                FirstName = "Tess", LastName = "Schreur"
-            },
-            new()
-            {
-                FirstName = "Daan", LastName = "Schreur"
-            }
+            new() { FirstName = "Dennis", LastName = "Schreur" }, new() { FirstName = "Tess", LastName = "Schreur" }, new() { FirstName = "Daan", LastName = "Schreur" }
         };
 
         _personCommand.Add(persons);
@@ -64,25 +54,7 @@ public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
 
     private async Task AddProducts(CancellationToken stoppingToken)
     {
-        Product[] products =
-        {
-            new()
-            {
-                Name = "Appel"
-            },
-            new()
-            {
-                Name = "Banaan"
-            },
-            new()
-            {
-                Name = "Peer"
-            },
-            new()
-            {
-                Name = "Sinasappel"
-            }
-        };
+        Product[] products = { new() { Name = "Appel" }, new() { Name = "Banaan" }, new() { Name = "Peer" }, new() { Name = "Sinasappel" } };
 
         _productCommand.Add(products);
         int addedRecords = await _productCommand.SaveChangesAsync(stoppingToken);
@@ -93,17 +65,74 @@ public class AddTestDataHandler : IRequestHandler<AddTestDataQuery, bool>
     private Task ClearData(CancellationToken cancellationToken)
     {
         string sql = @"
-DELETE FROM dbo.OrderLine
-DBCC CHECKIDENT ('dbo.Orderline',RESEED, 0)
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Orderline]') AND type in (N'U'))
+BEGIN
+    ALTER TABLE [dbo].[Orderline] SET ( SYSTEM_VERSIONING = OFF)
+    DROP TABLE [dbo].[Orderline]
+END
 
-DELETE FROM [dbo].[Order]
-DBCC CHECKIDENT ('dbo.Order',RESEED, 0)
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[OrderLineHistory]') AND type in (N'U'))
+    DROP TABLE [dbo].[OrderLineHistory]
 
-DELETE FROM dbo.Person
-DBCC CHECKIDENT ('dbo.Person',RESEED, 0)
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND type in (N'U'))
+BEGIN
+    ALTER TABLE [dbo].[Order] SET ( SYSTEM_VERSIONING = OFF)
+    DROP TABLE [dbo].[Order]
+END
 
-DELETE FROM dbo.Product
-DBCC CHECKIDENT ('dbo.Product',RESEED, 0)
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[OrderHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[OrderHistory]
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Product]') AND type in (N'U'))
+BEGIN
+    ALTER TABLE [dbo].[Product] SET ( SYSTEM_VERSIONING = OFF)
+    DROP TABLE [dbo].[Product]
+END
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[ProductHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[ProductHistory]
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[PersonPreCheck]') AND type in (N'U'))
+BEGIN
+    ALTER TABLE [dbo].[PersonPreCheck] SET ( SYSTEM_VERSIONING = OFF)
+    DROP TABLE [dbo].[PersonPreCheck]
+END
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[PersonPreCheckHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[PersonPreCheckHistory]
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Person]') AND type in (N'U'))
+BEGIN
+    ALTER TABLE [dbo].[Person] SET ( SYSTEM_VERSIONING = OFF)
+    DROP TABLE [dbo].[Person]
+END
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[PersonHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[PersonHistory]
+
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[__EFMigrationsHistory]') AND type in (N'U'))
+TRUNCATE TABLE [dbo].__EFMigrationsHistory
 ";
 
         return _dataContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);

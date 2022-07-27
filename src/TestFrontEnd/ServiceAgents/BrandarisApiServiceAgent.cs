@@ -22,10 +22,7 @@ public class BrandarisApiServiceAgent : IBrandarisApiServiceAgent
 
     public async Task<IEnumerable<KeyValuePair<string, string>>> GetRemoteClaimsAsync()
     {
-        string[] scope =
-        {
-            "api://brandaris-api/manage-data"
-        };
+        string[] scope = { "api://brandaris-api/manage-data" };
         string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(scope);
         using HttpRequestMessage request = new(HttpMethod.Get, "/api/user");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

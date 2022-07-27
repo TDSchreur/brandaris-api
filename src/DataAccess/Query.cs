@@ -16,7 +16,8 @@ public class Query<TEntity> : IQuery<TEntity>
 
     public Query(DataContext context)
     {
-        _query = context.Set<TEntity>().AsNoTracking();
+        _query = context.Set<TEntity>()
+                        .AsNoTracking();
     }
 
     /// <summary>

@@ -18,11 +18,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Update
 
     public async Task<UpdateProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        Product product = new()
-        {
-            Id = request.Id,
-            Name = request.Name
-        };
+        Product product = new() { Id = request.Id, Name = request.Name };
 
         _command.Attach(product);
         _command.Update(product, x => x.Name);

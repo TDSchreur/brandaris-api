@@ -2,14 +2,15 @@
 using Brandaris.DataAccess;
 using FluentValidation;
 
-namespace Brandaris.Features.ApprovePerson
+namespace Brandaris.Features.ApprovePerson;
+
+public class ApprovePersonCommandValidator : AbstractValidator<ApprovePersonCommand>
 {
-    public class ApprovePersonCommandValidator : AbstractValidator<ApprovePersonCommand>
+    public ApprovePersonCommandValidator(IQuery<Person> personQuery,
+                                         IQuery<PersonPreCheck> personPreCheckQuery)
     {
-        public ApprovePersonCommandValidator(IQuery<Person> personQuery,
-                                             IQuery<PersonPreCheck> personPreCheckQuery)
-        {
-            RuleFor(x => x).CustomAsync(async (command, context, cancellationToken) =>
+        RuleFor(x => x)
+           .CustomAsync(async (command, context, cancellationToken) =>
             {
                 PersonPreCheck personPreCheck = await personPreCheckQuery.FirstOrDefaultAsync(x => x.Id == command.Id);
 
@@ -22,6 +23,5 @@ namespace Brandaris.Features.ApprovePerson
                     context.AddFailure("Combination firstname / lastname must be unique");
                 }
             });
-        }
     }
 }

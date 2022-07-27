@@ -13,8 +13,7 @@ public static class GetData
 {
     [FunctionName("GetData")]
     public static IActionResult Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
-        HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
         ILogger logger)
     {
         logger.LogInformation("C# HTTP trigger function processed a request.");
@@ -27,7 +26,8 @@ public static class GetData
             return new UnauthorizedResult();
         }
 
-        IEnumerable<string> claims = req.HttpContext.User.Identities.SelectMany(x => x.Claims).Select(x => $"{x.Type}:{x.Value}");
+        IEnumerable<string> claims = req.HttpContext.User.Identities.SelectMany(x => x.Claims)
+                                        .Select(x => $"{x.Type}:{x.Value}");
 
         return new OkObjectResult($"Claims:{Environment.NewLine}{string.Join(Environment.NewLine, claims)}");
     }

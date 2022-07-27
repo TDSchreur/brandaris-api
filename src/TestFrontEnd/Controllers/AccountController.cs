@@ -13,33 +13,6 @@ namespace TestFrontEnd.Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-#pragma warning disable CA1054
-
-    [HttpGet("Login")]
-    [AllowAnonymous]
-    public IActionResult SignIn([FromQuery] string returnUrl)
-    {
-        if (string.IsNullOrWhiteSpace(returnUrl))
-        {
-            returnUrl = "/";
-        }
-
-        return Challenge(new AuthenticationProperties
-                         {
-                             RedirectUri = returnUrl
-                         },
-                         OpenIdConnectDefaults.AuthenticationScheme);
-    }
-
-    [HttpGet("Logout")]
-    public new SignOutResult SignOut()
-    {
-        return SignOut(new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        }, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-    }
-
     [HttpGet("claims")]
     public ActionResult<IEnumerable<KeyValuePair<string, string>>> GetClaims()
     {
@@ -56,5 +29,23 @@ public class AccountController : ControllerBase
         IEnumerable<KeyValuePair<string, string>> claims = await brandarisApiServiceAgent.GetRemoteClaimsAsync();
 
         return Ok(claims);
+    }
+
+    [HttpGet("Login")]
+    [AllowAnonymous]
+    public IActionResult SignIn([FromQuery] string returnUrl)
+    {
+        if (string.IsNullOrWhiteSpace(returnUrl))
+        {
+            returnUrl = "/";
+        }
+
+        return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+    }
+
+    [HttpGet("Logout")]
+    public new SignOutResult SignOut()
+    {
+        return SignOut(new AuthenticationProperties { RedirectUri = "/" }, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
     }
 }

@@ -59,12 +59,10 @@ public class Startup
         {
             endpoints.MapHealthChecks("/health/readiness");
 
-            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
-            {
-                Predicate = _ => false
-            });
+            endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = _ => false });
 
-            endpoints.MapControllers().RequireAuthorization();
+            endpoints.MapControllers()
+                     .RequireAuthorization();
         });
 
         app.Run(async context => { await context.Response.WriteAsync($"{Environment.MachineName}: Hello world! Request path: {context.Request.Path}"); });
@@ -110,10 +108,7 @@ public class Startup
                      options.TokenValidationParameters.ValidateAudience = true;
                      options.TokenValidationParameters.ValidateLifetime = true;
                      options.TokenValidationParameters.ValidateIssuerSigningKey = true;
-                     options.TokenValidationParameters.ValidAudiences = new[]
-                     {
-                         Configuration["Authentication:AppIdUri"], Configuration["Authentication:ClientId"]
-                     };
+                     options.TokenValidationParameters.ValidAudiences = new[] { Configuration["Authentication:AppIdUri"], Configuration["Authentication:ClientId"] };
                  });
 
         services.AddOpenApiDocument(opt => { opt.Title = "Brandaris"; });

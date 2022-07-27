@@ -26,7 +26,8 @@ public class AddUpdatePersonTests
         Mock<ICommand<PersonPreCheck>> personPreCheckCommand = new(MockBehavior.Strict);
 
         personCommand.Setup(x => x.Add(It.IsAny<Person>()))
-                     .Callback((Person[] p) => p[0].Id = 1);
+                     .Callback((Person[] p) => p[0]
+                                  .Id = 1);
         personCommand.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
                      .ReturnsAsync(1);
 

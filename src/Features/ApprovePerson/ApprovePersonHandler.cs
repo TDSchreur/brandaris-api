@@ -53,10 +53,7 @@ public class ApprovePersonHandler : IRequestHandler<ApprovePersonCommand, Approv
             personModel = addPersonResponse.Value;
         }
 
-        _command.Remove(new PersonPreCheck
-        {
-            Id = personPreCheck.Id
-        });
+        _command.Remove(new PersonPreCheck { Id = personPreCheck.Id });
 
         await _command.SaveChangesAsync(cancellationToken);
 

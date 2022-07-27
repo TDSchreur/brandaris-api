@@ -22,7 +22,8 @@ public class AddUpdateProductTest
 
         Mock<ICommand<Product>> qm = new(MockBehavior.Strict);
         qm.Setup(x => x.Add(It.IsAny<Product>()))
-          .Callback((Product[] p) => p[0].Id = 1);
+          .Callback((Product[] p) => p[0]
+                       .Id = 1);
         qm.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
           .ReturnsAsync(1);
 
@@ -40,10 +41,7 @@ public class AddUpdateProductTest
     {
         // arrange
         const string meloen = nameof(meloen);
-        UpdateProductCommand request = new()
-        {
-            Id = 1, Name = meloen
-        };
+        UpdateProductCommand request = new() { Id = 1, Name = meloen };
 
         Mock<ICommand<Product>> qm = new(MockBehavior.Strict);
 
